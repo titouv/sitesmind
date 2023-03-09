@@ -1,34 +1,36 @@
 import { Configuration, OpenAIApi } from "openai"
 import { getData } from "./scraper"
-import { supabase as supabaseClient } from "../utils/supabase"
+import { supabaseClient } from "../utils/supabase"
 import { Document, RecursiveCharacterTextSplitter } from "./splitter"
-
+import { openaiClient } from "@/utils/openAI"
 async function getDocuments() {
   const data = await getData(["https://datapix.fr"])
   const rawDocs = data.map((data) => new Document({ pageContent: data }))
 
   const textSplitter = new RecursiveCharacterTextSplitter({
     chunkSize: 1000,
-    chunkOverlap: 200,
+    chunkOverlap: 500,
   })
   const docs = await textSplitter.splitDocuments(rawDocs)
   return docs
 }
 
 async function generateEmbeddings() {
-  const configuration = new Configuration({
-    apiKey: process.env.OPENAI_API_KEY as string,
-  })
-  const openai = new OpenAIApi(configuration)
-
   const documents = await getDocuments() // Your custom function to load docs
+
+  documents.forEach((doc) => {
+    console.log(
+      "================================================================"
+    )
+    console.log(doc.pageContent)
+  })
 
   // Assuming each document is a string
   for (const { pageContent } of documents) {
     // OpenAI recommends replacing newlines with spaces for best results
     const input = pageContent.replace(/\n/g, " ")
 
-    const embeddingResponse = await openai.createEmbedding({
+    const embeddingResponse = await openaiClient.createEmbedding({
       model: "text-embedding-ada-002",
       input,
     })

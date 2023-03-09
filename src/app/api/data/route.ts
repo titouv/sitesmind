@@ -1,6 +1,6 @@
-// import { createClient } from "@supabase/supabase-js"
+import { createClient } from "@/supabase/utils/browser"
 import { Configuration, OpenAIApi } from "openai"
-import { supabase as supabaseClient } from "../../../utils/supabase"
+const supabaseClient = createClient()
 
 export const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -32,17 +32,13 @@ export async function POST(req: Request) {
   })
 
   const [{ embedding }] = embeddingResponse.data.data
-  console.log(embedding)
+  // console.log(embedding)
   // In production we should handle possible errors
-  const { data: documents, error } = await supabaseClient.rpc(
-    "match_documents",
-    {
-      match_count: 10,
-      query_embedding: embedding,
-      similarity_threshold: 0.1,
-    }
-  )
-  console.log(error)
+  const { data: documents } = await supabaseClient.rpc("match_documents", {
+    match_count: 10,
+    query_embedding: embedding,
+    similarity_threshold: 0.1,
+  })
 
   return new Response(JSON.stringify(documents), {
     headers: { ...corsHeaders, "Content-Type": "application/json" },

@@ -3,27 +3,9 @@ import {
   ParsedEvent,
   ReconnectInterval,
 } from "eventsource-parser"
+import { CreateChatCompletionRequest } from "openai"
 
-export type ChatGPTAgent = "user" | "system" | "assistant"
-
-export interface ChatGPTMessage {
-  role: ChatGPTAgent
-  content: string
-}
-
-export interface OpenAIStreamPayload {
-  model: string
-  messages: ChatGPTMessage[]
-  temperature: number
-  top_p: number
-  frequency_penalty: number
-  presence_penalty: number
-  max_tokens: number
-  stream: boolean
-  n: number
-}
-
-export async function OpenAIStream(payload: OpenAIStreamPayload) {
+export async function OpenAIStream(payload: CreateChatCompletionRequest) {
   const encoder = new TextEncoder()
   const decoder = new TextDecoder()
 
@@ -65,7 +47,7 @@ export async function OpenAIStream(payload: OpenAIStreamPayload) {
           }
         }
       }
-
+      // console.log(res.data)
       // stream response (SSE) from OpenAI may be fragmented into multiple chunks
       // this ensures we properly read chunks and invoke an event for each SSE event stream
       const parser = createParser(onParse)

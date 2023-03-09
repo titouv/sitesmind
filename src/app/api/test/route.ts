@@ -1,9 +1,10 @@
-import { OpenAIStream, OpenAIStreamPayload } from "@/utils/openAIStream"
+import { OpenAIStream } from "@/utils/openAIStream"
 import GPT3Tokenizer from "gpt3-tokenizer"
-import { Configuration, OpenAIApi } from "openai"
-import { supabase as supabaseClient } from "@/utils/supabase"
-import fetchAdapter from "@vespaiach/axios-fetch-adapter"
+// import { Configuration, OpenAIApi } from "openai"
+import { openaiClient } from "@/utils/openAI"
+import { createClient } from "@/supabase/utils/server"
 
+const supabaseClient = createClient()
 export const config = {
   revalidate: 0,
   runtime: "edge",
@@ -28,14 +29,8 @@ export async function GET(req: Request) {
   // OpenAI recommends replacing newlines with spaces for best results
   const input = query.replace(/\n/g, " ")
 
-  const configuration = new Configuration({
-    apiKey: process.env.OPENAI_API_KEY,
-    baseOptions: { adapter: fetchAdapter },
-  })
-  const openai = new OpenAIApi(configuration)
-
   // Generate a one-time embedding for the query itself
-  const embeddingResponse = await openai.createEmbedding({
+  const embeddingResponse = await openaiClient.createEmbedding({
     model: "text-embedding-ada-002",
     input,
   })
@@ -56,6 +51,11 @@ export async function GET(req: Request) {
       similarity_threshold: 0.1,
     }
   )
+
+  if (error) {
+    console.log("error", error)
+    return new Response("error", { headers: corsHeaders })
+  }
   console.log("supabaseClient.rpc", Date.now() - start)
 
   const tokenizer = new GPT3Tokenizer({ type: "gpt3" })
@@ -76,6 +76,8 @@ export async function GET(req: Request) {
 
     contextText += `${content.trim()}\n---\n`
   }
+
+  type OpenAIStreamPayload = Parameters<typeof OpenAIStream>[0]
 
   // In production we should handle possible errors
   const messages: OpenAIStreamPayload["messages"] = [

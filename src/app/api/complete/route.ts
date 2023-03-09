@@ -1,7 +1,9 @@
-import { OpenAIStream, OpenAIStreamPayload } from "@/utils/openAIStream"
+import { OpenAIStream } from "@/utils/openAIStream"
 import GPT3Tokenizer from "gpt3-tokenizer"
-import { Configuration, OpenAIApi } from "openai"
-import { supabase as supabaseClient } from "@/utils/supabase"
+import { openaiClient } from "@/utils/openAI"
+import { createClient } from "@/supabase/utils/browser"
+
+const supabaseClient = createClient()
 
 export const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -10,6 +12,7 @@ export const corsHeaders = {
 }
 
 export async function POST(req: Request) {
+  console.log("start")
   // Handle CORS
   if (req.method === "OPTIONS") {
     return new Response("ok", { headers: corsHeaders })
@@ -21,19 +24,17 @@ export async function POST(req: Request) {
   // OpenAI recommends replacing newlines with spaces for best results
   const input = query.replace(/\n/g, " ")
 
-  const configuration = new Configuration({
-    apiKey: process.env.OPENAI_API_KEY,
-  })
-  const openai = new OpenAIApi(configuration)
-
+  let start = Date.now()
   // Generate a one-time embedding for the query itself
-  const embeddingResponse = await openai.createEmbedding({
+  const embeddingResponse = await openaiClient.createEmbedding({
     model: "text-embedding-ada-002",
     input,
   })
+  console.log("time for embedding", Date.now() - start, "ms")
 
   const [{ embedding }] = embeddingResponse.data.data
 
+  start = Date.now()
   // Fetching whole documents for this simple example.
   //
   // Ideally for context injection, documents are chunked into
@@ -46,6 +47,11 @@ export async function POST(req: Request) {
       similarity_threshold: 0.1,
     }
   )
+  if (error) {
+    console.log("error", error)
+    return new Response("error", { headers: corsHeaders })
+  }
+  console.log("time for match_documents", Date.now() - start, "ms")
 
   const tokenizer = new GPT3Tokenizer({ type: "gpt3" })
   let tokenCount = 0
@@ -66,6 +72,8 @@ export async function POST(req: Request) {
     contextText += `${content.trim()}\n---\n`
   }
 
+  type OpenAIStreamPayload = Parameters<typeof OpenAIStream>[0]
+
   // In production we should handle possible errors
   const messages: OpenAIStreamPayload["messages"] = [
     {
@@ -78,7 +86,6 @@ export async function POST(req: Request) {
     },
     { role: "user", content: query },
   ]
-  console.log(messages)
 
   const payload: OpenAIStreamPayload = {
     model: "gpt-3.5-turbo",
