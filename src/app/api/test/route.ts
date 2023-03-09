@@ -3,6 +3,11 @@ import GPT3Tokenizer from "gpt3-tokenizer"
 import { Configuration, OpenAIApi } from "openai"
 import { supabase as supabaseClient } from "@/utils/supabase"
 
+export const config = {
+  revalidate: 0,
+  runtime: "edge",
+}
+
 export const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers":
