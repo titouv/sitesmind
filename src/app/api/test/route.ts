@@ -2,6 +2,7 @@ import { OpenAIStream, OpenAIStreamPayload } from "@/utils/openAIStream"
 import GPT3Tokenizer from "gpt3-tokenizer"
 import { Configuration, OpenAIApi } from "openai"
 import { supabase as supabaseClient } from "@/utils/supabase"
+import fetchAdapter from "@vespaiach/axios-fetch-adapter"
 
 export const config = {
   revalidate: 0,
@@ -29,6 +30,7 @@ export async function GET(req: Request) {
 
   const configuration = new Configuration({
     apiKey: process.env.OPENAI_API_KEY,
+    baseOptions: { adapter: fetchAdapter },
   })
   const openai = new OpenAIApi(configuration)
 
