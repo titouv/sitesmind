@@ -46,6 +46,8 @@ export async function GET(req: Request) {
   //
   // Ideally for context injection, documents are chunked into
   // smaller sections at earlier pre-processing/embedding step.
+
+  const start = Date.now()
   const { data: documents, error } = await supabaseClient.rpc(
     "match_documents",
     {
@@ -54,6 +56,7 @@ export async function GET(req: Request) {
       similarity_threshold: 0.1,
     }
   )
+  console.log("supabaseClient.rpc", Date.now() - start)
 
   const tokenizer = new GPT3Tokenizer({ type: "gpt3" })
   let tokenCount = 0
