@@ -9,14 +9,15 @@ export const corsHeaders = {
     "authorization, x-client-info, apikey, content-type",
 }
 
-export async function POST(req: Request) {
+export async function GET(req: Request) {
   // Handle CORS
   if (req.method === "OPTIONS") {
     return new Response("ok", { headers: corsHeaders })
   }
 
   // Search query is passed in request payload
-  const { query } = await req.json()
+  // const { query } = await req.json()
+  const query = "vincent"
 
   // OpenAI recommends replacing newlines with spaces for best results
   const input = query.replace(/\n/g, " ")

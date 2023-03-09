@@ -1,9 +1,18 @@
-import { createClient } from "@supabase/supabase-js"
 import { Configuration, OpenAIApi } from "openai"
-import { supabase as supabaseClient } from "./supabase"
+import { getData } from "./scraper"
+import { supabase as supabaseClient } from "../utils/supabase"
+import { Document, RecursiveCharacterTextSplitter } from "./splitter"
 
 async function getDocuments() {
-  return ["Hello world", "Hello world 2"]
+  const data = await getData(["https://datapix.fr"])
+  const rawDocs = data.map((data) => new Document({ pageContent: data }))
+
+  const textSplitter = new RecursiveCharacterTextSplitter({
+    chunkSize: 1000,
+    chunkOverlap: 200,
+  })
+  const docs = await textSplitter.splitDocuments(rawDocs)
+  return docs
 }
 
 async function generateEmbeddings() {
@@ -15,9 +24,9 @@ async function generateEmbeddings() {
   const documents = await getDocuments() // Your custom function to load docs
 
   // Assuming each document is a string
-  for (const document of documents) {
+  for (const { pageContent } of documents) {
     // OpenAI recommends replacing newlines with spaces for best results
-    const input = document.replace(/\n/g, " ")
+    const input = pageContent.replace(/\n/g, " ")
 
     const embeddingResponse = await openai.createEmbedding({
       model: "text-embedding-ada-002",
@@ -28,7 +37,7 @@ async function generateEmbeddings() {
 
     // In production we should handle possible errors
     await supabaseClient.from("documents").insert({
-      content: document,
+      content: pageContent,
       embedding,
     })
   }
