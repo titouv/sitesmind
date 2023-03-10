@@ -1,6 +1,10 @@
-import { createClient } from "@/supabase/utils/browser"
 import { Configuration, OpenAIApi } from "openai"
-const supabaseClient = createClient()
+import { supabaseClient } from "@/supabase/utils/api"
+
+export const config = {
+  revalidate: 0,
+  runtime: "edge",
+}
 
 export const corsHeaders = {
   "Access-Control-Allow-Origin": "*",

@@ -2,9 +2,9 @@ import { OpenAIStream } from "@/utils/openAIStream"
 import GPT3Tokenizer from "gpt3-tokenizer"
 // import { Configuration, OpenAIApi } from "openai"
 import { openaiClient } from "@/utils/openAI"
-import { createClient } from "@/supabase/utils/browser"
 
-const supabaseClient = createClient()
+import { supabaseClient } from "@/supabase/utils/api"
+
 export const config = {
   revalidate: 0,
   runtime: "edge",

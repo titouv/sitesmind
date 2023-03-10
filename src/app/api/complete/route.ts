@@ -1,9 +1,12 @@
 import { OpenAIStream } from "@/utils/openAIStream"
 import GPT3Tokenizer from "gpt3-tokenizer"
 import { openaiClient } from "@/utils/openAI"
-import { createClient } from "@/supabase/utils/browser"
+import { supabaseClient } from "@/supabase/utils/api"
 
-const supabaseClient = createClient()
+export const config = {
+  revalidate: 0,
+  runtime: "edge",
+}
 
 export const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
