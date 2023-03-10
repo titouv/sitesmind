@@ -2,7 +2,7 @@ import { OpenAIStream } from "@/utils/openAIStream"
 import GPT3Tokenizer from "gpt3-tokenizer"
 // import { Configuration, OpenAIApi } from "openai"
 import { openaiClient } from "@/utils/openAI"
-import { createClient } from "@/supabase/utils/server"
+import { createClient } from "@/supabase/utils/browser"
 
 const supabaseClient = createClient()
 export const config = {
@@ -42,7 +42,6 @@ export async function GET(req: Request) {
   // Ideally for context injection, documents are chunked into
   // smaller sections at earlier pre-processing/embedding step.
 
-  const start = Date.now()
   const { data: documents, error } = await supabaseClient.rpc(
     "match_documents",
     {
@@ -53,10 +52,8 @@ export async function GET(req: Request) {
   )
 
   if (error) {
-    console.log("error", error)
     return new Response("error", { headers: corsHeaders })
   }
-  console.log("supabaseClient.rpc", Date.now() - start)
 
   const tokenizer = new GPT3Tokenizer({ type: "gpt3" })
   let tokenCount = 0
@@ -91,7 +88,7 @@ export async function GET(req: Request) {
     },
     { role: "user", content: query },
   ]
-  console.log(messages)
+  // console.log(messages)
 
   const payload: OpenAIStreamPayload = {
     model: "gpt-3.5-turbo",

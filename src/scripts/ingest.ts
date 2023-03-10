@@ -1,8 +1,11 @@
 import { Configuration, OpenAIApi } from "openai"
 import { getData } from "./scraper"
-import { supabaseClient } from "../utils/supabase"
 import { Document, RecursiveCharacterTextSplitter } from "./splitter"
 import { openaiClient } from "@/utils/openAI"
+import { createClient } from "@/supabase/utils/server"
+
+const supabaseClient = createClient()
+
 async function getDocuments() {
   const data = await getData(["https://datapix.fr"])
   const rawDocs = data.map((data) => new Document({ pageContent: data }))
