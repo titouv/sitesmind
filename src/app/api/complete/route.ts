@@ -14,15 +14,17 @@ export const corsHeaders = {
     "authorization, x-client-info, apikey, content-type",
 }
 
-export async function POST(req: Request) {
+// maybe replace back to POST requst after this issue has been solved : https://github.com/vercel/next.js/issues/46337
+export async function GET(req: Request) {
   console.log("start")
-  // Handle CORS
-  if (req.method === "OPTIONS") {
-    return new Response("ok", { headers: corsHeaders })
-  }
 
   // Search query is passed in request payload
-  const { query } = await req.json()
+
+  const params = new URL(req.url).searchParams
+  const query = params.get("query")
+  if (!query) {
+    return new Response("no query", { headers: corsHeaders })
+  }
 
   // OpenAI recommends replacing newlines with spaces for best results
   const input = query.replace(/\n/g, " ")

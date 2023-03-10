@@ -15,15 +15,11 @@ export default function TestComponent() {
     setData("")
     setLoading(true)
     const start = Date.now()
-    const response = await fetch("/api/complete", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        query: input,
-      }),
-    })
+
+    const url = new URL("/api/complete", window.location.href)
+    url.searchParams.set("query", input)
+
+    const response = await fetch(url)
     console.log(response)
     if (!response.ok) {
       throw new Error(response.statusText)
