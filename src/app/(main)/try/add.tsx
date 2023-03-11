@@ -40,11 +40,18 @@ export function Add() {
       body: JSON.stringify({ url: siteUrl, id: site.id }),
     })
     if (!response.ok) {
-      setError(response.statusText)
+      try {
+        const data = await response.json()
+        if (data.status) setError(data.status)
+      } catch (e) {
+        setError(response.statusText)
+      }
+
       setLoading(false)
       return
     }
     const data = await response.json()
+
     setData(data)
 
     setLoading(false)

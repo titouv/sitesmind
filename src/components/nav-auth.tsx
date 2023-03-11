@@ -1,7 +1,7 @@
 "use client"
 
-import { ProfilePicture } from "@/app/(main)/profile-picture"
 import { Button } from "@/components/ui/button"
+import { BASE_URL } from "@/config/site"
 import { useSupabase } from "@/supabase/components/supabase-provider"
 
 export function NavAuth({ children }: { children: React.ReactNode }) {
@@ -26,7 +26,7 @@ export function NavAuth({ children }: { children: React.ReactNode }) {
         const { error } = await supabase.auth.signInWithOAuth({
           provider: "google",
           options: {
-            redirectTo: "http://localhost:3000/try",
+            redirectTo: BASE_URL,
           },
         })
         if (error) {

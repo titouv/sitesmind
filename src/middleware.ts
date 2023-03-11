@@ -16,7 +16,9 @@ export async function middleware(req: NextRequest) {
   } = await supabase.auth.getSession()
 
   if (!session && privatePaths.includes(req.nextUrl.pathname)) {
-    return NextResponse.rewrite(new URL("/auth", req.url))
+    const redirectUrl = new URL("/", req.url)
+    redirectUrl.searchParams.set("redirect", "true")
+    return NextResponse.redirect(redirectUrl)
   }
 
   return res

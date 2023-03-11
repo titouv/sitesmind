@@ -1,12 +1,6 @@
-import { createOpenaiClient } from "@/utils/openAI"
+import { generateEmbeddings } from "@/app/api/ingest/embeddings"
 import { createClient } from "@/supabase/utils/browser"
-import { getData } from "@/app/api/ingest/scraper"
-import {
-  Document,
-  RecursiveCharacterTextSplitter,
-} from "@/app/api/ingest/splitter"
-
-const supabaseClient = createClient()
+import { NextResponse } from "next/server"
 
 export const config = {
   revalidate: 0,
@@ -14,79 +8,34 @@ export const config = {
 
 export async function POST(req: Request) {
   const { url, id } = (await req.json()) as { url: string; id: number }
-  await generateEmbeddings(url, id)
-  return new Response(JSON.stringify({ status: "OK" }), { status: 200 })
-}
 
-async function getDocuments(url: string) {
-  const data = await getData([url])
-  const rawDocs = data.map((data) => new Document({ pageContent: data }))
+  const supabaseClient = createClient()
 
-  const textSplitter = new RecursiveCharacterTextSplitter({
-    chunkSize: 1000,
-    chunkOverlap: 500,
-  })
-  const docs = await textSplitter.splitDocuments(rawDocs)
-  return docs
-}
+  const session = await supabaseClient.auth.getSession()
 
-async function generateEmbeddings(url: string, siteId: number) {
-  const documents = await getDocuments(url) // Your custom function to load docs
+  if (!session)
+    return NextResponse.json({ status: "Unauthorized" }, { status: 401 })
 
-  documents.forEach((doc) => {
-    console.log(
-      "================================================================"
-    )
-    console.log(doc.pageContent)
-  })
+  const { data: sites, error } = await supabaseClient.from("sites").select("*")
 
-  // const openaiClient = createOpenaiClient()
+  if (error)
+    return NextResponse.json({ status: "Query error", error }, { status: 500 })
 
-  // Assuming each document is a string
-  for (const { pageContent } of documents) {
-    // OpenAI recommends replacing newlines with spaces for best results
-    const input = pageContent.replace(/\n/g, " ")
+  const sitesLength = sites.length
 
-    // const embeddingResponse = await openaiClient.createEmbedding({
-    //   model: "text-embedding-ada-002",
-    //   input,
-    // })
-    //   curl https://api.openai.com/v1/embeddings \
-    // -H "Content-Type: application/json" \
-    // -H "Authorization: Bearer $OPENAI_API_KEY" \
-    // -d '{"input": "Your text string goes here",
-    //      "model":"text-embedding-ada-002"}'
+  if (sitesLength === 5)
+    return NextResponse.json({ status: "Limit reached" }, { status: 400 })
 
-    const embeddingResponse = await fetch(
-      "https://api.openai.com/v1/embeddings",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
-        },
-        body: JSON.stringify({
-          input,
-          model: "text-embedding-ada-002",
-        }),
-      }
-    )
+  if (sitesLength > 0) {
+    const site = sites.find((site) => site.url === url)
 
-    if (!embeddingResponse.ok) {
-      console.log(
-        "Error while generating embedding",
-        embeddingResponse.statusText
+    if (site)
+      return NextResponse.json(
+        { status: "Site already exists" },
+        { status: 400 }
       )
-      throw new Error("Error while generating embedding")
-    }
-
-    const [{ embedding }] = (await embeddingResponse.json()).data
-
-    // In production we should handle possible errors
-    await supabaseClient.from("documents").insert({
-      content: pageContent,
-      embedding,
-      site_id: siteId,
-    })
   }
+
+  await generateEmbeddings(url, id)
+  return NextResponse.json({ status: "OK" }, { status: 200 })
 }
