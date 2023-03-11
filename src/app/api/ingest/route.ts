@@ -1,15 +1,92 @@
-import { load } from "cheerio"
+import { createOpenaiClient } from "@/utils/openAI"
+import { createClient } from "@/supabase/utils/browser"
+import { getData } from "@/app/api/ingest/scraper"
+import {
+  Document,
+  RecursiveCharacterTextSplitter,
+} from "@/app/api/ingest/splitter"
+
+const supabaseClient = createClient()
 
 export const config = {
   revalidate: 0,
-  runtime: "edge",
 }
 
 export async function POST(req: Request) {
-  const { url } = (await req.json()) as { url: string }
-  const response = await fetch(url)
-  const text = await response.text()
-  const $ = load(text)
-  const title = $("title").text()
-  return new Response(title)
+  const { url, id } = (await req.json()) as { url: string; id: number }
+  await generateEmbeddings(url, id)
+  return new Response(JSON.stringify({ status: "OK" }), { status: 200 })
+}
+
+async function getDocuments(url: string) {
+  const data = await getData([url])
+  const rawDocs = data.map((data) => new Document({ pageContent: data }))
+
+  const textSplitter = new RecursiveCharacterTextSplitter({
+    chunkSize: 1000,
+    chunkOverlap: 500,
+  })
+  const docs = await textSplitter.splitDocuments(rawDocs)
+  return docs
+}
+
+async function generateEmbeddings(url: string, siteId: number) {
+  const documents = await getDocuments(url) // Your custom function to load docs
+
+  documents.forEach((doc) => {
+    console.log(
+      "================================================================"
+    )
+    console.log(doc.pageContent)
+  })
+
+  // const openaiClient = createOpenaiClient()
+
+  // Assuming each document is a string
+  for (const { pageContent } of documents) {
+    // OpenAI recommends replacing newlines with spaces for best results
+    const input = pageContent.replace(/\n/g, " ")
+
+    // const embeddingResponse = await openaiClient.createEmbedding({
+    //   model: "text-embedding-ada-002",
+    //   input,
+    // })
+    //   curl https://api.openai.com/v1/embeddings \
+    // -H "Content-Type: application/json" \
+    // -H "Authorization: Bearer $OPENAI_API_KEY" \
+    // -d '{"input": "Your text string goes here",
+    //      "model":"text-embedding-ada-002"}'
+
+    const embeddingResponse = await fetch(
+      "https://api.openai.com/v1/embeddings",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+        },
+        body: JSON.stringify({
+          input,
+          model: "text-embedding-ada-002",
+        }),
+      }
+    )
+
+    if (!embeddingResponse.ok) {
+      console.log(
+        "Error while generating embedding",
+        embeddingResponse.statusText
+      )
+      throw new Error("Error while generating embedding")
+    }
+
+    const [{ embedding }] = (await embeddingResponse.json()).data
+
+    // In production we should handle possible errors
+    await supabaseClient.from("documents").insert({
+      content: pageContent,
+      embedding,
+      site_id: siteId,
+    })
+  }
 }

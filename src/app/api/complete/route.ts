@@ -1,6 +1,6 @@
 import { OpenAIStream } from "@/utils/openAIStream"
 import GPT3Tokenizer from "gpt3-tokenizer"
-import { openaiClient } from "@/utils/openAI"
+import { createOpenaiClient } from "@/utils/openAI"
 import { supabaseClient } from "@/supabase/utils/api"
 
 export const config = {
@@ -28,6 +28,7 @@ export async function GET(req: Request) {
 
   // OpenAI recommends replacing newlines with spaces for best results
   const input = query.replace(/\n/g, " ")
+  const openaiClient = createOpenaiClient()
 
   let start = Date.now()
   // Generate a one-time embedding for the query itself

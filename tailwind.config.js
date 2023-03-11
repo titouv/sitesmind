@@ -5,6 +5,13 @@ module.exports = {
   darkMode: ["class", '[data-theme="dark"]'],
   content: ["src/**/*.{ts,tsx}"],
   theme: {
+    container: {
+      center: true,
+      padding: "2.5rem",
+      screens: {
+        "2xl": "1360px",
+      },
+    },
     extend: {
       fontFamily: {
         sans: ["var(--font-sans)", ...fontFamily.sans],

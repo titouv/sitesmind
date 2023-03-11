@@ -1,5 +1,5 @@
-import { Configuration, OpenAIApi } from "openai"
 import { supabaseClient } from "@/supabase/utils/api"
+import { createOpenaiClient } from "@/utils/openAI"
 
 export const config = {
   revalidate: 0,
@@ -19,18 +19,14 @@ export async function POST(req: Request) {
   }
 
   // Search query is passed in request payload
-  const { query } = (await req.json()) as { query: string }
+  const { query, id } = (await req.json()) as { query: string; id: number }
   console.log(query)
   // OpenAI recommends replacing newlines with spaces for best results
   const input = query.replace(/\n/g, " ")
-
-  const configuration = new Configuration({
-    apiKey: process.env.OPENAI_API_KEY,
-  })
-  const openai = new OpenAIApi(configuration)
+  const openaiClient = createOpenaiClient()
 
   // Generate a one-time embedding for the query itself
-  const embeddingResponse = await openai.createEmbedding({
+  const embeddingResponse = await openaiClient.createEmbedding({
     model: "text-embedding-ada-002",
     input,
   })
@@ -38,11 +34,17 @@ export async function POST(req: Request) {
   const [{ embedding }] = embeddingResponse.data.data
   // console.log(embedding)
   // In production we should handle possible errors
-  const { data: documents } = await supabaseClient.rpc("match_documents", {
-    match_count: 10,
-    query_embedding: embedding,
-    similarity_threshold: 0.1,
-  })
+  const { data: documents, error } = await supabaseClient.rpc(
+    "match_documents_by_id",
+    {
+      my_site_id: id,
+      match_count: 10,
+      query_embedding: embedding,
+      similarity_threshold: 0.1,
+    }
+  )
+  console.log(error)
+  console.log(documents)
 
   return new Response(JSON.stringify(documents), {
     headers: { ...corsHeaders, "Content-Type": "application/json" },

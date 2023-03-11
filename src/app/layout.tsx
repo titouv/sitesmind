@@ -5,6 +5,7 @@ import SupabaseListener from "@/supabase/components/supabase-listener"
 import SupabaseProvider from "@/supabase/components/supabase-provider"
 import { createClient } from "@/supabase/utils/server"
 import { Inter } from "next/font/google"
+
 // do not cache this layout
 export const revalidate = 0
 
@@ -29,7 +30,7 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <SupabaseProvider>
+        <SupabaseProvider session={session}>
           <SupabaseListener serverAccessToken={session?.access_token} />
           {children}
         </SupabaseProvider>

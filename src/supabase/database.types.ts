@@ -14,16 +14,39 @@ export interface Database {
           content: string | null
           embedding: unknown | null
           id: number
+          site_id: number | null
         }
         Insert: {
           content?: string | null
           embedding?: unknown | null
           id?: number
+          site_id?: number | null
         }
         Update: {
           content?: string | null
           embedding?: unknown | null
           id?: number
+          site_id?: number | null
+        }
+      }
+      sites: {
+        Row: {
+          created_at: string | null
+          id: number
+          url: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: number
+          url?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: number
+          url?: string | null
+          user_id?: string | null
         }
       }
     }
@@ -42,6 +65,19 @@ export interface Database {
           query_embedding: unknown
           similarity_threshold: number
           match_count: number
+        }
+        Returns: {
+          id: number
+          content: string
+          similarity: number
+        }[]
+      }
+      match_documents_by_id: {
+        Args: {
+          query_embedding: unknown
+          similarity_threshold: number
+          match_count: number
+          my_site_id: number
         }
         Returns: {
           id: number

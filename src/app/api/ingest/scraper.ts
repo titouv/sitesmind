@@ -3,11 +3,15 @@ import { load } from "cheerio"
 const bannedTags = ["script", "style", "noscript", "iframe", "svg"]
 
 export async function getData(urls: string[]) {
+  console.log("getData")
   const responses = await Promise.all(urls.map((url) => fetch(url)))
   const data = await Promise.all(responses.map((response) => response.text()))
   const interestingData = await Promise.all(
     data.map((html) => getInterestingData(html))
   )
+  // limit each page to 1000 characters
+  // const slicedData = interestingData.map((data) => data.slice(0, 1000))
+
   return interestingData
 }
 async function getInterestingData(html: string) {
