@@ -16,7 +16,10 @@ export async function POST(req: Request) {
   if (!session)
     return NextResponse.json({ status: "Unauthorized" }, { status: 401 })
 
-  const { data: sites, error } = await supabaseClient.from("sites").select("*")
+  const { data: sites, error } = await supabaseClient
+    .from("sites")
+    .select("*")
+    .eq("user_id", session.data.session?.user.id)
 
   if (error)
     return NextResponse.json({ status: "Query error", error }, { status: 500 })
