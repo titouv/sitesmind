@@ -1,7 +1,6 @@
 "use client"
+
 import { useState, useRef, useEffect, useMemo } from "react"
-import Image from "next/image"
-import Link from "next/link"
 // import ReactMarkdown from "react-markdown"
 // import CircularProgress from "@mui/material/CircularProgress"
 // import { fetchEventSource } from "@microsoft/fetch-event-source"

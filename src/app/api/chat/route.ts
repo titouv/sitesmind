@@ -10,8 +10,6 @@ export const config = {
 
 export const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers":
-    "authorization, x-client-info, apikey, content-type",
 }
 
 type OpenAIStreamPayload = Parameters<typeof OpenAIStream>[0]
@@ -107,5 +105,5 @@ export async function GET(req: Request) {
     n: 1,
   }
   const stream = await OpenAIStream(payload)
-  return new Response(stream)
+  return new Response(stream, { headers: corsHeaders })
 }
