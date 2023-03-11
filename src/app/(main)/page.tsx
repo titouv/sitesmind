@@ -30,8 +30,9 @@ export default function Home({
             from your website
           </h1>
           <p className="max-w-[700px] text-lg text-slate-700 dark:text-slate-400 sm:text-xl">
-            Custom chatbot powered by ChatGPT API based on your content. Deploy
-            it on your website in minutes.
+            Custom chatbot powered by ChatGPT API based on your content.
+            <br className="hidden sm:inline" /> Deploy it on your website in
+            minutes.
           </p>
         </div>
         <div className="flex gap-4">
