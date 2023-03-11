@@ -21,12 +21,17 @@ interface MainNavProps {
 export function MainNav({ items }: MainNavProps) {
   return (
     <div className="flex gap-6 md:gap-10">
-      <Link href="/" className="hidden items-center space-x-2 md:flex">
-        <Icons.logo className="h-6 w-6" />
-        <span className="hidden font-bold sm:inline-block">
-          {siteConfig.name}
+      <div className="flex gap-2">
+        <Link href="/" className="hidden items-center space-x-2 md:flex">
+          <Icons.logo className="h-6 w-6" />
+          <span className="hidden font-bold sm:inline-block">
+            {siteConfig.name}
+          </span>
+        </Link>
+        <span className="hidden sm:inline-block whitespace-nowrap rounded-md bg-blue-100 px-2.5 py-0.5 text-sm text-blue-700">
+          Alpha
         </span>
-      </Link>
+      </div>
       {items?.length ? (
         <nav className="hidden gap-6 md:flex">
           {items?.map(
@@ -62,9 +67,14 @@ export function MainNav({ items }: MainNavProps) {
           className="w-[300px] overflow-scroll"
         >
           <DropdownMenuLabel>
-            <Link href="/" className="flex items-center">
-              <Icons.logo className="mr-2 h-4 w-4" /> {siteConfig.name}
-            </Link>
+            <div className="flex gap-2">
+              <Link href="/" className="flex items-center">
+                <Icons.logo className="mr-2 h-4 w-4" /> {siteConfig.name}
+              </Link>
+              <span className=" whitespace-nowrap rounded-md bg-blue-100 px-2.5 py-0.5  text-sm text-blue-700">
+                Alpha
+              </span>
+            </div>
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
           {items?.map(

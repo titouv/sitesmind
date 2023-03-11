@@ -36,14 +36,14 @@ export default function Home({
         </div>
         <div className="flex gap-4">
           <Link href="/try">Try it out</Link>
-          <Link
+          {/* <Link
             variant="subtle"
             target="_blank"
             rel="noreferrer"
             href={siteConfig.links.github}
           >
             GitHub
-          </Link>
+          </Link> */}
         </div>
       </section>
     </>
