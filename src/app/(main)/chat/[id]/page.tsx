@@ -55,7 +55,9 @@ export default function Home({ params }: { params: { id: string } }) {
     console.log(process.env.NEXT_PUBLIC_VERCEL_URL)
     const url = new URL(
       `api/chat/`,
-      process.env.NEXT_PUBLIC_VERCEL_URL || "http://localhost:3000"
+      process.env.NEXT_PUBLIC_VERCEL_URL
+        ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
+        : "http://localhost:3000"
     )
     console.log(url)
     url.searchParams.set("messages", JSON.stringify(messagesToApi))
