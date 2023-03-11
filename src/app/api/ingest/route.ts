@@ -1,5 +1,6 @@
 import { generateEmbeddings } from "@/app/api/ingest/embeddings"
 import { createClient } from "@/supabase/utils/browser"
+import { get } from "@vercel/edge-config"
 import { NextResponse } from "next/server"
 
 export const config = {
@@ -26,7 +27,13 @@ export async function POST(req: Request) {
 
   const sitesLength = sites.length
 
-  if (sitesLength === 5)
+  const emailBypassLimit = (await get("emailBypassLimit")) as string[]
+
+  if (
+    session.data.session?.user.email &&
+    !emailBypassLimit.includes(session.data.session?.user.email) &&
+    sitesLength >= 5
+  )
     return NextResponse.json({ status: "Limit reached" }, { status: 400 })
 
   if (sitesLength > 0) {
