@@ -11,7 +11,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { Icons } from "@/components/icons"
-import { BASE_SITE_URL } from "@/config/site"
+
 type Message = OpenAIMessages[number] & {
   streaming?: boolean
 }
@@ -52,7 +52,12 @@ export default function Home({ params }: { params: { id: string } }) {
       { content: "", role: "assistant", streaming: true },
     ])
 
-    const url = new URL(`api/chat/`, BASE_SITE_URL)
+    console.log(process.env.NEXT_PUBLIC_VERCEL_URL)
+    const url = new URL(
+      `api/chat/`,
+      process.env.NEXT_PUBLIC_VERCEL_URL || "http://localhost:3000"
+    )
+    console.log(url)
     url.searchParams.set("messages", JSON.stringify(messagesToApi))
 
     const response = await fetch(url)
