@@ -30,6 +30,10 @@ export const siteConfig: SiteConfig = {
       title: "Try",
       href: "/try",
     },
+    {
+      title: "Sites",
+      href: "/sites",
+    },
   ],
   links: {
     twitter: "https://twitter.com/titouanver",
