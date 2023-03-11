@@ -1,5 +1,8 @@
 import { NavItem } from "@/types/nav"
 
+export const BASE_SITE_URL =
+  process.env.NEXT_PUBLIC_VERCEL_URL || "http://localhost:3000"
+
 interface SiteConfig {
   name: string
   description: string
