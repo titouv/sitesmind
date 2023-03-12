@@ -132,10 +132,10 @@ export default function Home({ params }: { params: { id: string } }) {
 
   return (
     <div className="container flex flex-col items-center py-8">
-      <div className="w-[75vw]  py-2">
+      <div className="w-full py-2  md:w-[75vw]">
         <span>This is a chabot for {params.id}</span>
       </div>
-      <div className="flex h-[65vh]  w-[75vw] flex-col items-center  justify-center overflow-hidden rounded-xl border  border-slate-300">
+      <div className="flex h-[65vh] w-full flex-col items-center justify-center  overflow-hidden rounded-xl border border-slate-300  md:w-[75vw]">
         <div
           className="h-full w-full overflow-y-scroll scroll-smooth  scrollbar-thin scrollbar-thumb-slate-400 "
           ref={messageListRef}
@@ -204,7 +204,7 @@ export default function Home({ params }: { params: { id: string } }) {
           })}
         </div>
       </div>
-      <div className="w-[75vw] pt-4">
+      <div className="w-full pt-4 md:w-[75vw]">
         <form onSubmit={handleSubmit} className="flex gap-2">
           <Textarea
             ref={textAreaRef}

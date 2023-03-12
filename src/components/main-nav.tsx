@@ -21,7 +21,7 @@ interface MainNavProps {
 export function MainNav({ items }: MainNavProps) {
   return (
     <div className="flex gap-6 md:gap-10">
-      <div className="flex gap-2">
+      <div className="hidden gap-2 md:flex">
         <Link href="/" className="hidden items-center space-x-2 md:flex">
           <Icons.logo className="h-6 w-6" />
           <span className="hidden font-bold sm:inline-block">
@@ -55,7 +55,7 @@ export function MainNav({ items }: MainNavProps) {
         <DropdownMenuTrigger asChild>
           <Button
             variant="ghost"
-            className="-ml-4 text-base hover:bg-transparent focus:ring-0 md:hidden"
+            className="-ml-4 text-base focus:ring-0 hover:bg-transparent md:hidden"
           >
             <Icons.logo className="mr-2 h-4 w-4" />{" "}
             <span className="font-bold">Menu</span>
