@@ -29,10 +29,10 @@ export default async function Page() {
             {data.map((site) => (
               <li
                 key={site.id}
-                className="flex justify-between rounded-xl px-3 py-2 odd:bg-slate-100"
+                className="flex gap-8 rounded-xl border-slate-200 p-2 odd:bg-slate-100 even:border"
               >
                 {site.url && (
-                  <Link variant="link" href={site.url}>
+                  <Link className="p-0 pl-2" variant="link" href={site.url}>
                     {site.url}
                   </Link>
                 )}

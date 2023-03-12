@@ -1,6 +1,7 @@
 export interface NavItem {
   title: string;
   href?: string;
-  disabled?: boolean;
-  external?: boolean;
+  disabled?: true;
+  external?: true;
+  requireLogin?: true;
 }

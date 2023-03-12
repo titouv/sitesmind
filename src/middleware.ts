@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import type { Database } from "@/supabase/database.types";
 
-const privatePaths = ["/try", "/sites"];
+const privatePaths = ["/create", "/sites"];
 
 export async function middleware(req: NextRequest) {
   const res = NextResponse.next();

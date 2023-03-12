@@ -22,17 +22,23 @@ export const siteConfig: SiteConfig = {
   name: "Chatbot GPT",
   description: "GPT-3 powered chatbot for your website.",
   mainNav: [
+    // {
+    //   title: "Home",
+    //   href: "/",
+    //   requireLogin: false,
+    // },
     {
-      title: "Home",
-      href: "/",
-    },
-    {
-      title: "Try",
-      href: "/try",
+      title: "Create",
+      href: "/create",
+      requireLogin: true,
     },
     {
       title: "Sites",
       href: "/sites",
+      requireLogin: true,
+    },
+    {
+      title: "Pricing",
     },
   ],
   links: {

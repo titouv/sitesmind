@@ -65,7 +65,7 @@ export function Add() {
           <Label>
             Enter the adress of the website you want to import data from.
           </Label>
-          <div className="flex gap-4">
+          <div className="mt-2 flex gap-4">
             <Input
               type="url"
               placeholder="https:/datapix.fr"
@@ -99,9 +99,7 @@ export function Add() {
               <span className="py-2">The data as been treated</span>
 
               {data && (
-                <Link href={`/chat/${siteId}`}>
-                  Try the generated chatbot
-                </Link>
+                <Link href={`/chat/${siteId}`}>Try the generated chatbot</Link>
               )}
             </>
           )}

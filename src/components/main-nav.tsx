@@ -13,12 +13,18 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { createClient } from "@/supabase/utils/server";
 
 interface MainNavProps {
   items?: NavItem[];
 }
 
-export function MainNav({ items }: MainNavProps) {
+export async function MainNav({ items }: MainNavProps) {
+  const supabase = createClient();
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+
   return (
     <div className="flex gap-6 md:gap-10">
       <div className="hidden gap-2 md:flex">
@@ -36,7 +42,8 @@ export function MainNav({ items }: MainNavProps) {
         <nav className="hidden gap-6 md:flex">
           {items?.map(
             (item, index) =>
-              item.href && (
+              item.href &&
+              (!item.requireLogin || session) && (
                 <Link
                   key={index}
                   href={item.href}
@@ -79,7 +86,8 @@ export function MainNav({ items }: MainNavProps) {
           <DropdownMenuSeparator />
           {items?.map(
             (item, index) =>
-              item.href && (
+              item.href &&
+              (!item.requireLogin || session) && (
                 <DropdownMenuItem key={index} asChild>
                   <Link href={item.href}>{item.title}</Link>
                 </DropdownMenuItem>

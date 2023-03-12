@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Icons } from "@/components/icons";
 import { BASE_URL } from "@/config/site";
+import { Link } from "@/components/ui/link";
 
 type Message = OpenAIMessages[number] & {
   streaming?: boolean;
@@ -132,8 +133,11 @@ export default function Home({ params }: { params: { id: string } }) {
 
   return (
     <div className="container flex flex-col items-center py-8">
-      <div className="w-full py-2  md:w-[75vw]">
+      <div className="flex w-full items-center justify-between py-2  md:w-[75vw]">
         <span>This is a chabot for {params.id}</span>
+        <Link href={`/chat/${params.id}/how-to`}>
+          How to use the chat on your website
+        </Link>
       </div>
       <div className="flex h-[65vh] w-full flex-col items-center justify-center  overflow-hidden rounded-xl border border-slate-300  md:w-[75vw]">
         <div
