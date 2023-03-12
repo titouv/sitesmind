@@ -1,14 +1,18 @@
-import { Link } from "@/components/ui/link"
-import { createClient } from "@/supabase/utils/server"
+import { Link } from "@/components/ui/link";
+import { createClient } from "@/supabase/utils/server";
+
+export const config = {
+  revalidate: 0,
+};
 
 export default async function Page() {
-  const supabase = createClient()
-  const { data, error } = await supabase.from("sites").select()
+  const supabase = createClient();
+  const { data, error } = await supabase.from("sites").select();
 
   if (error) {
-    console.error(error)
+    console.error(error);
   }
-  console.log(data)
+  console.log(data);
   return (
     // <div>
     //   <h1>Page</h1>
@@ -21,11 +25,11 @@ export default async function Page() {
         {!data ? (
           <span className="pt-8">No sites</span>
         ) : (
-          <ul className="flex pt-8 flex-col max-w-sm gap-2">
+          <ul className="flex max-w-sm flex-col gap-2 pt-8">
             {data.map((site) => (
               <li
                 key={site.id}
-                className="flex odd:bg-slate-100 rounded-xl px-3 py-2 justify-between"
+                className="flex justify-between rounded-xl px-3 py-2 odd:bg-slate-100"
               >
                 {site.url && (
                   <Link variant="link" href={site.url}>
@@ -40,5 +44,5 @@ export default async function Page() {
         )}
       </div>
     </section>
-  )
+  );
 }

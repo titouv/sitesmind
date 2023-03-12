@@ -1,5 +1,5 @@
-import { SiteHeader } from "@/components/site-header"
-import { ReactNode } from "react"
+import { SiteHeader } from "@/components/site-header";
+import { ReactNode } from "react";
 
 export default function MainLayout({ children }: { children: ReactNode }) {
   return (
@@ -9,5 +9,5 @@ export default function MainLayout({ children }: { children: ReactNode }) {
         <main>{children}</main>
       </body>
     </>
-  )
+  );
 }

@@ -1,21 +1,21 @@
-import { NavItem } from "@/types/nav"
+import { NavItem } from "@/types/nav";
 
-import Image from "next/image"
-import Link from "next/link"
+import Image from "next/image";
+import Link from "next/link";
 
 export const BASE_URL = process.env.NEXT_PUBLIC_VERCEL_GIT_REPO_SLUG
   ? `https://${process.env.NEXT_PUBLIC_VERCEL_GIT_REPO_SLUG}.vercel.app`
-  : "http://localhost:3000"
+  : "http://localhost:3000";
 
 interface SiteConfig {
-  name: string
-  description: string
-  mainNav: NavItem[]
+  name: string;
+  description: string;
+  mainNav: NavItem[];
   links: {
-    twitter: string
-    github: string
+    twitter: string;
+    github: string;
     // docs: string
-  }
+  };
 }
 
 export const siteConfig: SiteConfig = {
@@ -39,4 +39,4 @@ export const siteConfig: SiteConfig = {
     twitter: "https://twitter.com/titouanver",
     github: "https://github.com/titouv",
   },
-}
+};

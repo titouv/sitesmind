@@ -6,16 +6,18 @@ import {
   Twitter,
   Bot,
   User,
+  CheckCircle,
   type Icon as LucideIcon,
-} from "lucide-react"
+} from "lucide-react";
 
-export type Icon = LucideIcon
+export type Icon = LucideIcon;
 
 export const Icons = {
   sun: SunMedium,
   moon: Moon,
   laptop: Laptop,
   twitter: Twitter,
+  checkCircle: CheckCircle,
   bot: Bot,
   user: User,
   logo: (props: LucideProps) => (
@@ -34,4 +36,4 @@ export const Icons = {
       ></path>
     </svg>
   ),
-}
+};

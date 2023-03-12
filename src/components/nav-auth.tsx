@@ -1,18 +1,18 @@
-"use client"
+"use client";
 
-import { Button } from "@/components/ui/button"
-import { BASE_URL } from "@/config/site"
-import { useSupabase } from "@/supabase/components/supabase-provider"
+import { Button } from "@/components/ui/button";
+import { BASE_URL } from "@/config/site";
+import { useSupabase } from "@/supabase/components/supabase-provider";
 
 export function NavAuth({ children }: { children: React.ReactNode }) {
-  const { supabase, session } = useSupabase()
+  const { supabase, session } = useSupabase();
 
   return session ? (
     <>
       <Button
         variant="outline"
         onClick={async () => {
-          await supabase.auth.signOut()
+          await supabase.auth.signOut();
         }}
       >
         Sign out
@@ -28,13 +28,13 @@ export function NavAuth({ children }: { children: React.ReactNode }) {
           options: {
             redirectTo: BASE_URL,
           },
-        })
+        });
         if (error) {
-          console.error(error)
+          console.error(error);
         }
       }}
     >
       Sign in
     </Button>
-  )
+  );
 }

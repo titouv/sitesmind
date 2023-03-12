@@ -1,10 +1,10 @@
-import Link from "next/link"
+import Link from "next/link";
 
-import { NavItem } from "@/types/nav"
-import { siteConfig } from "@/config/site"
-import { cn } from "@/lib/utils"
-import { Icons } from "@/components/icons"
-import { Button } from "@/components/ui/button"
+import { NavItem } from "@/types/nav";
+import { siteConfig } from "@/config/site";
+import { cn } from "@/lib/utils";
+import { Icons } from "@/components/icons";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,10 +12,10 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from "@/components/ui/dropdown-menu";
 
 interface MainNavProps {
-  items?: NavItem[]
+  items?: NavItem[];
 }
 
 export function MainNav({ items }: MainNavProps) {
@@ -28,7 +28,7 @@ export function MainNav({ items }: MainNavProps) {
             {siteConfig.name}
           </span>
         </Link>
-        <span className="hidden sm:inline-block whitespace-nowrap rounded-md bg-blue-100 px-2.5 py-0.5 text-sm text-blue-700">
+        <span className="hidden whitespace-nowrap rounded-md bg-blue-100 px-2.5 py-0.5 text-sm text-blue-700 sm:inline-block">
           Alpha
         </span>
       </div>
@@ -88,5 +88,5 @@ export function MainNav({ items }: MainNavProps) {
         </DropdownMenuContent>
       </DropdownMenu>
     </div>
-  )
+  );
 }

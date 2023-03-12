@@ -1,25 +1,25 @@
-import { createMiddlewareSupabaseClient } from "@supabase/auth-helpers-nextjs"
-import { NextResponse } from "next/server"
+import { createMiddlewareSupabaseClient } from "@supabase/auth-helpers-nextjs";
+import { NextResponse } from "next/server";
 
-import type { NextRequest } from "next/server"
-import type { Database } from "@/supabase/database.types"
+import type { NextRequest } from "next/server";
+import type { Database } from "@/supabase/database.types";
 
-const privatePaths = ["/try", "/sites"]
+const privatePaths = ["/try", "/sites"];
 
 export async function middleware(req: NextRequest) {
-  const res = NextResponse.next()
+  const res = NextResponse.next();
 
-  const supabase = createMiddlewareSupabaseClient<Database>({ req, res })
+  const supabase = createMiddlewareSupabaseClient<Database>({ req, res });
 
   const {
     data: { session },
-  } = await supabase.auth.getSession()
+  } = await supabase.auth.getSession();
 
   if (!session && privatePaths.includes(req.nextUrl.pathname)) {
-    const redirectUrl = new URL("/", req.url)
-    redirectUrl.searchParams.set("redirect", "true")
-    return NextResponse.redirect(redirectUrl)
+    const redirectUrl = new URL("/", req.url);
+    redirectUrl.searchParams.set("redirect", "true");
+    return NextResponse.redirect(redirectUrl);
   }
 
-  return res
+  return res;
 }

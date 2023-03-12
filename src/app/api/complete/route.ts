@@ -1,46 +1,46 @@
-import { OpenAIStream } from "@/utils/openAIStream"
-import GPT3Tokenizer from "gpt3-tokenizer"
-import { createOpenaiClient } from "@/utils/openAI"
-import { supabaseClient } from "@/supabase/utils/api"
+import { OpenAIStream } from "@/utils/openAIStream";
+import GPT3Tokenizer from "gpt3-tokenizer";
+import { createOpenaiClient } from "@/utils/openAI";
+import { supabaseClient } from "@/supabase/utils/api";
 
 export const config = {
   revalidate: 0,
   runtime: "edge",
-}
+};
 
 export const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers":
     "authorization, x-client-info, apikey, content-type",
-}
+};
 
 // maybe replace back to POST requst after this issue has been solved : https://github.com/vercel/next.js/issues/46337
 export async function GET(req: Request) {
-  console.log("start")
+  console.log("start");
 
   // Search query is passed in request payload
 
-  const params = new URL(req.url).searchParams
-  const query = params.get("query")
+  const params = new URL(req.url).searchParams;
+  const query = params.get("query");
   if (!query) {
-    return new Response("no query", { headers: corsHeaders })
+    return new Response("no query", { headers: corsHeaders });
   }
 
   // OpenAI recommends replacing newlines with spaces for best results
-  const input = query.replace(/\n/g, " ")
-  const openaiClient = createOpenaiClient()
+  const input = query.replace(/\n/g, " ");
+  const openaiClient = createOpenaiClient();
 
-  let start = Date.now()
+  let start = Date.now();
   // Generate a one-time embedding for the query itself
   const embeddingResponse = await openaiClient.createEmbedding({
     model: "text-embedding-ada-002",
     input,
-  })
-  console.log("time for embedding", Date.now() - start, "ms")
+  });
+  console.log("time for embedding", Date.now() - start, "ms");
 
-  const [{ embedding }] = embeddingResponse.data.data
+  const [{ embedding }] = embeddingResponse.data.data;
 
-  start = Date.now()
+  start = Date.now();
   // Fetching whole documents for this simple example.
   //
   // Ideally for context injection, documents are chunked into
@@ -52,33 +52,33 @@ export async function GET(req: Request) {
       query_embedding: embedding,
       similarity_threshold: 0.1,
     }
-  )
+  );
   if (error) {
-    console.log("error", error)
-    return new Response("error", { headers: corsHeaders })
+    console.log("error", error);
+    return new Response("error", { headers: corsHeaders });
   }
-  console.log("time for match_documents", Date.now() - start, "ms")
+  console.log("time for match_documents", Date.now() - start, "ms");
 
-  const tokenizer = new GPT3Tokenizer({ type: "gpt3" })
-  let tokenCount = 0
-  let contextText = ""
+  const tokenizer = new GPT3Tokenizer({ type: "gpt3" });
+  let tokenCount = 0;
+  let contextText = "";
 
   // Concat matched documents
   for (let i = 0; i < documents.length; i++) {
-    const document = documents[i]
-    const content = document.content
-    const encoded = tokenizer.encode(content)
-    tokenCount += encoded.text.length
+    const document = documents[i];
+    const content = document.content;
+    const encoded = tokenizer.encode(content);
+    tokenCount += encoded.text.length;
 
     // Limit context to max 1500 tokens (configurable)
     if (tokenCount > 1500) {
-      break
+      break;
     }
 
-    contextText += `${content.trim()}\n---\n`
+    contextText += `${content.trim()}\n---\n`;
   }
 
-  type OpenAIStreamPayload = Parameters<typeof OpenAIStream>[0]
+  type OpenAIStreamPayload = Parameters<typeof OpenAIStream>[0];
 
   // In production we should handle possible errors
   const messages: OpenAIStreamPayload["messages"] = [
@@ -91,7 +91,7 @@ export async function GET(req: Request) {
       content: contextText,
     },
     { role: "user", content: query },
-  ]
+  ];
 
   const payload: OpenAIStreamPayload = {
     model: "gpt-3.5-turbo",
@@ -103,7 +103,7 @@ export async function GET(req: Request) {
     max_tokens: 200,
     stream: true,
     n: 1,
-  }
-  const stream = await OpenAIStream(payload)
-  return new Response(stream)
+  };
+  const stream = await OpenAIStream(payload);
+  return new Response(stream);
 }

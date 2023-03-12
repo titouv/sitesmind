@@ -1,25 +1,21 @@
-import { Auth } from "@/app/(main)/auth"
-import { ProfilePicture } from "@/app/(main)/profile-picture"
-import { Link } from "@/components/ui/link"
-import { siteConfig } from "@/config/site"
+import { Link } from "@/components/ui/link";
 
-import type { Metadata } from "next"
-import { redirect } from "next/dist/server/api-utils"
+import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Home",
   description: "Welcome to Next.js",
-}
+};
 
 export default function Home({
   searchParams,
 }: {
-  searchParams: { redirect: string }
+  searchParams: { redirect: string };
 }) {
   return (
     <>
       {searchParams.redirect && (
-        <div className="container w-full  py-3 bg-slate-100">
+        <div className="container my-2 w-full rounded-xl  bg-slate-100 py-3">
           <span>Please login before using</span>
         </div>
       )}
@@ -48,5 +44,5 @@ export default function Home({
         </div>
       </section>
     </>
-  )
+  );
 }

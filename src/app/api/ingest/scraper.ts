@@ -1,22 +1,22 @@
-import { load } from "cheerio"
+import { load } from "cheerio";
 
-const bannedTags = ["script", "style", "noscript", "iframe", "svg"]
+const bannedTags = ["script", "style", "noscript", "iframe", "svg"];
 
 export async function getData(urls: string[]) {
-  console.log("getData")
-  const responses = await Promise.all(urls.map((url) => fetch(url)))
-  const data = await Promise.all(responses.map((response) => response.text()))
+  console.log("getData");
+  const responses = await Promise.all(urls.map((url) => fetch(url)));
+  const data = await Promise.all(responses.map((response) => response.text()));
   const interestingData = await Promise.all(
     data.map((html) => getInterestingData(html))
-  )
+  );
   // limit each page to 1000 characters
   // const slicedData = interestingData.map((data) => data.slice(0, 1000))
 
-  return interestingData
+  return interestingData;
 }
 async function getInterestingData(html: string) {
-  const $ = load(html)
-  let texts = new Set()
+  const $ = load(html);
+  let texts = new Set();
   // get all text tag and their content
   $("*")
     .contents()
@@ -24,13 +24,13 @@ async function getInterestingData(html: string) {
       if (el.type === "text") {
         // @ts-ignore
         if (!bannedTags.includes(el?.parent?.name)) {
-          texts.add(el.data)
+          texts.add(el.data);
         }
       }
-    })
-  let text = Array.from(texts).join(" ")
+    });
+  let text = Array.from(texts).join(" ");
   //replace multiple spaces by newline
-  text = text.replace(/\s\s+/g, "\n")
+  text = text.replace(/\s\s+/g, "\n");
 
-  return text
+  return text;
 }

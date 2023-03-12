@@ -1,77 +1,75 @@
-"use client"
+"use client";
 
-import { useState, useRef, useEffect, useMemo } from "react"
-// import ReactMarkdown from "react-markdown"
-// import CircularProgress from "@mui/material/CircularProgress"
-// import { fetchEventSource } from "@microsoft/fetch-event-source"
-// import remarkGfm from "remark-gfm"
-import { OpenAIMessages } from "@/app/api/chat/route"
-import { Textarea } from "@/components/ui/textarea"
-import { Button } from "@/components/ui/button"
-import { cn } from "@/lib/utils"
-import { Icons } from "@/components/icons"
-import { BASE_URL } from "@/config/site"
+import { useState, useRef, useEffect, useMemo } from "react";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import { OpenAIMessages } from "@/app/api/chat/route";
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import { Icons } from "@/components/icons";
+import { BASE_URL } from "@/config/site";
 
 type Message = OpenAIMessages[number] & {
-  streaming?: boolean
-}
+  streaming?: boolean;
+};
 
 export default function Home({ params }: { params: { id: string } }) {
-  const [userInput, setUserInput] = useState("")
-  const [loading, setLoading] = useState(false)
+  const [userInput, setUserInput] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const [messages, setMessages] = useState<Message[]>([
     {
       content: "Hello, I am a chatbot. How can I help you?",
       role: "assistant",
     },
-  ])
+  ]);
 
   // Handle form submission
   const handleSubmit = async (e: any) => {
-    e.preventDefault()
+    e.preventDefault();
 
-    const question = userInput.trim()
+    const question = userInput.trim();
     if (question === "") {
-      return
+      return;
     }
 
     // clean input
-    setUserInput("")
-    setLoading(true)
+    setUserInput("");
+    setLoading(true);
     let messagesToApi: Message[] = [
       ...messages,
       {
         content: question,
         role: "user",
       },
-    ]
+    ];
     setMessages((state) => [
       ...state,
       { content: question, role: "user" },
       { content: "", role: "assistant", streaming: true },
-    ])
+    ]);
 
-    console.log(BASE_URL)
-    const url = new URL(`api/chat/`, BASE_URL)
-    console.log(url)
-    url.searchParams.set("messages", JSON.stringify(messagesToApi))
+    console.log(BASE_URL);
+    const url = new URL(`api/chat/`, BASE_URL);
+    console.log(url);
+    url.searchParams.set("messages", JSON.stringify(messagesToApi));
 
-    const response = await fetch(url)
+    const response = await fetch(url);
     if (!response.ok) {
-      throw new Error(response.statusText)
+      throw new Error(response.statusText);
     }
-    const data = response.body
+    const data = response.body;
     if (!data) {
-      return
+      return;
     }
-    const reader = data.getReader()
-    const decoder = new TextDecoder()
-    let done = false
+    const reader = data.getReader();
+    const decoder = new TextDecoder();
+    let done = false;
     while (!done) {
-      const { value, done: doneReading } = await reader.read()
+      const { value, done: doneReading } = await reader.read();
       if (value) {
-        const decoded = decoder.decode(value)
+        const decoded = decoder.decode(value);
         setMessages((state) =>
           // modify last element
           state.map((message, index) => {
@@ -79,13 +77,13 @@ export default function Home({ params }: { params: { id: string } }) {
               return {
                 ...message,
                 content: message.content + decoded,
-              }
+              };
             }
-            return message
+            return message;
           })
-        )
+        );
       }
-      done = doneReading
+      done = doneReading;
     }
     // remove streaming
     setMessages((state) =>
@@ -94,58 +92,58 @@ export default function Home({ params }: { params: { id: string } }) {
           return {
             ...message,
             streaming: undefined,
-          }
+          };
         }
-        return message
+        return message;
       })
-    )
+    );
 
-    setLoading(false)
-  }
+    setLoading(false);
+  };
 
-  const messageListRef = useRef<HTMLDivElement>(null)
-  const textAreaRef = useRef<HTMLTextAreaElement>(null)
+  const messageListRef = useRef<HTMLDivElement>(null);
+  const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
-  const lastMessage = messages[messages.length - 1].content
+  const lastMessage = messages[messages.length - 1].content;
 
   // Auto scroll chat to bottom
   useEffect(() => {
-    const messageList = messageListRef.current
+    const messageList = messageListRef.current;
     if (messageList) {
-      messageList.scrollTop = messageList.scrollHeight
+      messageList.scrollTop = messageList.scrollHeight;
     }
-  }, [lastMessage])
+  }, [lastMessage]);
 
   // Focus on text field on load
   useEffect(() => {
-    textAreaRef.current?.focus()
-  }, [loading])
+    textAreaRef.current?.focus();
+  }, [loading]);
 
   // Prevent blank submissions and allow for multiline input
   const handleEnter = (e: any) => {
     if (e.key === "Enter" && userInput) {
       if (!e.shiftKey && userInput) {
-        handleSubmit(e)
+        handleSubmit(e);
       }
     } else if (e.key === "Enter") {
-      e.preventDefault()
+      e.preventDefault();
     }
-  }
+  };
 
   return (
     <div className="container flex flex-col items-center py-8">
-      <div className="py-2  w-[75vw]">
+      <div className="w-[75vw]  py-2">
         <span>This is a chabot for {params.id}</span>
       </div>
-      <div className="w-[75vw] h-[65vh]  flex flex-col items-center  border overflow-hidden rounded-xl justify-center  border-slate-300">
+      <div className="flex h-[65vh]  w-[75vw] flex-col items-center  justify-center overflow-hidden rounded-xl border  border-slate-300">
         <div
-          className="w-full h-full overflow-y-scroll scroll-smooth"
+          className="h-full w-full overflow-y-scroll scroll-smooth  scrollbar-thin scrollbar-thumb-slate-400 "
           ref={messageListRef}
         >
           {messages.map((message, index) => {
-            if (message.content == "") return
-            let icon
-            let roleClassName
+            if (message.content == "") return;
+            let icon;
+            let roleClassName;
 
             if (message.role === "assistant") {
               icon = (
@@ -156,15 +154,15 @@ export default function Home({ params }: { params: { id: string } }) {
                 //   height="30"
                 //   priority
                 // />
-                <div className="p-2 bg-white rounded-xl">
+                <div className="rounded-xl bg-white p-2">
                   <Icons.bot
-                    className="w-[20px] h-[20px]"
+                    className="h-[20px] w-[20px]"
                     width={30}
                     height={30}
                   />
                 </div>
-              )
-              roleClassName = "bg-slate-100"
+              );
+              roleClassName = "bg-slate-100";
             } else {
               icon = (
                 //     <Image
@@ -174,35 +172,35 @@ export default function Home({ params }: { params: { id: string } }) {
                 //       height="30"
                 //       priority
                 //     />
-                <div className="p-2 bg-slate-100 rounded-xl">
+                <div className="rounded-xl bg-slate-100 p-2">
                   <Icons.user
-                    className="w-[20px] h-[20px]"
+                    className="h-[20px] w-[20px]"
                     width={30}
                     height={30}
                   />
                 </div>
-              )
+              );
 
               // The latest message sent by the user will be animated while waiting for a response
               roleClassName =
                 index === messages.length - 2 &&
                 messages[messages.length - 1].content == ""
                   ? "animate-pulse"
-                  : ""
+                  : "";
             }
             return (
-              <div className={cn("px-6 py-4 flex ", roleClassName)} key={index}>
+              <div className={cn("flex px-6 py-4 ", roleClassName)} key={index}>
                 <div className="mr-4">{icon}</div>
                 <div>
-                  {/* <ReactMarkdown
+                  <ReactMarkdown
                     remarkPlugins={[remarkGfm]}
                     linkTarget="_blank"
-                  > */}
-                  {message.content}
-                  {/* </ReactMarkdown> */}
+                  >
+                    {message.content}
+                  </ReactMarkdown>
                 </div>
               </div>
-            )
+            );
           })}
         </div>
       </div>
@@ -222,7 +220,7 @@ export default function Home({ params }: { params: { id: string } }) {
             }
             value={userInput}
             onChange={(e) => setUserInput(e.target.value)}
-            className="resize-none w-full"
+            className="w-full resize-none"
           />
           <Button type="submit" disabled={loading}>
             Send
@@ -230,5 +228,5 @@ export default function Home({ params }: { params: { id: string } }) {
         </form>
       </div>
     </div>
-  )
+  );
 }

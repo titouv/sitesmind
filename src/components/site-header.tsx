@@ -1,11 +1,11 @@
-import Link from "next/link"
+import Link from "next/link";
 
-import { siteConfig } from "@/config/site"
-import { Icons } from "@/components/icons"
-import { MainNav } from "@/components/main-nav"
-import { buttonVariants } from "@/components/ui/button"
-import { NavAuth } from "@/components/nav-auth"
-import { ProfilePicture } from "@/app/(main)/profile-picture"
+import { siteConfig } from "@/config/site";
+import { Icons } from "@/components/icons";
+import { MainNav } from "@/components/main-nav";
+import { buttonVariants } from "@/components/ui/button";
+import { NavAuth } from "@/components/nav-auth";
+import { ProfilePicture } from "@/app/(main)/profile-picture";
 
 export function SiteHeader() {
   return (
@@ -22,5 +22,5 @@ export function SiteHeader() {
         </div>
       </div>
     </header>
-  )
+  );
 }

@@ -1,10 +1,10 @@
-"use client"
+"use client";
 
-import { Button } from "@/components/ui/button"
-import { useSupabase } from "@/supabase/components/supabase-provider"
+import { Button } from "@/components/ui/button";
+import { useSupabase } from "@/supabase/components/supabase-provider";
 
 export function Auth() {
-  const { supabase, session } = useSupabase()
+  const { supabase, session } = useSupabase();
 
   return (
     <div>
@@ -14,8 +14,8 @@ export function Auth() {
           <p>Logged as {session.user.email} </p>
           <Button
             onClick={async () => {
-              const { error } = await supabase.auth.signOut()
-              if (error) console.log("error", error)
+              const { error } = await supabase.auth.signOut();
+              if (error) console.log("error", error);
             }}
           >
             Logout
@@ -26,13 +26,13 @@ export function Auth() {
           onClick={async () => {
             const { error } = await supabase.auth.signInWithOAuth({
               provider: "google",
-            })
-            if (error) console.log("error", error)
+            });
+            if (error) console.log("error", error);
           }}
         >
           Login
         </Button>
       )}
     </div>
-  )
+  );
 }

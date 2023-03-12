@@ -1,6 +1,5 @@
-import { Auth } from "@/app/(main)/auth"
-import { ProfilePicture } from "@/app/(main)/profile-picture"
-import { NavAuth } from "@/components/nav-auth"
+import { ProfilePicture } from "@/app/(main)/profile-picture";
+import { NavAuth } from "@/components/nav-auth";
 
 export default function Page() {
   return (
@@ -17,5 +16,5 @@ export default function Page() {
         </div>
       </div>
     </section>
-  )
+  );
 }
