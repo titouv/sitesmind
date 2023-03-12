@@ -1,9 +1,7 @@
 import { Link } from "@/components/ui/link";
 import { createClient } from "@/supabase/utils/server";
 
-export const config = {
-  revalidate: 0,
-};
+export const fetchCache = "force-no-store";
 
 export default async function Page() {
   const supabase = createClient();
