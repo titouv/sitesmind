@@ -3,13 +3,6 @@ import { LoginButton } from "@/components/login-button";
 import { Link } from "@/components/ui/link";
 import { createClient } from "@/supabase/utils/server";
 
-import type { Metadata } from "next";
-
-export const metadata: Metadata = {
-  title: "Home",
-  description: "Welcome to Next.js",
-};
-
 export default async function Home({
   searchParams,
 }: {
