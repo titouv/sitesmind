@@ -20,7 +20,7 @@ export const metadata = {
     siteName: "Sitesmind",
     images: [
       {
-        url: "https://www.sitesmind/og.jpg",
+        url: "https://www.sitesmind.com/og.jpg",
         width: 1200,
         height: 630,
         alt: "OG Sitesmind",
