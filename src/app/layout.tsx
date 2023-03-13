@@ -13,6 +13,42 @@ export const revalidate = 0;
 export const metadata = {
   title: "Sitesmind",
   description: "GPT-3 powered chatbot for your website.",
+  openGraph: {
+    title: "Sitesmind",
+    description: "GPT-3 powered chatbot for your website.",
+    url: "https://www.sitesmind.com",
+    siteName: "Sitesmind",
+    images: [
+      {
+        url: "https://www.sitesmind/og.jpg",
+        width: 1200,
+        height: 630,
+        alt: "OG Sitesmind",
+      },
+    ],
+    locale: "en-US",
+    type: "website",
+  },
+  robots: {
+    index: false,
+    follow: true,
+    nocache: true,
+    googleBot: {
+      index: true,
+      follow: false,
+      noimageindex: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+  twitter: {
+    title: "Sitesmind",
+    description: "GPT-3 powered chatbot for your website.",
+    card: "summary_large_image",
+    creator: "@titouanver",
+    images: ["https://www.sitesmind.com/og.jpg"],
+  },
 };
 
 const inter = Inter({ subsets: ["latin"] });
