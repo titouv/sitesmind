@@ -1,4 +1,5 @@
 import "server-only";
+import { Analytics } from "@vercel/analytics/react";
 
 import "./globals.css";
 import SupabaseListener from "@/supabase/components/supabase-listener";
@@ -34,6 +35,7 @@ export default async function RootLayout({
           <SupabaseListener serverAccessToken={session?.access_token} />
           {children}
         </SupabaseProvider>
+        <Analytics />
       </body>
     </html>
   );
