@@ -1,11 +1,6 @@
 import { NavItem } from "@/types/nav";
 
-import Image from "next/image";
-import Link from "next/link";
-
-export const BASE_URL = process.env.NEXT_PUBLIC_VERCEL_GIT_REPO_SLUG
-  ? `https://${process.env.NEXT_PUBLIC_VERCEL_GIT_REPO_SLUG}.vercel.app`
-  : "http://localhost:3000";
+export const BASE_URL = "http://" + process.env.NEXT_PUBLIC_VERCEL_URL;
 
 interface SiteConfig {
   name: string;
@@ -19,7 +14,7 @@ interface SiteConfig {
 }
 
 export const siteConfig: SiteConfig = {
-  name: "Chatbot GPT",
+  name: "Sitesmind",
   description: "GPT-3 powered chatbot for your website.",
   mainNav: [
     // {

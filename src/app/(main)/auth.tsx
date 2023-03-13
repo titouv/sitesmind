@@ -1,5 +1,5 @@
 "use client";
-
+import { BASE_URL } from "@/config/site";
 import { Button } from "@/components/ui/button";
 import { useSupabase } from "@/supabase/components/supabase-provider";
 
@@ -26,6 +26,9 @@ export function Auth() {
           onClick={async () => {
             const { error } = await supabase.auth.signInWithOAuth({
               provider: "google",
+              options: {
+                redirectTo: BASE_URL + "/create",
+              },
             });
             if (error) console.log("error", error);
           }}
