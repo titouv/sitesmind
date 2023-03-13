@@ -1,5 +1,9 @@
 {
-  "name": "next-supabase-ai",
+  "name": "sitesmind",
+  "author": {
+    "email": "titouan.verhille@gmail.com",
+    "name": "Titouan Verhille"
+  },
   "version": "0.1.0",
   "private": true,
   "scripts": {
