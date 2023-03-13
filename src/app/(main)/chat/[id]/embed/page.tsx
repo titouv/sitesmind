@@ -208,7 +208,7 @@ export default function Home({ params }: { params: { id: string } }) {
           <div>
             <form onSubmit={handleSubmit} className="mt-4 flex gap-2">
               <textarea
-                className="w-full flex-grow  resize-none rounded-full bg-gray-800 px-4 py-2 text-white outline-none"
+                className="w-full grow  resize-none rounded-full bg-gray-800 px-4 py-2 text-white outline-none"
                 ref={textAreaRef}
                 disabled={loading}
                 onKeyDown={handleEnter}

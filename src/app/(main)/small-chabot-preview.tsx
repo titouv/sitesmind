@@ -150,7 +150,7 @@ export default function SmallChabotPreview({
         <div>
           <div
             ref={messageListRef}
-            className="max-w-16 mb-4 flex flex-col  gap-4 overflow-scroll rounded-t-xl md:max-h-32 "
+            className="mb-4 flex max-w-sm flex-col  gap-4 overflow-scroll rounded-t-xl md:max-h-32 "
           >
             {messages.map((message, index) => {
               if (message.content == "") return;
@@ -212,7 +212,7 @@ export default function SmallChabotPreview({
         <div>
           <form onSubmit={handleSubmit} className="mt-2 flex gap-1">
             <textarea
-              className="w-full flex-grow  resize-none rounded-full bg-gray-800 px-3 py-1 text-white outline-none"
+              className="w-full grow  resize-none rounded-full bg-gray-800 px-3 py-1 text-white outline-none"
               ref={textAreaRef}
               disabled={loading}
               onKeyDown={handleEnter}
