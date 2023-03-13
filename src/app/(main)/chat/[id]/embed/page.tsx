@@ -49,8 +49,7 @@ export default function Home({ params }: { params: { id: string } }) {
       { content: "", role: "assistant", streaming: true },
     ]);
 
-    console.log(BASE_URL);
-    const url = new URL(`api/chat/`, BASE_URL);
+    const url = new URL(`api/chat/`, window.location.origin);
     console.log(url);
     url.searchParams.set("messages", JSON.stringify(messagesToApi));
 
