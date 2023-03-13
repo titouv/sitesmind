@@ -12,9 +12,6 @@ export default async function Page() {
   }
   console.log(data);
   return (
-    // <div>
-    //   <h1>Page</h1>
-    // </div>
     <section className="container grid items-center gap-6 pt-6 pb-8 md:py-10">
       <div className="flex flex-col items-center justify-center">
         <h1 className="text-3xl font-extrabold leading-tight tracking-tighter sm:text-3xl md:text-5xl lg:text-6xl">
@@ -27,7 +24,7 @@ export default async function Page() {
             {data.map((site) => (
               <li
                 key={site.id}
-                className="flex gap-8 rounded-xl border-slate-200 p-2 odd:bg-slate-100 even:border"
+                className="flex justify-between gap-8 rounded-xl border-slate-200 p-2 odd:bg-slate-100 even:border"
               >
                 {site.url && (
                   <Link className="p-0 pl-2" variant="link" href={site.url}>

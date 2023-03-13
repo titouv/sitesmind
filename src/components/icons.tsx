@@ -1,26 +1,27 @@
 import {
-  Laptop,
-  LucideProps,
-  Moon,
-  SunMedium,
-  Twitter,
-  Bot,
-  User,
-  CheckCircle,
-  type Icon as LucideIcon,
-} from "lucide-react";
+  SunIcon,
+  MoonIcon,
+  PaperAirplaneIcon,
+  ChatBubbleOvalLeftEllipsisIcon,
+  BoltIcon,
+  UserIcon,
+  CheckCircleIcon,
+  BeakerIcon,
+} from "@heroicons/react/24/solid";
 
-export type Icon = LucideIcon;
+type IconProps = any;
 
 export const Icons = {
-  sun: SunMedium,
-  moon: Moon,
-  laptop: Laptop,
-  twitter: Twitter,
-  checkCircle: CheckCircle,
-  bot: Bot,
-  user: User,
-  logo: (props: LucideProps) => (
+  sun: SunIcon,
+  moon: MoonIcon,
+  // laptop: BeakerIcon,
+  twitter: BeakerIcon,
+  checkCircle: CheckCircleIcon,
+  send: PaperAirplaneIcon,
+  messageCircle: ChatBubbleOvalLeftEllipsisIcon,
+  bot: BoltIcon,
+  user: UserIcon,
+  logo: (props: IconProps) => (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" {...props}>
       <path
         fill="currentColor"
@@ -28,7 +29,7 @@ export const Icons = {
       />
     </svg>
   ),
-  gitHub: (props: LucideProps) => (
+  gitHub: (props: IconProps) => (
     <svg viewBox="0 0 438.549 438.549" {...props}>
       <path
         fill="currentColor"

@@ -30,11 +30,9 @@ export async function MainNav({ items }: MainNavProps) {
       <div className="hidden gap-2 md:flex">
         <Link href="/" className="hidden items-center space-x-2 md:flex">
           <Icons.logo className="h-6 w-6" />
-          <span className="hidden font-bold sm:inline-block">
-            {siteConfig.name}
-          </span>
+          <span className="font-bold sm:inline-block">{siteConfig.name}</span>
         </Link>
-        <span className="hidden whitespace-nowrap rounded-md bg-blue-100 px-2.5 py-0.5 text-sm text-blue-700 sm:inline-block">
+        <span className="whitespace-nowrap rounded-md bg-blue-100 px-2.5 py-0.5 text-sm text-blue-700 sm:inline-block">
           Alpha
         </span>
       </div>
