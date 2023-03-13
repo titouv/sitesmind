@@ -192,7 +192,10 @@ export default function Home({ params }: { params: { id: string } }) {
                   : "";
             }
             return (
-              <div className={cn("flex px-6 py-4 ", roleClassName)} key={index}>
+              <div
+                className={cn("flex items-center px-6 py-4 ", roleClassName)}
+                key={index}
+              >
                 <div className="mr-4">{icon}</div>
                 <div>
                   <ReactMarkdown
