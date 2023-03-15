@@ -11,6 +11,8 @@ import { Icons } from "@/components/icons";
 import { BASE_URL } from "@/config/site";
 import * as Popover from "@radix-ui/react-popover";
 
+const botId = "3bcae46d-2796-4922-b84b-81cbc24befcf";
+
 type Message = OpenAIMessages[number] & {
   streaming?: boolean;
 };
@@ -64,7 +66,6 @@ export default function SmallChabotPreview({
     };
 
     url.searchParams.set("messages", JSON.stringify(searchParams.messages));
-    url.searchParams.set("botId", searchParams.botId);
 
     const response = await fetch(url);
     if (!response.ok) {
