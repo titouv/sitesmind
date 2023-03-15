@@ -18,6 +18,7 @@ export const corsHeaders = {
 type OpenAIStreamPayload = Parameters<typeof OpenAIStream>[0];
 
 export type OpenAIMessages = OpenAIStreamPayload["messages"];
+
 export type ChatApiSchemaType = {
   messages: OpenAIMessages;
 };
