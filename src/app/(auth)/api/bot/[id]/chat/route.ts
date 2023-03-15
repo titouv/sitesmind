@@ -1,7 +1,6 @@
 import { OpenAIStream } from "@/utils/openAIStream";
 import GPT3Tokenizer from "gpt3-tokenizer";
 import { OpenAIApi } from "openai";
-import { NextRequest } from "next/server";
 import { createApiClient } from "@/supabase/utils/api";
 
 export const config = {
@@ -25,7 +24,7 @@ export type ChatApiSchemaType = {
 
 // maybe replace back to POST requst after this issue has been solved : https://github.com/vercel/next.js/issues/46337
 export async function GET(
-  req: NextRequest,
+  req: Request,
   { params }: { params: { id: string } }
 ) {
   const searchParams = new URL(req.url).searchParams;

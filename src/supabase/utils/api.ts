@@ -1,5 +1,5 @@
 import { Database } from "@/supabase/database.types";
-import { createClient } from "@supabase/supabase-js";
+
 import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs";
 export const createApiClient = () =>
   createBrowserSupabaseClient<Database>({
