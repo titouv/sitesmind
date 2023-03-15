@@ -5,6 +5,8 @@ import { NextRequest, NextResponse } from "next/server";
 
 import { z } from "zod";
 
+export const dynamic = "force-dynamic";
+
 const IngestApiSchema = z.object({
   url: z.string(),
   // botId: z.string(),
