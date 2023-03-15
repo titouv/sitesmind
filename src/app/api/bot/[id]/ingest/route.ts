@@ -1,6 +1,6 @@
 import { generateEmbeddings } from "@/app/api/bot/[id]/ingest/embeddings";
-import { createApiClient } from "@/supabase/utils/api";
-import { NextResponse } from "next/server";
+import { createApiClient } from "@/supabase/utils/server";
+import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
 export const config = {
@@ -10,17 +10,22 @@ export const config = {
 
 const IngestApiSchema = z.object({
   url: z.string(),
-  siteId: z.number(),
+  siteId: z.coerce.number(),
 });
 
 export type IngestApiSchemaType = z.infer<typeof IngestApiSchema>;
 
-export async function POST(
-  req: Request,
+export async function GET(
+  req: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  const body = await req.json();
-  const result = IngestApiSchema.safeParse(body);
+  const searchParams = req.nextUrl.searchParams;
+
+  const result = IngestApiSchema.safeParse({
+    url: searchParams.get("url"),
+    siteId: searchParams.get("siteId"),
+  });
+
   if (!result.success) {
     return NextResponse.json({ error: result.error }, { status: 400 });
   }

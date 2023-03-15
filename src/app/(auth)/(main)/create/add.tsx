@@ -51,18 +51,12 @@ export function Add() {
 
     console.log("body", { url: siteUrl, id: bot.id });
 
-    const body: IngestApiSchemaType = {
-      url: siteUrl,
-      siteId: site.id,
-    };
+    const url = new URL(`/api/bot/${bot.id}/ingest`, window.location.origin);
 
-    const response = await fetch(`/api/bot/${bot.id}/ingest`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(body),
-    });
+    url.searchParams.set("siteId", site.id.toString());
+    url.searchParams.set("url", siteUrl);
+
+    const response = await fetch(url);
     if (!response.ok) {
       setError("Something went wrong");
       setLoading(false);
