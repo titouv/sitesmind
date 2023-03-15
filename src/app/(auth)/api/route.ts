@@ -1,7 +1,7 @@
 import { OpenAIStream } from "@/utils/openAIStream";
 import GPT3Tokenizer from "gpt3-tokenizer";
 import { OpenAIApi } from "openai";
-import { createApiClient } from "@/supabase/utils/api";
+import { supabaseClient } from "@/supabase/utils/api";
 
 export const config = {
   revalidate: 0,
@@ -25,16 +25,12 @@ export type ChatApiSchemaType = {
 
 // maybe replace back to POST requst after this issue has been solved : https://github.com/vercel/next.js/issues/46337
 export async function GET(req: Request) {
-  const searchParams = new URL(req.url).searchParams;
-
-  if (!searchParams.has("messages")) {
-    return new Response("Missing botId or message", { headers: corsHeaders });
+  const params = new URL(req.url).searchParams;
+  const messages = JSON.parse(params.get("messages") || "") as OpenAIMessages;
+  const botId = params.get("botId") || "";
+  if (!messages) {
+    return new Response("no query", { headers: corsHeaders });
   }
-
-  const messages = JSON.parse(
-    searchParams.get("messages") || ""
-  ) as OpenAIMessages;
-  const botId = searchParams.get("botId") || "";
 
   // i want a variable with only the last element and a var with all the previous elements
   const lastMessage = messages[messages.length - 1];
@@ -71,7 +67,6 @@ export async function GET(req: Request) {
   const [{ embedding }] = embeddingData.data;
   start = Date.now();
 
-  const supabaseClient = createApiClient();
   // Ideally for context injection, documents are chunked into
   // smaller sections at earlier pre-processing/embedding step.
   const { data: documents, error } = await supabaseClient.rpc(
@@ -86,13 +81,7 @@ export async function GET(req: Request) {
   if (error) {
     console.log("error", error);
     return new Response("error", {
-      headers: {
-        ...corsHeaders,
-        "Transfer-Encoding": "chunked",
-        charset: "utf-8",
-        "Content-Type": "application/json",
-        "Content-Encoding": "gzip",
-      },
+      headers: corsHeaders,
     });
   }
   console.log("time for match_documents", Date.now() - start, "ms");
