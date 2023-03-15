@@ -6,7 +6,6 @@ import { supabaseClient } from "@/supabase/utils/api";
 export const config = {
   revalidate: 0,
   runtime: "edge",
-  dynamicParams: true,
 };
 
 export const corsHeaders = {
@@ -25,13 +24,17 @@ export type ChatApiSchemaType = {
 
 // maybe replace back to POST requst after this issue has been solved : https://github.com/vercel/next.js/issues/46337
 export async function GET(req: Request) {
+  console.log("here");
   const params = new URL(req.url).searchParams;
   const messages = JSON.parse(params.get("messages") || "") as OpenAIMessages;
   const botId = params.get("botId") || "";
+
+  console.log("here2");
   if (!messages) {
     return new Response("no query", { headers: corsHeaders });
   }
 
+  console.log("here3");
   // i want a variable with only the last element and a var with all the previous elements
   const lastMessage = messages[messages.length - 1];
   const previousMessages = messages.slice(0, messages.length - 1);
@@ -39,8 +42,10 @@ export async function GET(req: Request) {
   // OpenAI recommends replacing newlines with spaces for best results
   const input = lastMessage.content.replace(/\n/g, " ");
 
+  console.log("here4");
   let start = Date.now();
 
+  console.log("here5");
   type EmbeddingFetchResponseType = Awaited<
     ReturnType<OpenAIApi["createEmbedding"]>
   >["data"];
@@ -70,9 +75,8 @@ export async function GET(req: Request) {
   // Ideally for context injection, documents are chunked into
   // smaller sections at earlier pre-processing/embedding step.
   const { data: documents, error } = await supabaseClient.rpc(
-    "match_documents_by_id",
+    "match_documents",
     {
-      bot_id: botId,
       match_count: 10,
       query_embedding: embedding,
       similarity_threshold: 0.1,
@@ -90,6 +94,7 @@ export async function GET(req: Request) {
   let tokenCount = 0;
   let contextText = "";
 
+  console.log("here6");
   // Concat matched documents
   for (let i = 0; i < documents.length; i++) {
     const document = documents[i];
