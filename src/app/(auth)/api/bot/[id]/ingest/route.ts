@@ -9,10 +9,11 @@ export const fetchCache = "only-no-store";
 
 const IngestApiSchema = z.object({
   url: z.string(),
-  // botId: z.string(),
   siteId: z.number(),
 });
+
 export type IngestApiSchemaType = z.infer<typeof IngestApiSchema>;
+
 export async function POST(
   req: Request,
   { params }: { params: { id: string } }
@@ -34,7 +35,7 @@ export async function POST(
 
   if (sessionError || !session)
     return NextResponse.json(
-      { status: "Unauthorized", error: sessionError },
+      { status: "Unauthorized", session, error: sessionError },
       { status: 401 }
     );
 
