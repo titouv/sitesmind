@@ -5,7 +5,10 @@ import { NextResponse } from "next/server";
 
 import { z } from "zod";
 
-export const fetchCache = "only-no-store";
+export const config = {
+  revalidate: 0,
+  runtime: "edge",
+};
 
 const IngestApiSchema = z.object({
   url: z.string(),
