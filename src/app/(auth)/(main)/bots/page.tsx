@@ -13,10 +13,11 @@ export default async function Page() {
     )
   `);
 
+  console.log("supabase call", { data, error });
+
   if (error) {
-    console.error(error);
+    return <span>Error</span>;
   }
-  console.log("data", { data });
   return (
     <section className="container grid items-center gap-6 pt-6 pb-8 md:py-10">
       <div className="flex flex-col items-center justify-center">
