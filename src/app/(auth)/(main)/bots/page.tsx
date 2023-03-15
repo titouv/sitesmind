@@ -24,7 +24,10 @@ export default async function Page() {
           Bots
         </h1>
         {!data || data.length == 0 ? (
-          <span className="pt-8">No bots</span>
+          <div className="pt-8">
+            <span className="block pb-2">No bots found</span>
+            <Link href="/create">Create one</Link>
+          </div>
         ) : (
           <ul className="flex max-w-sm flex-col gap-2 pt-8">
             {data.map((bot) => (
