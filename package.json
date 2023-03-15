@@ -19,7 +19,6 @@
     "ts-lint": "tsc --noEmit --incremental --watch"
   },
   "dependencies": {
-    "@dqbd/tiktoken": "^0.4.0",
     "@heroicons/react": "^2.0.16",
     "@radix-ui/react-accordion": "^1.1.1",
     "@radix-ui/react-avatar": "^1.0.2",
@@ -34,7 +33,6 @@
     "@types/react": "18.0.28",
     "@types/react-dom": "18.0.11",
     "@vercel/analytics": "^0.1.11",
-    "@vercel/edge-config": "^0.1.2",
     "@vespaiach/axios-fetch-adapter": "^0.3.1",
     "bright": "^0.7.0",
     "buffer": "^6.0.3",
@@ -48,7 +46,7 @@
     "eventsource-parser": "^0.1.0",
     "gpt3-tokenizer": "^1.1.5",
     "lucide-react": "^0.125.0",
-    "next": "13.2.4",
+    "next": "13.2.5-canary.3",
     "openai": "^3.2.1",
     "path": "^0.12.7",
     "react": "18.2.0",

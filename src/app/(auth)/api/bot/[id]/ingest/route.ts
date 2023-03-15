@@ -1,6 +1,5 @@
 import { generateEmbeddings } from "@/app/(auth)/api/bot/[id]/ingest/embeddings";
 import { createClient } from "@/supabase/utils/server";
-import { get } from "@vercel/edge-config";
 import { NextResponse } from "next/server";
 
 import { z } from "zod";
@@ -54,13 +53,7 @@ export async function POST(
 
   const botsLength = bots.length;
 
-  const emailBypassLimit = (await get("emailBypassLimit")) as string[];
-
-  if (
-    session.user.email &&
-    !emailBypassLimit.includes(session.user.email) &&
-    botsLength >= 5
-  )
+  if (session.user.email && botsLength >= 5)
     return NextResponse.json({ status: "Limit reached" }, { status: 400 });
 
   if (botsLength > 0) {

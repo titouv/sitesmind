@@ -169,7 +169,7 @@ export default function Chat({ params }: { params: { id: string } }) {
                 // />
                 <div className="rounded-xl bg-white p-2">
                   <Icons.bot
-                    className="h-[20px] w-[20px]"
+                    className="h-[14x] w-[14px]"
                     width={30}
                     height={30}
                   />
@@ -187,7 +187,7 @@ export default function Chat({ params }: { params: { id: string } }) {
                 //     />
                 <div className="rounded-xl bg-slate-100 p-2">
                   <Icons.user
-                    className="h-[20px] w-[20px]"
+                    className="h-[14px] w-[14px]"
                     width={30}
                     height={30}
                   />
