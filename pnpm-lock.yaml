@@ -18,7 +18,7 @@ specifiers:
   '@types/react': 18.0.28
   '@types/react-dom': 18.0.11
   '@vercel/analytics': ^0.1.11
-  '@vercel/edge-config': ^0.1.1
+  '@vercel/edge-config': ^0.1.2
   '@vespaiach/axios-fetch-adapter': ^0.3.1
   autoprefixer: ^10.4.13
   bright: ^0.7.0
@@ -71,7 +71,7 @@ dependencies:
   '@types/react': 18.0.28
   '@types/react-dom': 18.0.11
   '@vercel/analytics': 0.1.11_react@18.2.0
-  '@vercel/edge-config': 0.1.1
+  '@vercel/edge-config': 0.1.2
   '@vespaiach/axios-fetch-adapter': 0.3.1
   bright: 0.7.0_react@18.2.0
   buffer: 6.0.3
@@ -1499,8 +1499,8 @@ packages:
       react: 18.2.0
     dev: false
 
-  /@vercel/edge-config/0.1.1:
-    resolution: {integrity: sha512-HDl+12tzW2RHIu8Y804kXg2VpZ02KVb7Nqsa+e1AFoACXXMb+7TfjI1wR19tXoDIu5enQz1dbat40YMEgaH13Q==}
+  /@vercel/edge-config/0.1.2:
+    resolution: {integrity: sha512-rSX5ttw+qGgHyA2YNxIDBzn5cV5h7mr8wsk//M9pKdTiKz2GhjmsyMXfrlJJ6v7J/fk8prfcha+rhqETHauTwg==}
     engines: {node: '>=14.6'}
     dev: false
 

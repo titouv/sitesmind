@@ -1,14 +1,16 @@
 import { Link } from "@/components/ui/link";
 import { createClient } from "@/supabase/utils/server";
 
-export const dynamic = "force-dynamic";
-export const fetchCache = "only-no-store";
+// do not cache this page
+export const revalidate = 0;
+
 export default async function Page() {
   const supabase = createClient();
 
-  let { data, error } = await supabase.from("bots").select(`
-    *
-  `);
+  let { data, error } = await supabase.from("bots").select(`*,
+    sites (
+      *
+    )`);
 
   console.log("supabase call", { data, error });
 
@@ -30,7 +32,7 @@ export default async function Page() {
                 key={bot.id}
                 className="flex justify-between gap-8 rounded-xl border-slate-200 p-2 odd:bg-slate-100 even:border"
               >
-                {/* {Array.isArray(bot.sites) &&
+                {Array.isArray(bot.sites) &&
                   bot.sites.map((site) => (
                     <Link
                       key={site.id}
@@ -40,7 +42,7 @@ export default async function Page() {
                     >
                       {site.url}
                     </Link>
-                  ))} */}
+                  ))}
 
                 <Link href={`/bot/${bot.id}/chat`}>Chat</Link>
               </li>
