@@ -1,7 +1,7 @@
 import "server-only";
 import { Analytics } from "@vercel/analytics/react";
 
-import "./globals.css";
+import "@/styles/globals.css";
 import SupabaseListener from "@/supabase/components/supabase-listener";
 import SupabaseProvider from "@/supabase/components/supabase-provider";
 import { createClient } from "@/supabase/utils/server";
@@ -13,6 +13,9 @@ export const revalidate = 0;
 export const metadata = {
   title: "Sitesmind",
   description: "GPT-3 powered chatbot for your website.",
+  icons: {
+    icon: "/favicon.svg",
+  },
   openGraph: {
     title: "Sitesmind",
     description: "GPT-3 powered chatbot for your website.",

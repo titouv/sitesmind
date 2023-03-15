@@ -4,158 +4,178 @@ export type Json =
   | boolean
   | null
   | { [key: string]: Json }
-  | Json[];
+  | Json[]
 
 export interface Database {
   public: {
     Tables: {
+      bots: {
+        Row: {
+          created_at: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          user_id?: string
+        }
+      }
       documents: {
         Row: {
-          content: string | null;
-          embedding: unknown | null;
-          id: number;
-          site_id: number | null;
-        };
+          bot_id: string
+          content: string | null
+          embedding: unknown | null
+          id: number
+          site_id: number
+        }
         Insert: {
-          content?: string | null;
-          embedding?: unknown | null;
-          id?: number;
-          site_id?: number | null;
-        };
+          bot_id: string
+          content?: string | null
+          embedding?: unknown | null
+          id?: number
+          site_id: number
+        }
         Update: {
-          content?: string | null;
-          embedding?: unknown | null;
-          id?: number;
-          site_id?: number | null;
-        };
-      };
+          bot_id?: string
+          content?: string | null
+          embedding?: unknown | null
+          id?: number
+          site_id?: number
+        }
+      }
       profiles: {
         Row: {
-          avatar_url: string | null;
-          full_name: string | null;
-          id: string;
-          subscription_status: boolean;
-          updated_at: string | null;
-          username: string | null;
-          website: string | null;
-        };
+          avatar_url: string | null
+          full_name: string | null
+          id: string
+          subscription_status: boolean
+          updated_at: string | null
+          username: string | null
+          website: string | null
+        }
         Insert: {
-          avatar_url?: string | null;
-          full_name?: string | null;
-          id: string;
-          subscription_status?: boolean;
-          updated_at?: string | null;
-          username?: string | null;
-          website?: string | null;
-        };
+          avatar_url?: string | null
+          full_name?: string | null
+          id: string
+          subscription_status?: boolean
+          updated_at?: string | null
+          username?: string | null
+          website?: string | null
+        }
         Update: {
-          avatar_url?: string | null;
-          full_name?: string | null;
-          id?: string;
-          subscription_status?: boolean;
-          updated_at?: string | null;
-          username?: string | null;
-          website?: string | null;
-        };
-      };
+          avatar_url?: string | null
+          full_name?: string | null
+          id?: string
+          subscription_status?: boolean
+          updated_at?: string | null
+          username?: string | null
+          website?: string | null
+        }
+      }
       sites: {
         Row: {
-          created_at: string | null;
-          id: number;
-          url: string | null;
-          user_id: string | null;
-        };
+          bot_id: string
+          created_at: string
+          id: number
+          url: string
+        }
         Insert: {
-          created_at?: string | null;
-          id?: number;
-          url?: string | null;
-          user_id?: string | null;
-        };
+          bot_id: string
+          created_at?: string
+          id?: number
+          url: string
+        }
         Update: {
-          created_at?: string | null;
-          id?: number;
-          url?: string | null;
-          user_id?: string | null;
-        };
-      };
-    };
+          bot_id?: string
+          created_at?: string
+          id?: number
+          url?: string
+        }
+      }
+    }
     Views: {
-      [_ in never]: never;
-    };
+      [_ in never]: never
+    }
     Functions: {
       ivfflathandler: {
         Args: {
-          "": unknown;
-        };
-        Returns: unknown;
-      };
+          "": unknown
+        }
+        Returns: unknown
+      }
       match_documents: {
         Args: {
-          query_embedding: unknown;
-          similarity_threshold: number;
-          match_count: number;
-        };
+          query_embedding: unknown
+          similarity_threshold: number
+          match_count: number
+        }
         Returns: {
-          id: number;
-          content: string;
-          similarity: number;
-        }[];
-      };
+          id: number
+          content: string
+          similarity: number
+        }[]
+      }
       match_documents_by_id: {
         Args: {
-          query_embedding: unknown;
-          similarity_threshold: number;
-          match_count: number;
-          my_site_id: number;
-        };
+          query_embedding: unknown
+          similarity_threshold: number
+          match_count: number
+          bot_id: string
+        }
         Returns: {
-          id: number;
-          content: string;
-          similarity: number;
-        }[];
-      };
+          id: number
+          content: string
+          similarity: number
+        }[]
+      }
       vector_avg: {
         Args: {
-          "": number[];
-        };
-        Returns: unknown;
-      };
+          "": number[]
+        }
+        Returns: unknown
+      }
       vector_dims: {
         Args: {
-          "": unknown;
-        };
-        Returns: number;
-      };
+          "": unknown
+        }
+        Returns: number
+      }
       vector_norm: {
         Args: {
-          "": unknown;
-        };
-        Returns: number;
-      };
+          "": unknown
+        }
+        Returns: number
+      }
       vector_out: {
         Args: {
-          "": unknown;
-        };
-        Returns: unknown;
-      };
+          "": unknown
+        }
+        Returns: unknown
+      }
       vector_send: {
         Args: {
-          "": unknown;
-        };
-        Returns: string;
-      };
+          "": unknown
+        }
+        Returns: string
+      }
       vector_typmod_in: {
         Args: {
-          "": unknown[];
-        };
-        Returns: number;
-      };
-    };
+          "": unknown[]
+        }
+        Returns: number
+      }
+    }
     Enums: {
-      [_ in never]: never;
-    };
+      [_ in never]: never
+    }
     CompositeTypes: {
-      [_ in never]: never;
-    };
-  };
+      [_ in never]: never
+    }
+  }
 }

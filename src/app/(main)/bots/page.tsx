@@ -5,7 +5,13 @@ export const dynamic = "force-dynamic";
 
 export default async function Page() {
   const supabase = createClient();
-  const { data, error } = await supabase.from("sites").select();
+
+  let { data, error } = await supabase.from("bots").select(`
+    *,
+    sites (
+       *
+    )
+  `);
 
   if (error) {
     console.error(error);
@@ -15,24 +21,30 @@ export default async function Page() {
     <section className="container grid items-center gap-6 pt-6 pb-8 md:py-10">
       <div className="flex flex-col items-center justify-center">
         <h1 className="text-3xl font-extrabold leading-tight tracking-tighter sm:text-3xl md:text-5xl lg:text-6xl">
-          Sites
+          Bots
         </h1>
-        {!data ? (
-          <span className="pt-8">No sites</span>
+        {!data || data.length == 0 ? (
+          <span className="pt-8">No bots</span>
         ) : (
           <ul className="flex max-w-sm flex-col gap-2 pt-8">
-            {data.map((site) => (
+            {data.map((bot) => (
               <li
-                key={site.id}
+                key={bot.id}
                 className="flex justify-between gap-8 rounded-xl border-slate-200 p-2 odd:bg-slate-100 even:border"
               >
-                {site.url && (
-                  <Link className="p-0 pl-2" variant="link" href={site.url}>
-                    {site.url}
-                  </Link>
-                )}
+                {Array.isArray(bot.sites) &&
+                  bot.sites.map((site) => (
+                    <Link
+                      key={site.id}
+                      className="p-0 pl-2"
+                      variant="link"
+                      href={site.url}
+                    >
+                      {site.url}
+                    </Link>
+                  ))}
 
-                <Link href={`/chat/${site.id}`}>Chat</Link>
+                <Link href={`/chat/${bot.id}`}>Chat</Link>
               </li>
             ))}
           </ul>

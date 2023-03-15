@@ -25,6 +25,7 @@ export async function OpenAIStream(payload: CreateChatCompletionRequest) {
       // callback
       function onParse(event: ParsedEvent | ReconnectInterval) {
         if (event.type === "event") {
+          console.log(event);
           const data = event.data;
           // https://beta.openai.com/docs/api-reference/completions/create#completions/create-stream
           if (data === "[DONE]") {

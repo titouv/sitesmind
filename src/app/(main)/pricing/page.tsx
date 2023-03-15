@@ -68,8 +68,8 @@ export default function Page() {
               <span>3 embeds</span>
             </li>
           </ul>
-          <Button variant="subtle" className="mt-8">
-            Subscribe
+          <Button disabled variant="subtle" className="mt-8">
+            Coming soon...
           </Button>
         </div>
       </div>

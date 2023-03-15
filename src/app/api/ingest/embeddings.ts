@@ -17,7 +17,15 @@ async function getDocuments(url: string) {
   return docs;
 }
 
-export async function generateEmbeddings(url: string, siteId: number) {
+export async function generateEmbeddings({
+  url,
+  siteId,
+  botId,
+}: {
+  url: string;
+  botId: string;
+  siteId: number;
+}) {
   const documents = await getDocuments(url); // Your custom function to load docs
 
   documents.forEach((doc) => {
@@ -27,23 +35,12 @@ export async function generateEmbeddings(url: string, siteId: number) {
     console.log(doc.pageContent);
   });
 
-  // const openaiClient = createOpenaiClient()
-
   // Assuming each document is a string
   for (const { pageContent } of documents) {
     // OpenAI recommends replacing newlines with spaces for best results
     const input = pageContent.replace(/\n/g, " ");
 
-    // const embeddingResponse = await openaiClient.createEmbedding({
-    //   model: "text-embedding-ada-002",
-    //   input,
-    // })
-    //   curl https://api.openai.com/v1/embeddings \
-    // -H "Content-Type: application/json" \
-    // -H "Authorization: Bearer $OPENAI_API_KEY" \
-    // -d '{"input": "Your text string goes here",
-    //      "model":"text-embedding-ada-002"}'
-
+    // TODO conver to openaiclient when possible
     const embeddingResponse = await fetch(
       "https://api.openai.com/v1/embeddings",
       {
@@ -75,6 +72,7 @@ export async function generateEmbeddings(url: string, siteId: number) {
       content: pageContent,
       embedding,
       site_id: siteId,
+      bot_id: botId,
     });
   }
 }

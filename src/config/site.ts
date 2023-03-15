@@ -1,5 +1,4 @@
 import { NavItem } from "@/types/nav";
-
 export const BASE_URL = "http://" + process.env.NEXT_PUBLIC_VERCEL_URL;
 
 interface SiteConfig {
@@ -28,8 +27,8 @@ export const siteConfig: SiteConfig = {
       requireLogin: true,
     },
     {
-      title: "Sites",
-      href: "/sites",
+      title: "Bots",
+      href: "/bots",
       requireLogin: true,
     },
     {

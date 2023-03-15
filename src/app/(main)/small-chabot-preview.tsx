@@ -3,8 +3,7 @@
 import { useState, useRef, useEffect, useMemo } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { OpenAIMessages } from "@/app/api/chat/route";
-import { cn } from "@/lib/utils";
+import { ChatApiSchemaType, OpenAIMessages } from "@/app/api/chat/route";
 import { Icons } from "@/components/icons";
 import { BASE_URL } from "@/config/site";
 import * as Popover from "@radix-ui/react-popover";
@@ -53,10 +52,18 @@ export default function SmallChabotPreview({
       { content: "", role: "assistant", streaming: true },
     ]);
 
-    console.log(BASE_URL);
-    const url = new URL(`api/chat/`, BASE_URL);
-    console.log(url);
-    url.searchParams.set("messages", JSON.stringify(messagesToApi));
+    const url = new URL(`api/chat/`, window.location.origin);
+    const searchParams: ChatApiSchemaType = {
+      messages: messagesToApi.map((message) => ({
+        content: message.content,
+        role: message.role,
+      })),
+
+      botId: params.id,
+    };
+
+    url.searchParams.set("messages", JSON.stringify(searchParams.messages));
+    url.searchParams.set("botId", searchParams.botId);
 
     const response = await fetch(url);
     if (!response.ok) {
@@ -212,7 +219,7 @@ export default function SmallChabotPreview({
         <div>
           <form onSubmit={handleSubmit} className="mt-2 flex gap-1">
             <textarea
-              className="w-full grow  resize-none rounded-full bg-gray-800 px-3 py-1 text-white outline-none"
+              className="grow  resize-none rounded-full bg-gray-800 px-3 py-1 text-white outline-none"
               ref={textAreaRef}
               disabled={loading}
               onKeyDown={handleEnter}
@@ -228,12 +235,12 @@ export default function SmallChabotPreview({
               onChange={(e) => setUserInput(e.target.value)}
             />
             <button
-              className="inline-flex aspect-square h-6 items-center justify-center rounded-full border-white bg-gray-800 fill-white text-white"
+              className="inline-flex aspect-square h-6 items-center justify-center rounded-full border-white bg-gray-800 fill-white text-white md:h-8"
               type="submit"
               disabled={loading}
             >
               <svg
-                className="h-5 w-5 rotate-90"
+                className="h-3 w-3 rotate-90 md:h-5 md:w-5"
                 viewBox="0 0 20 20"
                 xmlns="http://www.w3.org/2000/svg"
               >

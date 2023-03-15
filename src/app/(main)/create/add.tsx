@@ -1,5 +1,6 @@
 "use client";
 
+import { IngestApiSchemaType } from "@/app/api/ingest/route";
 import { LoadingSpinner } from "@/components/loading-spinner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,39 +16,56 @@ export function Add() {
   const [data, setData] = useState<any>(null);
   const [siteId, setSiteId] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [botId, setBotId] = useState<string | null>(null);
 
   async function ingest() {
     setLoading(true);
-    const { data: site, error } = await supabase
-      .from("sites")
-      .insert({ url: siteUrl, user_id: session?.user.id })
+    if (!session) return;
+    const { data: bot, error: botError } = await supabase
+      .from("bots")
+      .insert({ user_id: session.user.id })
       .select()
       .single();
-    if (error) {
-      console.error(error);
-      setError(error.message);
+
+    if (botError) {
+      console.error(botError);
+      setError(botError.message);
+      return;
+    }
+    setBotId(bot.id);
+
+    const { data: site, error: siteError } = await supabase
+      .from("sites")
+      .insert({ url: siteUrl, bot_id: bot.id })
+      .select()
+      .single();
+
+    if (siteError) {
+      console.error(siteError);
+      setError(siteError.message);
       return;
     } else {
       setSiteId(site.id);
-      console.log(site);
+      console.log(bot);
     }
 
-    console.log("body", { url: siteUrl, id: site.id });
+    console.log("body", { url: siteUrl, id: bot.id });
+
+    const body: IngestApiSchemaType = {
+      url: siteUrl,
+      botId: bot.id,
+      siteId: site.id,
+    };
+
     const response = await fetch("/api/ingest", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ url: siteUrl, id: site.id }),
+      body: JSON.stringify(body),
     });
     if (!response.ok) {
-      try {
-        const data = await response.json();
-        if (data.status) setError(data.status);
-      } catch (e) {
-        setError(response.statusText);
-      }
-
+      setError("Something went wrong");
       setLoading(false);
       return;
     }
@@ -99,7 +117,7 @@ export function Add() {
               <span className="py-2">The data as been treated</span>
 
               {data && (
-                <Link href={`/chat/${siteId}`}>Try the generated chatbot</Link>
+                <Link href={`/chat/${botId}`}>Try the generated chatbot</Link>
               )}
             </>
           )}

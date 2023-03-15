@@ -1,14 +1,23 @@
 import { generateEmbeddings } from "@/app/api/ingest/embeddings";
 import { createClient } from "@/supabase/utils/server";
 import { get } from "@vercel/edge-config";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-// export const config = {
-//   revalidate: 0,
-// };
+import { z } from "zod";
 
-export async function POST(req: Request) {
-  const { url, id } = (await req.json()) as { url: string; id: number };
+const IngestApiSchema = z.object({
+  url: z.string(),
+  botId: z.string(),
+  siteId: z.number(),
+});
+export type IngestApiSchemaType = z.infer<typeof IngestApiSchema>;
+export async function POST(req: NextRequest) {
+  const body = await req.json();
+  const result = IngestApiSchema.safeParse(body);
+  if (!result.success) {
+    return NextResponse.json({ error: result.error }, { status: 400 });
+  }
+  const { url, botId, siteId } = result.data;
 
   const supabaseClient = createClient();
 
@@ -23,37 +32,48 @@ export async function POST(req: Request) {
       { status: 401 }
     );
 
-  const { data: sites, error } = await supabaseClient
-    .from("sites")
+  const { data: bots, error } = await supabaseClient
+    .from("bots")
     .select("*")
     .eq("user_id", session.user.id);
 
-  console.log(sites);
+  console.log(bots);
 
   if (error)
     return NextResponse.json({ status: "Query error", error }, { status: 500 });
 
-  const sitesLength = sites.length;
+  const botsLength = bots.length;
 
   const emailBypassLimit = (await get("emailBypassLimit")) as string[];
 
   if (
     session.user.email &&
     !emailBypassLimit.includes(session.user.email) &&
-    sitesLength >= 5
+    botsLength >= 5
   )
     return NextResponse.json({ status: "Limit reached" }, { status: 400 });
 
-  if (sitesLength > 0) {
-    const site = sites.find((site) => site.id != id && site.url === url);
+  if (botsLength > 0) {
+    // query sites of this both and verify if the url is already in the db
+    const { data: sites, error: sitesError } = await supabaseClient
+      .from("sites")
+      .select("*");
+    // .eq("bot_id", bot_id);
 
-    if (site)
+    if (sitesError)
+      return NextResponse.json(
+        { status: "Query error", error: sitesError },
+        { status: 500 }
+      );
+    // if site is found
+    if (sites.filter((site) => site.url === url).length > 1)
       return NextResponse.json(
         { status: "Site already exists" },
         { status: 400 }
       );
   }
-
-  await generateEmbeddings(url, id);
+  console.log("Test passed generating embedding for", { url, siteId, botId });
+  await generateEmbeddings({ url, siteId, botId });
+  console.log("Embedding generated");
   return NextResponse.json({ status: "OK" }, { status: 200 });
 }

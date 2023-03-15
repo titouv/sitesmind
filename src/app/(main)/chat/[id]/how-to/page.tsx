@@ -25,7 +25,7 @@ export default function Page({ params }: { params: { id: string } }) {
           Copy and paste the following code into your website to embed the chat
         </span>
         {/* @ts-expect-error */}
-        <Code className="max-w-xl" lang="js">
+        <Code className="max-w-xl text-sm" lang="js">
           {code}
         </Code>
         <Link href={`/chat/${params.id}`}>Go back to chat</Link>

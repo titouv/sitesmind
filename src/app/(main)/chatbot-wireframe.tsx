@@ -6,10 +6,16 @@ export function ChatbotWireframe() {
   const [clicked, setClicked] = useState(false);
   return (
     <div className="relative flex aspect-[9/16] w-full items-center justify-center rounded-2xl border border-slate-200 bg-white shadow-2xl animate-in fade-in slide-in-from-right-12 duration-1000 sm:aspect-video">
-      <div className="text-center  text-2xl font-semibold italic text-slate-900">
-        Your
-        <span className="relative ml-2 inline-block before:absolute before:-inset-1  before:block before:-skew-y-3 before:bg-blue-500">
-          <span className="relative text-white">website</span>
+      <div className="text-center   text-slate-900">
+        <span className="block text-2xl font-semibold italic">
+          Your
+          <span className="relative ml-2 inline-block before:absolute before:-inset-1  before:block before:-skew-y-3 before:bg-blue-500">
+            <span className="relative text-white">website</span>
+          </span>
+        </span>
+        <span className="mt-2 block text-sm">
+          Train a chatbot on your content,
+          <br /> deploy it to your website, and start
         </span>
       </div>
       <div
@@ -18,7 +24,9 @@ export function ChatbotWireframe() {
           setClicked(true);
         }}
       >
-        <SmallChabotPreview params={{ id: "2" }} />
+        <SmallChabotPreview
+          params={{ id: "3bcae46d-2796-4922-b84b-81cbc24befcf" }}
+        />
       </div>
       {!clicked && (
         <div className="pointer-events-none absolute bottom-8 right-8 z-10   border-black fill-black text-black">
@@ -45,12 +53,12 @@ function Arrow() {
         height="51.49455935068181"
         fill="transparent"
       ></rect>
-      <g stroke-linecap="round">
+      <g strokeLinecap="round">
         <g transform="translate(10 10.010184350681811) rotate(0 34.712890625 15.737095324659094)">
           <path
             d="M0 0 C7.41 0.59, 32.89 -1.7, 44.46 3.54 C56.03 8.79, 65.26 26.83, 69.43 31.48 M0 0 C7.41 0.59, 32.89 -1.7, 44.46 3.54 C56.03 8.79, 65.26 26.83, 69.43 31.48"
             stroke="#000000"
-            stroke-width="4"
+            strokeWidth="4"
             fill="none"
           ></path>
         </g>
@@ -58,7 +66,7 @@ function Arrow() {
           <path
             d="M54.01 20.84 C58.72 24.09, 63.43 27.35, 69.43 31.48 M54.01 20.84 C59.34 24.52, 64.67 28.2, 69.43 31.48"
             stroke="#000000"
-            stroke-width="4"
+            strokeWidth="4"
             fill="none"
           ></path>
         </g>
@@ -66,7 +74,7 @@ function Arrow() {
           <path
             d="M64.45 13.42 C65.97 18.94, 67.49 24.46, 69.43 31.48 M64.45 13.42 C66.17 19.66, 67.89 25.91, 69.43 31.48"
             stroke="#000000"
-            stroke-width="4"
+            strokeWidth="4"
             fill="none"
           ></path>
         </g>

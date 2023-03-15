@@ -10,19 +10,28 @@ export const config = {
 
 export const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
+  "Content-Type": "text/html; charset=utf-8",
 };
 
 type OpenAIStreamPayload = Parameters<typeof OpenAIStream>[0];
 
 export type OpenAIMessages = OpenAIStreamPayload["messages"];
+export type ChatApiSchemaType = {
+  messages: OpenAIMessages;
+  botId: string;
+};
 
 // maybe replace back to POST requst after this issue has been solved : https://github.com/vercel/next.js/issues/46337
 export async function GET(req: Request) {
   const params = new URL(req.url).searchParams;
-  const messages = JSON.parse(params.get("messages") || "") as OpenAIMessages;
-  if (!messages) {
-    return new Response("no query", { headers: corsHeaders });
+
+  if (!params.has("botId") || !params.has("messages")) {
+    return new Response("Missing botId or message", { headers: corsHeaders });
   }
+
+  const messages = JSON.parse(params.get("messages") || "") as OpenAIMessages;
+  const botId = params.get("botId") as string;
+
   // i want a variable with only the last element and a var with all the previous elements
   const lastMessage = messages[messages.length - 1];
   const previousMessages = messages.slice(0, messages.length - 1);
@@ -61,8 +70,9 @@ export async function GET(req: Request) {
   // Ideally for context injection, documents are chunked into
   // smaller sections at earlier pre-processing/embedding step.
   const { data: documents, error } = await supabaseClient.rpc(
-    "match_documents",
+    "match_documents_by_id",
     {
+      bot_id: botId,
       match_count: 10,
       query_embedding: embedding,
       similarity_threshold: 0.1,
@@ -70,9 +80,19 @@ export async function GET(req: Request) {
   );
   if (error) {
     console.log("error", error);
-    return new Response("error", { headers: corsHeaders });
+    return new Response("error", {
+      headers: {
+        ...corsHeaders,
+        "Transfer-Encoding": "chunked",
+        charset: "utf-8",
+        "Content-Type": "application/json",
+        "Content-Encoding": "gzip",
+      },
+    });
   }
   console.log("time for match_documents", Date.now() - start, "ms");
+
+  console.log("documents", documents);
 
   const tokenizer = new GPT3Tokenizer({ type: "gpt3" });
   let tokenCount = 0;
@@ -116,5 +136,5 @@ export async function GET(req: Request) {
     n: 1,
   };
   const stream = await OpenAIStream(payload);
-  return new Response(stream, { headers: corsHeaders });
+  return new Response(stream, { status: 200, headers: corsHeaders });
 }
