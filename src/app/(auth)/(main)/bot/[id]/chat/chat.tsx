@@ -53,8 +53,8 @@ export default function Chat({ params }: { params: { id: string } }) {
       { content: question, role: "user" },
       { content: "", role: "assistant", streaming: true },
     ]);
+    const url = new URL(`api/`, window.location.origin);
 
-    const url = new URL(`api/bot/${params.id}/chat`, window.location.origin);
     const searchParams: ChatApiSchemaType = {
       messages: messagesToApi.map((message) => ({
         content: message.content,
@@ -63,6 +63,7 @@ export default function Chat({ params }: { params: { id: string } }) {
     };
 
     url.searchParams.set("messages", JSON.stringify(searchParams.messages));
+    url.searchParams.set("botId", params.id);
 
     const response = await fetch(url);
     if (!response.ok) {
