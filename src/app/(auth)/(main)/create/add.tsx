@@ -56,7 +56,7 @@ export function Add() {
       siteId: site.id,
     };
 
-    const response = await fetch(`/api/bot/${botId}/ingest`, {
+    const response = await fetch(`/api/bot/${bot.id}/ingest`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
