@@ -17,6 +17,7 @@ export default async function Page() {
     console.error(error);
   }
   console.log(data);
+  console.log(data);
   return (
     <section className="container grid items-center gap-6 pt-6 pb-8 md:py-10">
       <div className="flex flex-col items-center justify-center">
