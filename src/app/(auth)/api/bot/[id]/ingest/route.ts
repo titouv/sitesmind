@@ -1,7 +1,7 @@
 import { generateEmbeddings } from "@/app/(auth)/api/bot/[id]/ingest/embeddings";
 import { createClient } from "@/supabase/utils/server";
 import { get } from "@vercel/edge-config";
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 
 import { z } from "zod";
 
@@ -14,7 +14,7 @@ const IngestApiSchema = z.object({
 });
 export type IngestApiSchemaType = z.infer<typeof IngestApiSchema>;
 export async function POST(
-  req: NextRequest,
+  req: Request,
   { params }: { params: { id: string } }
 ) {
   const body = await req.json();
