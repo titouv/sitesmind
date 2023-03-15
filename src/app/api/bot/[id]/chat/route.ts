@@ -2,7 +2,7 @@ import { OpenAIStream } from "@/utils/openAIStream";
 import GPT3Tokenizer from "gpt3-tokenizer";
 import { OpenAIApi } from "openai";
 import { NextRequest } from "next/server";
-import { supabaseClient } from "@/supabase/utils/api";
+import { createServerComponentClient } from "@/supabase/utils/server";
 
 export const config = {
   revalidate: 0,
@@ -71,14 +71,15 @@ export async function GET(
   const [{ embedding }] = embeddingData.data;
   start = Date.now();
 
+  const supabaseClient = createServerComponentClient();
   // Ideally for context injection, documents are chunked into
   // smaller sections at earlier pre-processing/embedding step.
   const { data: documents, error } = await supabaseClient.rpc(
     "match_documents_by_id",
     {
-      bot_id: id,
-      match_count: 10,
+      query_bot_id: id,
       query_embedding: embedding,
+      match_count: 10,
       similarity_threshold: 0.1,
     }
   );
@@ -89,7 +90,6 @@ export async function GET(
     });
   }
   console.log("time for match_documents", Date.now() - start, "ms");
-
   const tokenizer = new GPT3Tokenizer({ type: "gpt3" });
   let tokenCount = 0;
   let contextText = "";
@@ -108,6 +108,7 @@ export async function GET(
 
     contextText += `${content.trim()}\n---\n`;
   }
+  console.log("contextText", contextText);
 
   // In production we should handle possible errors
   const messagesToSend: OpenAIStreamPayload["messages"] = [

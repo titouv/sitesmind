@@ -8,17 +8,3 @@ export const createServerComponentClient = () =>
     headers,
     cookies,
   });
-
-// export const createRouteHandlerClient = () =>
-//   createRouteHandlerSupabaseClient<Database>({
-//     headers,
-//     cookies,
-//   });
-
-// export const createRouteHandlerClientAsAdmin = () =>
-//   createRouteHandlerSupabaseClient<Database>({
-//     headers,
-//     cookies,
-//     supabaseKey: process.env.SUPABASE_SECRET_KEY,
-//     supabaseUrl: process.env.SUPABASE_URL,
-//   });

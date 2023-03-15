@@ -126,7 +126,7 @@ export interface Database {
           query_embedding: unknown
           similarity_threshold: number
           match_count: number
-          bot_id: string
+          query_bot_id: string
         }
         Returns: {
           id: number

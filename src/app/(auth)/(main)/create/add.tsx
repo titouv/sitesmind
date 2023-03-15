@@ -94,6 +94,10 @@ export function Add() {
               Create
             </Button>
           </div>
+          <span className="mt-4 block text-sm text-gray-500">
+            Coming soon : select the root of the website you want to import, and
+            import all the subpages at once
+          </span>
         </>
       ) : (
         <div className="flex flex-col items-center justify-center gap-4">
