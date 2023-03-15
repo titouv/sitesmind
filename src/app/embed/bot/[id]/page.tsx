@@ -3,13 +3,18 @@
 import { useState, useRef, useEffect, useMemo } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { OpenAIMessages } from "@/app/(auth)/api/bot/[id]/chat/route";
+// import { OpenAIMessages } from "@/app/(auth)/api/bot/[id]/chat/route";
 import { cn } from "@/lib/utils";
 import { Icons } from "@/components/icons";
 import { BASE_URL } from "@/config/site";
 import * as Popover from "@radix-ui/react-popover";
 
-type Message = OpenAIMessages[number] & {
+// type Message = OpenAIMessages[number] & {
+//   streaming?: boolean;
+// };
+type Message = {
+  content: string;
+  role: "user" | "assistant" | "system";
   streaming?: boolean;
 };
 
