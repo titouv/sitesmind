@@ -4,7 +4,7 @@ import { Analytics } from "@vercel/analytics/react";
 import "@/styles/globals.css";
 import SupabaseListener from "@/supabase/components/supabase-listener";
 import SupabaseProvider from "@/supabase/components/supabase-provider";
-import { createClient } from "@/supabase/utils/server";
+import { createServerComponentClient } from "@/supabase/utils/server";
 import { Inter } from "next/font/google";
 
 // do not cache this layout
@@ -61,7 +61,7 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const supabase = createClient();
+  const supabase = createServerComponentClient();
 
   const {
     data: { session },

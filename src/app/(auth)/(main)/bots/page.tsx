@@ -1,11 +1,11 @@
 import { Link } from "@/components/ui/link";
-import { createClient } from "@/supabase/utils/server";
+import { createServerComponentClient } from "@/supabase/utils/server";
 
 // do not cache this page
 export const revalidate = 0;
 
 export default async function Page() {
-  const supabase = createClient();
+  const supabase = createServerComponentClient();
 
   let { data, error } = await supabase.from("bots").select(`*,
     sites (

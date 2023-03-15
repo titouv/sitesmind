@@ -13,14 +13,14 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { createClient } from "@/supabase/utils/server";
+import { createServerComponentClient } from "@/supabase/utils/server";
 
 interface MainNavProps {
   items?: NavItem[];
 }
 
 export async function MainNav({ items }: MainNavProps) {
-  const supabase = createClient();
+  const supabase = createServerComponentClient();
   const {
     data: { session },
   } = await supabase.auth.getSession();

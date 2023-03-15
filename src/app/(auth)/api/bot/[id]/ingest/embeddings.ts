@@ -3,7 +3,7 @@ import {
   RecursiveCharacterTextSplitter,
   Document,
 } from "@/app/(auth)/api/bot/[id]/ingest/splitter";
-import { createClient } from "@/supabase/utils/browser";
+import { createBrowserClient } from "@/supabase/utils/browser";
 
 async function getDocuments(url: string) {
   const data = await getData([url]);
@@ -65,7 +65,7 @@ export async function generateEmbeddings({
     }
 
     const [{ embedding }] = (await embeddingResponse.json()).data;
-    const supabaseClient = createClient();
+    const supabaseClient = createBrowserClient();
 
     // In production we should handle possible errors
     await supabaseClient.from("documents").insert({

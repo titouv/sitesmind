@@ -1,9 +1,9 @@
 import { Link } from "@/components/ui/link";
-import { createClient } from "@/supabase/utils/server";
+import { createServerComponentClient } from "@/supabase/utils/server";
 import { Add } from "./add";
 
 export default async function Page() {
-  const supabase = createClient();
+  const supabase = createServerComponentClient();
 
   const {
     data: { user },

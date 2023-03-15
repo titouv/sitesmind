@@ -1,8 +1,8 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { createClient } from "@/supabase/utils/server";
+import { createServerComponentClient } from "@/supabase/utils/server";
 
 export async function ProfilePicture() {
-  const supabase = createClient();
+  const supabase = createServerComponentClient();
   const user = await supabase.auth.getUser();
   const avatarUrl = user.data.user?.user_metadata.avatar_url;
   const fullName = user.data.user?.user_metadata.full_name;

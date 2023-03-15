@@ -1,14 +1,14 @@
 import { ChatbotWireframe } from "@/app/(auth)/(main)/chatbot-wireframe";
 import { LoginButton } from "@/components/login-button";
 import { Link } from "@/components/ui/link";
-import { createClient } from "@/supabase/utils/server";
+import { createServerComponentClient } from "@/supabase/utils/server";
 
 export default async function Home({
   searchParams,
 }: {
   searchParams: { redirect: string };
 }) {
-  const supabase = createClient();
+  const supabase = createServerComponentClient();
   const {
     data: { session },
   } = await supabase.auth.getSession();
