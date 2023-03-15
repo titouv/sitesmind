@@ -1,8 +1,8 @@
-import { getData } from "@/app/(auth)/api/bot/[id]/ingest/scraper";
+import { getData } from "@/app/api/bot/[id]/ingest/scraper";
 import {
   RecursiveCharacterTextSplitter,
   Document,
-} from "@/app/(auth)/api/bot/[id]/ingest/splitter";
+} from "@/app/api/bot/[id]/ingest/splitter";
 import { createBrowserClient } from "@/supabase/utils/browser";
 
 async function getDocuments(url: string) {

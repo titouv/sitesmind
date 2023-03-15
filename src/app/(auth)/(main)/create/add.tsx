@@ -1,6 +1,6 @@
 "use client";
 
-import { IngestApiSchemaType } from "@/app/(auth)/api/bot/[id]/ingest/route";
+import { IngestApiSchemaType } from "@/app/api/bot/[id]/ingest/route";
 import { LoadingSpinner } from "@/components/loading-spinner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";

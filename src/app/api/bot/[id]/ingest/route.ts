@@ -1,4 +1,4 @@
-import { generateEmbeddings } from "@/app/(auth)/api/bot/[id]/ingest/embeddings";
+import { generateEmbeddings } from "@/app/api/bot/[id]/ingest/embeddings";
 import { supabaseClient } from "@/supabase/utils/api";
 import { createRouteHandlerClient } from "@/supabase/utils/server";
 import { NextResponse } from "next/server";
