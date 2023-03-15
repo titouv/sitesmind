@@ -41,7 +41,7 @@ export async function POST(
     .select("*")
     .eq("user_id", session.user.id);
 
-  console.log(bots);
+  console.log("bots", { bots });
 
   if (error)
     return NextResponse.json({ status: "Query error", error }, { status: 500 });
@@ -62,7 +62,8 @@ export async function POST(
     const { data: sites, error: sitesError } = await supabaseClient
       .from("sites")
       .select("*");
-    // .eq("bot_id", bot_id);
+
+    console.log("sites", { sites });
 
     if (sitesError)
       return NextResponse.json(
