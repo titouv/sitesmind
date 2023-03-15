@@ -2,7 +2,7 @@ import { Link } from "@/components/ui/link";
 import { createClient } from "@/supabase/utils/server";
 
 export const dynamic = "force-dynamic";
-
+export const fetchCache = "only-no-store";
 export default async function Page() {
   const supabase = createClient();
 
