@@ -28,7 +28,7 @@ export default function Page({ params }: { params: { id: string } }) {
         <Code className="max-w-xl text-sm" lang="js">
           {code}
         </Code>
-        <Link href={`/chat/${params.id}`}>Go back to chat</Link>
+        <Link href={`/bot/${params.id}/chat`}>Go back to chat</Link>
       </div>
     </section>
   );

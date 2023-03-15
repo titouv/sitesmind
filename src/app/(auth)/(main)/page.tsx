@@ -1,4 +1,4 @@
-import { ChatbotWireframe } from "@/app/(main)/chatbot-wireframe";
+import { ChatbotWireframe } from "@/app/(auth)/(main)/chatbot-wireframe";
 import { LoginButton } from "@/components/login-button";
 import { Link } from "@/components/ui/link";
 import { createClient } from "@/supabase/utils/server";

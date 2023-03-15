@@ -2,6 +2,7 @@ import { OpenAIStream } from "@/utils/openAIStream";
 import GPT3Tokenizer from "gpt3-tokenizer";
 import { supabaseClient } from "@/supabase/utils/api";
 import { OpenAIApi } from "openai";
+import { NextRequest } from "next/server";
 
 export const config = {
   revalidate: 0,
@@ -18,19 +19,23 @@ type OpenAIStreamPayload = Parameters<typeof OpenAIStream>[0];
 export type OpenAIMessages = OpenAIStreamPayload["messages"];
 export type ChatApiSchemaType = {
   messages: OpenAIMessages;
-  botId: string;
 };
 
 // maybe replace back to POST requst after this issue has been solved : https://github.com/vercel/next.js/issues/46337
-export async function GET(req: Request) {
-  const params = new URL(req.url).searchParams;
+export async function GET(
+  req: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  const searchParams = new URL(req.url).searchParams;
 
-  if (!params.has("botId") || !params.has("messages")) {
+  if (!searchParams.has("messages")) {
     return new Response("Missing botId or message", { headers: corsHeaders });
   }
 
-  const messages = JSON.parse(params.get("messages") || "") as OpenAIMessages;
-  const botId = params.get("botId") as string;
+  const messages = JSON.parse(
+    searchParams.get("messages") || ""
+  ) as OpenAIMessages;
+  const botId = params.id;
 
   // i want a variable with only the last element and a var with all the previous elements
   const lastMessage = messages[messages.length - 1];

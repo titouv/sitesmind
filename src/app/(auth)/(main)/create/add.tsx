@@ -1,6 +1,6 @@
 "use client";
 
-import { IngestApiSchemaType } from "@/app/api/ingest/route";
+import { IngestApiSchemaType } from "@/app/(auth)/api/bot/[id]/ingest/route";
 import { LoadingSpinner } from "@/components/loading-spinner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -53,11 +53,10 @@ export function Add() {
 
     const body: IngestApiSchemaType = {
       url: siteUrl,
-      botId: bot.id,
       siteId: site.id,
     };
 
-    const response = await fetch("/api/ingest", {
+    const response = await fetch(`/api/bot/${botId}/ingest`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -117,7 +116,9 @@ export function Add() {
               <span className="py-2">The data as been treated</span>
 
               {data && (
-                <Link href={`/chat/${botId}`}>Try the generated chatbot</Link>
+                <Link href={`/bot/${botId}/chat`}>
+                  Try the generated chatbot
+                </Link>
               )}
             </>
           )}

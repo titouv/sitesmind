@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect, useMemo } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { OpenAIMessages } from "@/app/api/chat/route";
+import { OpenAIMessages } from "@/app/(auth)/api/bot/[id]/chat/route";
 import { cn } from "@/lib/utils";
 import { Icons } from "@/components/icons";
 import { BASE_URL } from "@/config/site";

@@ -1,4 +1,4 @@
-import Chat from "@/app/(main)/chat/[id]/chat";
+import Chat from "@/app/(auth)/(main)/bot/[id]/chat/chat";
 import { createClient } from "@/supabase/utils/server";
 import { notFound } from "next/navigation";
 export default async function Page({ params }: { params: { id: string } }) {

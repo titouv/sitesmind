@@ -3,7 +3,10 @@
 import { useState, useRef, useEffect, useMemo } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { ChatApiSchemaType, OpenAIMessages } from "@/app/api/chat/route";
+import {
+  ChatApiSchemaType,
+  OpenAIMessages,
+} from "@/app/(auth)/api/bot/[id]/chat/route";
 import { Icons } from "@/components/icons";
 import { BASE_URL } from "@/config/site";
 import * as Popover from "@radix-ui/react-popover";
@@ -52,14 +55,12 @@ export default function SmallChabotPreview({
       { content: "", role: "assistant", streaming: true },
     ]);
 
-    const url = new URL(`api/chat/`, window.location.origin);
+    const url = new URL(`api/chat/${botId}`, window.location.origin);
     const searchParams: ChatApiSchemaType = {
       messages: messagesToApi.map((message) => ({
         content: message.content,
         role: message.role,
       })),
-
-      botId: params.id,
     };
 
     url.searchParams.set("messages", JSON.stringify(searchParams.messages));

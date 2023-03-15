@@ -1,7 +1,7 @@
 import { siteConfig } from "@/config/site";
 import { MainNav } from "@/components/main-nav";
 import { NavAuth } from "@/components/nav-auth";
-import { ProfilePicture } from "@/app/(main)/profile-picture";
+import { ProfilePicture } from "@/components/profile-picture";
 
 export function SiteHeader() {
   return (

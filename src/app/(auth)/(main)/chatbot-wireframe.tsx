@@ -1,5 +1,5 @@
 "use client";
-import SmallChabotPreview from "@/app/(main)/small-chabot-preview";
+import SmallChabotPreview from "@/app/(auth)/(main)/small-chabot-preview";
 import { useState } from "react";
 
 export function ChatbotWireframe() {

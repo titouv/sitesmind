@@ -3,7 +3,10 @@
 import { useState, useRef, useEffect, useMemo } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { ChatApiSchemaType, OpenAIMessages } from "@/app/api/chat/route";
+import {
+  ChatApiSchemaType,
+  OpenAIMessages,
+} from "@/app/(auth)/api/bot/[id]/chat/route";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -51,18 +54,16 @@ export default function Chat({ params }: { params: { id: string } }) {
       { content: "", role: "assistant", streaming: true },
     ]);
 
-    const url = new URL(`api/chat/`, window.location.origin);
+    const url = new URL(`api/bot/${params.id}/chat`, window.location.origin);
     const searchParams: ChatApiSchemaType = {
       messages: messagesToApi.map((message) => ({
         content: message.content,
         role: message.role,
       })),
-
-      botId: params.id,
     };
 
     url.searchParams.set("messages", JSON.stringify(searchParams.messages));
-    url.searchParams.set("botId", searchParams.botId);
+
     const response = await fetch(url);
     if (!response.ok) {
       throw new Error(response.statusText);
@@ -143,7 +144,7 @@ export default function Chat({ params }: { params: { id: string } }) {
     <div className="container flex flex-col items-center py-8">
       <div className="flex w-full items-center justify-between py-2  md:w-[75vw]">
         <h1 className="text-2xl font-bold text-slate-900">Test your chatbot</h1>
-        <Link href={`/chat/${params.id}/how-to`}>
+        <Link href={`/bot/${params.id}/how-to`}>
           How to use the chat on your website
         </Link>
       </div>
