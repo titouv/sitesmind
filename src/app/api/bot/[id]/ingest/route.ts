@@ -1,5 +1,5 @@
 import { generateEmbeddings } from "@/app/api/bot/[id]/ingest/embeddings";
-import { createServerComponentClient } from "@/supabase/utils/server";
+import { createApiClient } from "@/supabase/utils/api";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
@@ -27,7 +27,7 @@ export async function POST(
   const { url, siteId } = result.data;
   const botId = params.id;
 
-  const supabaseClient = createServerComponentClient();
+  const supabaseClient = createApiClient();
 
   const {
     data: { session },
