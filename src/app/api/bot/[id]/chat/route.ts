@@ -1,7 +1,8 @@
 import { OpenAIStream } from "@/utils/openAIStream";
 import GPT3Tokenizer from "gpt3-tokenizer";
 import { OpenAIApi } from "openai";
-import { supabaseClient } from "@/supabase/utils/api";
+import { NextRequest } from "next/server";
+import { createRouteHandlerClientAsAdmin } from "@/supabase/utils/server";
 
 export const config = {
   revalidate: 0,
@@ -23,18 +24,18 @@ export type ChatApiSchemaType = {
 };
 
 // maybe replace back to POST requst after this issue has been solved : https://github.com/vercel/next.js/issues/46337
-export async function GET(req: Request) {
-  console.log("here");
-  const params = new URL(req.url).searchParams;
-  const messages = JSON.parse(params.get("messages") || "") as OpenAIMessages;
-  const botId = params.get("botId") || "";
+export async function GET(
+  req: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  const { id } = params;
 
-  console.log("here2");
+  const messages = JSON.parse(req.nextUrl.searchParams.get("messages") || "[]");
+
   if (!messages) {
     return new Response("no query", { headers: corsHeaders });
   }
 
-  console.log("here3");
   // i want a variable with only the last element and a var with all the previous elements
   const lastMessage = messages[messages.length - 1];
   const previousMessages = messages.slice(0, messages.length - 1);
@@ -42,10 +43,8 @@ export async function GET(req: Request) {
   // OpenAI recommends replacing newlines with spaces for best results
   const input = lastMessage.content.replace(/\n/g, " ");
 
-  console.log("here4");
   let start = Date.now();
 
-  console.log("here5");
   type EmbeddingFetchResponseType = Awaited<
     ReturnType<OpenAIApi["createEmbedding"]>
   >["data"];
@@ -72,11 +71,13 @@ export async function GET(req: Request) {
   const [{ embedding }] = embeddingData.data;
   start = Date.now();
 
+  const supabaseClient = createRouteHandlerClientAsAdmin();
   // Ideally for context injection, documents are chunked into
   // smaller sections at earlier pre-processing/embedding step.
   const { data: documents, error } = await supabaseClient.rpc(
-    "match_documents",
+    "match_documents_by_id",
     {
+      bot_id: id,
       match_count: 10,
       query_embedding: embedding,
       similarity_threshold: 0.1,
@@ -94,7 +95,6 @@ export async function GET(req: Request) {
   let tokenCount = 0;
   let contextText = "";
 
-  console.log("here6");
   // Concat matched documents
   for (let i = 0; i < documents.length; i++) {
     const document = documents[i];
@@ -119,7 +119,6 @@ export async function GET(req: Request) {
     },
     lastMessage,
   ];
-  console.log("messagesToSend", messagesToSend);
 
   const payload: OpenAIStreamPayload = {
     model: "gpt-3.5-turbo",

@@ -58,7 +58,7 @@ export default function Page({ params }: { params: { id: string } }) {
       { content: question, role: "user" },
       { content: "", role: "assistant", streaming: true },
     ]);
-    const url = new URL(`api/chat`, window.location.origin);
+    const url = new URL(`api/bot/${params.id}/chat`, window.location.origin);
 
     const searchParams: { messages: Message[] } = {
       messages: messagesToApi.map((message) => ({
@@ -68,7 +68,6 @@ export default function Page({ params }: { params: { id: string } }) {
     };
 
     url.searchParams.set("messages", JSON.stringify(searchParams.messages));
-    url.searchParams.set("botId", params.id);
 
     const response = await fetch(url);
     if (!response.ok) {
