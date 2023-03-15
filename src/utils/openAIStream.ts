@@ -25,7 +25,6 @@ export async function OpenAIStream(payload: CreateChatCompletionRequest) {
       // callback
       function onParse(event: ParsedEvent | ReconnectInterval) {
         if (event.type === "event") {
-          console.log(event);
           const data = event.data;
           // https://beta.openai.com/docs/api-reference/completions/create#completions/create-stream
           if (data === "[DONE]") {
@@ -48,7 +47,6 @@ export async function OpenAIStream(payload: CreateChatCompletionRequest) {
           }
         }
       }
-      // console.log(res.data)
       // stream response (SSE) from OpenAI may be fragmented into multiple chunks
       // this ensures we properly read chunks and invoke an event for each SSE event stream
       const parser = createParser(onParse);

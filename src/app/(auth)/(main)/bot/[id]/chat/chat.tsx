@@ -167,9 +167,9 @@ export default function Chat({ params }: { params: { id: string } }) {
                 //   height="30"
                 //   priority
                 // />
-                <div className="rounded-xl bg-white p-2">
+                <div className="rounded-md bg-white p-2">
                   <Icons.bot
-                    className="h-[14x] w-[14px]"
+                    className="h-[14px] w-[14px]"
                     width={30}
                     height={30}
                   />
@@ -185,7 +185,7 @@ export default function Chat({ params }: { params: { id: string } }) {
                 //       height="30"
                 //       priority
                 //     />
-                <div className="rounded-xl bg-slate-100 p-2">
+                <div className="rounded-md bg-slate-100 p-2">
                   <Icons.user
                     className="h-[14px] w-[14px]"
                     width={30}
@@ -202,10 +202,7 @@ export default function Chat({ params }: { params: { id: string } }) {
                   : "";
             }
             return (
-              <div
-                className={cn("flex items-center px-6 py-4 ", roleClassName)}
-                key={index}
-              >
+              <div className={cn("flex px-6 py-4 ", roleClassName)} key={index}>
                 <div className="mr-4">{icon}</div>
                 <div>
                   <ReactMarkdown
