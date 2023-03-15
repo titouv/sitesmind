@@ -1,8 +1,8 @@
 import { OpenAIStream } from "@/utils/openAIStream";
 import GPT3Tokenizer from "gpt3-tokenizer";
-import { createRouteHandlerClientAsAdmin } from "@/supabase/utils/server";
 import { OpenAIApi } from "openai";
 import { NextRequest } from "next/server";
+import { createApiClient } from "@/supabase/utils/api";
 
 export const config = {
   revalidate: 0,
@@ -74,7 +74,7 @@ export async function GET(
   const [{ embedding }] = embeddingData.data;
   start = Date.now();
 
-  const supabaseClient = createRouteHandlerClientAsAdmin();
+  const supabaseClient = createApiClient();
   // Ideally for context injection, documents are chunked into
   // smaller sections at earlier pre-processing/embedding step.
   const { data: documents, error } = await supabaseClient.rpc(

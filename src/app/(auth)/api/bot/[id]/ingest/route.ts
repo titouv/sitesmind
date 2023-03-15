@@ -1,4 +1,5 @@
 import { generateEmbeddings } from "@/app/(auth)/api/bot/[id]/ingest/embeddings";
+import { createApiClient } from "@/supabase/utils/api";
 import { createRouteHandlerClient } from "@/supabase/utils/server";
 import { NextResponse } from "next/server";
 
@@ -28,7 +29,7 @@ export async function POST(
   const { url, siteId } = result.data;
   const botId = params.id;
 
-  const supabaseClient = createRouteHandlerClient();
+  const supabaseClient = createApiClient();
 
   const {
     data: { session },
