@@ -3,10 +3,10 @@
 import { useState, useRef, useEffect, useMemo } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import {
-  ChatApiSchemaType,
-  OpenAIMessages,
-} from "@/app/(auth)/api/bot/[id]/chat/route";
+// import {
+//   ChatApiSchemaType,
+//   OpenAIMessages,
+// } from "@/app/(auth)/api/bot/[id]/chat/route";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -14,7 +14,12 @@ import { Icons } from "@/components/icons";
 import { BASE_URL } from "@/config/site";
 import { Link } from "@/components/ui/link";
 
-type Message = OpenAIMessages[number] & {
+// type Message = OpenAIMessages[number] & {
+//   streaming?: boolean;
+// };
+type Message = {
+  content: string;
+  role: "user" | "assistant" | "system";
   streaming?: boolean;
 };
 
@@ -53,9 +58,9 @@ export default function Page({ params }: { params: { id: string } }) {
       { content: question, role: "user" },
       { content: "", role: "assistant", streaming: true },
     ]);
-    const url = new URL(`api/`, window.location.origin);
+    const url = new URL(`api/chat`, window.location.origin);
 
-    const searchParams: ChatApiSchemaType = {
+    const searchParams: { messages: Message[] } = {
       messages: messagesToApi.map((message) => ({
         content: message.content,
         role: message.role,
