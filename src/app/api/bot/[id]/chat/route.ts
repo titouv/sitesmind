@@ -108,7 +108,6 @@ export async function GET(
 
     contextText += `${content.trim()}\n---\n`;
   }
-  console.log("contextText", contextText);
 
   // In production we should handle possible errors
   const messagesToSend: OpenAIStreamPayload["messages"] = [
@@ -119,6 +118,7 @@ export async function GET(
     },
     lastMessage,
   ];
+  console.log("messagesToSend", messagesToSend);
 
   const payload: OpenAIStreamPayload = {
     model: "gpt-3.5-turbo",
