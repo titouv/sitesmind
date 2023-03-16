@@ -22,9 +22,6 @@ async function getInterestingData(html: string) {
         }
       }
     });
-  let text = Array.from(texts).join(" ");
-  //replace multiple spaces by newline
-  text = text.replace(/\s\s+/g, "\n");
-
+  let text = Array.from(texts).join("\n\n");
   return text;
 }

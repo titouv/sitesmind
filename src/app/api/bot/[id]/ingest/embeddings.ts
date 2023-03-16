@@ -16,6 +16,7 @@ async function getDocuments(urls: string[]) {
   const textSplitter = new RecursiveCharacterTextSplitter({
     chunkSize: 1000,
     chunkOverlap: 500,
+    separators: ["\n\n", "\n", " "],
   });
   const docs = await textSplitter.splitDocuments(rawDocs);
   return docs;
@@ -48,7 +49,7 @@ export async function generateEmbeddings({
   // In production we should handle possible errors
   const { error } = await supabaseClient.from("documents").insert(dataToInsert);
   if (error) {
-    console.log("Error while inserting documents", error);
+    console.error("Error while inserting documents", error);
     throw new Error("Error while inserting documents");
   }
 }
@@ -75,7 +76,7 @@ async function getEmbeddingOfDocument(document: Document) {
   );
 
   if (!embeddingResponse.ok) {
-    console.log(
+    console.error(
       "Error while generating embedding",
       embeddingResponse.statusText
     );

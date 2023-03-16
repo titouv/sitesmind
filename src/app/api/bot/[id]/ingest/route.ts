@@ -64,8 +64,6 @@ export async function GET(
       .from("sites")
       .select("*");
 
-    console.log("sites", { sites });
-
     if (sitesError)
       return NextResponse.json(
         { status: "Query error", error: sitesError },
@@ -82,13 +80,13 @@ export async function GET(
   try {
     await generateEmbeddings({ url, siteId, botId });
   } catch (error) {
-    console.log("Error while generating embeddings", error);
+    console.error("Error while generating embeddings", error);
     return NextResponse.json(
       { status: "Error while generating embeddings", error },
       { status: 500 }
     );
   }
 
-  console.log("Time to generate embeddings", Date.now() - start);
+  console.log("Time total route embeddings", Date.now() - start);
   return NextResponse.json({ status: "OK" }, { status: 200 });
 }
