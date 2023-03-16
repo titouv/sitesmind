@@ -61,7 +61,7 @@ chat.setAttribute("id", "chatbase-bubble-window"),
   (chat.style.zIndex = 999999999),
   (chat.style.padding = "5px"),
   document.body.appendChild(chat),
-  (chat.innerHTML = `<iframe\nsrc="http://localhost:3000/embed/bot/c847eee0-ac29-4f00-9f33-3e23a74d232b"\nwidth="100%"\nheight="100%"\nframeborder="0"\n></iframe>`);
+  (chat.innerHTML = `<iframe\nsrc="https://www.sitesmind.com/embed/bot/c847eee0-ac29-4f00-9f33-3e23a74d232b"\nwidth="100%"\nheight="100%"\nframeborder="0"\n></iframe>`);
 
 const mediaQuery = window.matchMedia("(min-width: 550px)");
 
