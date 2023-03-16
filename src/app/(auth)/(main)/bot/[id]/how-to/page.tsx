@@ -6,13 +6,7 @@ Code.theme = "github-dark";
 
 export default function Page({ params }: { params: { id: string } }) {
   const code = `
-<iframe
-    src="${BASE_URL}/embed/bot/${params.id}"
-    width="560"
-    height="315"
-    frameBorder="0"
-    allowFullScreen
-/>`.trim();
+  <script src="${BASE_URL}/embed.js"></script>`.trim();
   return (
     <section className="container grid items-center gap-6 pt-6 pb-8 md:py-10">
       <div className="flex flex-col items-center justify-center">

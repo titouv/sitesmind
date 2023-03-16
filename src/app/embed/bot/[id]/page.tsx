@@ -3,8 +3,6 @@
 import { useState, useRef, useEffect, useMemo } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { Icons } from "@/components/icons";
-import * as Popover from "@radix-ui/react-popover";
 import "@/styles/globals.css";
 
 type Message = {
@@ -32,7 +30,6 @@ export default function Home({ params }: { params: { id: string } }) {
     if (question === "") {
       return;
     }
-
     // clean input
     setUserInput("");
     setLoading(true);
@@ -124,119 +121,75 @@ export default function Home({ params }: { params: { id: string } }) {
   };
 
   return (
-    <div className="fixed bottom-4 right-4">
-      <Popover.Root>
-        <Popover.Trigger asChild>
-          <button
-            className="flex
-          items-center justify-center gap-2 rounded-full bg-blue-500 p-3 text-white"
-          >
-            <Icons.send className="h-6 w-6" />
-          </button>
-        </Popover.Trigger>
-        <Popover.Content
-          side="top"
-          sideOffset={10}
-          align="end"
-          className="rounded-3xl bg-black/90 p-6"
+    <div className="flex h-full w-full flex-col gap-4 bg-black">
+      <div>
+        <div
+          ref={messageListRef}
+          className="mb-4 flex max-h-52 w-96 flex-col gap-4 overflow-scroll rounded-t-xl"
         >
-          <div>
-            <div
-              ref={messageListRef}
-              className="mb-4 flex max-h-52 w-96 flex-col gap-4 overflow-scroll rounded-t-xl"
+          {messages.map((message, index) => {
+            if (message.content == "") return;
+            let roleClassName;
+
+            if (message.role === "assistant") {
+              roleClassName =
+                "px-4 py-2 rounded-t-xl rounded-br-xl bg-[#004584] text-white";
+            } else {
+              // The latest message sent by the user will be animated while waiting for a response
+              roleClassName =
+                index === messages.length - 2 &&
+                messages[messages.length - 1].content == ""
+                  ? "px-4 py-2 rounded-t-xl rounded-bl-xl bg-gray-100 animate-pulse"
+                  : "px-4 py-2 rounded-t-xl rounded-bl-xl bg-gray-100";
+            }
+            return (
+              <div className={roleClassName} key={index}>
+                <div>
+                  <ReactMarkdown
+                    remarkPlugins={[remarkGfm]}
+                    linkTarget="_blank"
+                  >
+                    {message.content}
+                  </ReactMarkdown>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+      <div>
+        <form onSubmit={handleSubmit} className="mt-4 flex gap-2">
+          <textarea
+            className="w-full grow  resize-none rounded-full bg-gray-800 px-4 py-2 text-white outline-none"
+            ref={textAreaRef}
+            disabled={loading}
+            onKeyDown={handleEnter}
+            autoFocus={false}
+            rows={1}
+            maxLength={512}
+            id="userInput"
+            name="userInput"
+            placeholder={
+              loading ? "Waiting for response..." : "Type your question..."
+            }
+            value={userInput}
+            onChange={(e) => setUserInput(e.target.value)}
+          />
+          <button
+            className="inline-flex aspect-square h-10 items-center justify-center rounded-full border-white bg-gray-800 fill-white text-white"
+            type="submit"
+            disabled={loading}
+          >
+            <svg
+              className="h-5 w-5 rotate-90"
+              viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg"
             >
-              {messages.map((message, index) => {
-                if (message.content == "") return;
-                let icon;
-                let roleClassName;
-
-                if (message.role === "assistant") {
-                  icon = (
-                    // <Image
-                    //   src="/chatIcon.png"
-                    //   alt="AI"
-                    //   width="30"
-                    //   height="30"
-                    //   priority
-                    // />
-                    <div>
-                      <Icons.bot width={30} height={30} />
-                    </div>
-                  );
-                  roleClassName =
-                    "px-4 py-2 rounded-t-xl rounded-br-xl bg-[#004584] text-white";
-                } else {
-                  icon = (
-                    //     <Image
-                    //       src="/usericon.png"
-                    //       alt="Me"
-                    //       width="30"
-                    //       height="30"
-                    //       priority
-                    //     />
-                    <div>
-                      <Icons.user width={30} height={30} />
-                    </div>
-                  );
-
-                  // The latest message sent by the user will be animated while waiting for a response
-                  roleClassName =
-                    index === messages.length - 2 &&
-                    messages[messages.length - 1].content == ""
-                      ? "px-4 py-2 rounded-t-xl rounded-bl-xl bg-gray-100 animate-pulse"
-                      : "px-4 py-2 rounded-t-xl rounded-bl-xl bg-gray-100";
-                }
-                return (
-                  <div className={roleClassName} key={index}>
-                    {/* <div>{icon}</div> */}
-                    <div>
-                      <ReactMarkdown
-                        remarkPlugins={[remarkGfm]}
-                        linkTarget="_blank"
-                      >
-                        {message.content}
-                      </ReactMarkdown>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-          <div>
-            <form onSubmit={handleSubmit} className="mt-4 flex gap-2">
-              <textarea
-                className="w-full grow  resize-none rounded-full bg-gray-800 px-4 py-2 text-white outline-none"
-                ref={textAreaRef}
-                disabled={loading}
-                onKeyDown={handleEnter}
-                autoFocus={false}
-                rows={1}
-                maxLength={512}
-                id="userInput"
-                name="userInput"
-                placeholder={
-                  loading ? "Waiting for response..." : "Type your question..."
-                }
-                value={userInput}
-                onChange={(e) => setUserInput(e.target.value)}
-              />
-              <button
-                className="inline-flex aspect-square h-10 items-center justify-center rounded-full border-white bg-gray-800 fill-white text-white"
-                type="submit"
-                disabled={loading}
-              >
-                <svg
-                  className="h-5 w-5 rotate-90"
-                  viewBox="0 0 20 20"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"></path>
-                </svg>
-              </button>
-            </form>
-          </div>
-        </Popover.Content>
-      </Popover.Root>
+              <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"></path>
+            </svg>
+          </button>
+        </form>
+      </div>
     </div>
   );
 }
