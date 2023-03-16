@@ -53,15 +53,10 @@ chat.setAttribute("id", "chatbase-bubble-window"),
   (chat.style.right = "20px"),
   (chat.style.width = "85vw"),
   (chat.style.height = "70vh"),
-  (chat.style.backgroundColor = "#fff"),
-  (chat.style.boxShadow = "0 4px 8px 0 rgba(0, 0, 0, 0.2)"),
   (chat.style.display = "none"),
-  (chat.style.border = "1px solid #D5D4D5"),
-  (chat.style.borderRadius = "10px"),
   (chat.style.zIndex = 999999999),
-  (chat.style.padding = "5px"),
   document.body.appendChild(chat),
-  (chat.innerHTML = `<iframe\nsrc="https://www.sitesmind.com/embed/bot/c847eee0-ac29-4f00-9f33-3e23a74d232b"\nwidth="100%"\nheight="100%"\nframeborder="0"\n></iframe>`);
+  (chat.innerHTML = `<iframe\nsrc="https://www.sitesmind.com/embed/bot/${scriptTag.id}"\nwidth="100%"\nheight="100%"\nframeborder="0"\n></iframe>`);
 
 const mediaQuery = window.matchMedia("(min-width: 550px)");
 

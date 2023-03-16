@@ -1,4 +1,5 @@
 import { NavItem } from "@/types/nav";
+
 export const BASE_URL = "http://" + process.env.NEXT_PUBLIC_VERCEL_URL;
 
 interface SiteConfig {

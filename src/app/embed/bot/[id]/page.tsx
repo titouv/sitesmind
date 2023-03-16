@@ -121,11 +121,11 @@ export default function Home({ params }: { params: { id: string } }) {
   };
 
   return (
-    <div className="flex h-full w-full flex-col gap-4 bg-black">
+    <div className="fixed inset-x-0 bottom-0 flex-col justify-end rounded-xl bg-black p-4">
       <div>
         <div
           ref={messageListRef}
-          className="mb-4 flex max-h-52 w-96 flex-col gap-4 overflow-scroll rounded-t-xl"
+          className="mb-4 flex flex-col gap-4 overflow-scroll rounded-t-xl"
         >
           {messages.map((message, index) => {
             if (message.content == "") return;

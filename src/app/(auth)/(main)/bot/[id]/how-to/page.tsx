@@ -5,8 +5,8 @@ import { Code } from "bright";
 Code.theme = "github-dark";
 
 export default function Page({ params }: { params: { id: string } }) {
-  const code = `
-  <script src="${BASE_URL}/embed.js"></script>`.trim();
+  const code =
+    `<script src="https://www.sitesmind.com/embed.js" id="${params.id}"></script>`.trim();
   return (
     <section className="container grid items-center gap-6 pt-6 pb-8 md:py-10">
       <div className="flex flex-col items-center justify-center">
