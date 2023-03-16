@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils";
 import { Icons } from "@/components/icons";
 import { BASE_URL } from "@/config/site";
 import * as Popover from "@radix-ui/react-popover";
+import "@/styles/globals.css";
 
 // type Message = OpenAIMessages[number] & {
 //   streaming?: boolean;
@@ -64,7 +65,7 @@ export default function Home({ params }: { params: { id: string } }) {
     }
     const data = response.body;
     if (!data) {
-      return;
+      throw new Error("No data");
     }
     const reader = data.getReader();
     const decoder = new TextDecoder();
