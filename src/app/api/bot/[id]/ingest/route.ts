@@ -50,8 +50,6 @@ export async function GET(
     .select("*")
     .eq("user_id", session.user.id);
 
-  console.log("bots", { bots });
-
   if (error)
     return NextResponse.json({ status: "Query error", error }, { status: 500 });
 
@@ -80,8 +78,8 @@ export async function GET(
         { status: 400 }
       );
   }
-  console.log("Test passed generating embedding for", { url, siteId, botId });
+  const start = Date.now();
   await generateEmbeddings({ url, siteId, botId });
-  console.log("Embedding generated");
+  console.log("Time to generate embeddings", Date.now() - start);
   return NextResponse.json({ status: "OK" }, { status: 200 });
 }
