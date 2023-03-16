@@ -79,7 +79,16 @@ export async function GET(
       );
   }
   const start = Date.now();
-  await generateEmbeddings({ url, siteId, botId });
+  try {
+    await generateEmbeddings({ url, siteId, botId });
+  } catch (error) {
+    console.log("Error while generating embeddings", error);
+    return NextResponse.json(
+      { status: "Error while generating embeddings", error },
+      { status: 500 }
+    );
+  }
+
   console.log("Time to generate embeddings", Date.now() - start);
   return NextResponse.json({ status: "OK" }, { status: 200 });
 }

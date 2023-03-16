@@ -46,7 +46,11 @@ export async function generateEmbeddings({
 
   const supabaseClient = createBrowserClient();
   // In production we should handle possible errors
-  await supabaseClient.from("documents").insert(dataToInsert);
+  const { error } = await supabaseClient.from("documents").insert(dataToInsert);
+  if (error) {
+    console.log("Error while inserting documents", error);
+    throw new Error("Error while inserting documents");
+  }
 }
 
 async function getEmbeddingOfDocument(document: Document) {
