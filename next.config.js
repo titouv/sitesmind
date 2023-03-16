@@ -29,7 +29,7 @@ const ContentSecurityPolicy = `
 `;
 
 const securityHeaders = [
-  // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy
+  // // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy
   { key: "Access-Control-Allow-Origin", value: "*" },
   // https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP
   {

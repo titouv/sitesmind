@@ -7,7 +7,7 @@ Code.theme = "github-dark";
 export default function Page({ params }: { params: { id: string } }) {
   const code = `
 <iframe
-    src="${BASE_URL}/chat/${params.id}/embed"
+    src="${BASE_URL}/embed/bot/${params.id}"
     width="560"
     height="315"
     frameBorder="0"

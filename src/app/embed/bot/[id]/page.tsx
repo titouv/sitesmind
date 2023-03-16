@@ -3,16 +3,10 @@
 import { useState, useRef, useEffect, useMemo } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-// import { OpenAIMessages } from "@/app/(auth)/api/bot/[id]/chat/route";
-import { cn } from "@/lib/utils";
 import { Icons } from "@/components/icons";
-import { BASE_URL } from "@/config/site";
 import * as Popover from "@radix-ui/react-popover";
 import "@/styles/globals.css";
 
-// type Message = OpenAIMessages[number] & {
-//   streaming?: boolean;
-// };
 type Message = {
   content: string;
   role: "user" | "assistant" | "system";
@@ -55,7 +49,7 @@ export default function Home({ params }: { params: { id: string } }) {
       { content: "", role: "assistant", streaming: true },
     ]);
 
-    const url = new URL(`api/chat/`, window.location.origin);
+    const url = new URL(`api/bot/${params.id}/chat/`, window.location.origin);
     console.log(url);
     url.searchParams.set("messages", JSON.stringify(messagesToApi));
 
@@ -138,9 +132,6 @@ export default function Home({ params }: { params: { id: string } }) {
           items-center justify-center gap-2 rounded-full bg-blue-500 p-3 text-white"
           >
             <Icons.send className="h-6 w-6" />
-
-            {/* <PhChatTeardropFill className="h-6 w-6" /> */}
-            {/* <span>Datapix GPT</span> */}
           </button>
         </Popover.Trigger>
         <Popover.Content
