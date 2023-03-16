@@ -7,14 +7,14 @@ const nextConfig = {
     appDir: true,
     // typedRoutes: true,
   },
-  headers() {
-    return [
-      {
-        source: "/(.*)",
-        headers: securityHeaders,
-      },
-    ];
-  },
+  // headers() {
+  //   return [
+  //     {
+  //       source: "/(.*)",
+  //       headers: securityHeaders,
+  //     },
+  //   ];
+  // },
 };
 
 // https://nextjs.org/docs/advanced-features/security-headers
