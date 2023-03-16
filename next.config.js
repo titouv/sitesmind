@@ -7,16 +7,19 @@ const nextConfig = {
     appDir: true,
     // typedRoutes: true,
   },
-  // headers() {
-  //   return [
-  //     {
-  //       source: "/(.*)",
-  //       headers: securityHeaders,
-  //     },
-  //   ];
-  // },
+  headers() {
+    return [
+      {
+        source: "/(.*)",
+        headers: securityHeadersSimple,
+      },
+    ];
+  },
 };
 
+const securityHeadersSimple = [
+  { key: "Access-Control-Allow-Origin", value: "*" },
+];
 // https://nextjs.org/docs/advanced-features/security-headers
 const ContentSecurityPolicy = `
   default-src 'self' vercel.live;
