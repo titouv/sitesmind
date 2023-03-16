@@ -9,7 +9,7 @@ interface SiteConfig {
   links: {
     twitter: string;
     github: string;
-    // docs: string
+    docs: string;
   };
 }
 
@@ -17,8 +17,8 @@ export const siteConfig: SiteConfig = {
   name: "Sitesmind",
   description: "GPT-3 powered chatbot for your website.",
   mainNav: [
-    // {
     //   title: "Home",
+    // {
     //   href: "/",
     //   requireLogin: false,
     // },
@@ -36,9 +36,14 @@ export const siteConfig: SiteConfig = {
       title: "Pricing",
       href: "/pricing",
     },
+    {
+      title: "Docs",
+      href: "https://sitesmind.notion.site/Sitesmind-a88845c165fa45ce8d85fd431d3555e0",
+    },
   ],
   links: {
     twitter: "https://twitter.com/titouanver",
     github: "https://github.com/titouv",
+    docs: "https://sitesmind.notion.site/Sitesmind-a88845c165fa45ce8d85fd431d3555e0",
   },
 };

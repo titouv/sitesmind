@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect, useMemo } from "react";
+import { useState, useRef, useEffect } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import "@/styles/globals.css";
@@ -121,11 +121,11 @@ export default function Home({ params }: { params: { id: string } }) {
   };
 
   return (
-    <div className="fixed inset-x-0 bottom-0 flex-col justify-end rounded-xl bg-black p-4">
+    <div className="fixed inset-x-0 bottom-0 flex flex-col rounded-xl bg-black p-4">
       <div>
         <div
           ref={messageListRef}
-          className="mb-4 flex flex-col gap-4 overflow-scroll rounded-t-xl"
+          className="mb-4 flex max-h-[32vh] flex-col gap-4 overflow-y-scroll rounded-t-xl"
         >
           {messages.map((message, index) => {
             if (message.content == "") return;
@@ -157,39 +157,37 @@ export default function Home({ params }: { params: { id: string } }) {
           })}
         </div>
       </div>
-      <div>
-        <form onSubmit={handleSubmit} className="mt-4 flex gap-2">
-          <textarea
-            className="w-full grow  resize-none rounded-full bg-gray-800 px-4 py-2 text-white outline-none"
-            ref={textAreaRef}
-            disabled={loading}
-            onKeyDown={handleEnter}
-            autoFocus={false}
-            rows={1}
-            maxLength={512}
-            id="userInput"
-            name="userInput"
-            placeholder={
-              loading ? "Waiting for response..." : "Type your question..."
-            }
-            value={userInput}
-            onChange={(e) => setUserInput(e.target.value)}
-          />
-          <button
-            className="inline-flex aspect-square h-10 items-center justify-center rounded-full border-white bg-gray-800 fill-white text-white"
-            type="submit"
-            disabled={loading}
+      <form onSubmit={handleSubmit} className="m-0 flex gap-2">
+        <textarea
+          className="w-full grow  resize-none rounded-full bg-gray-800 px-4 py-2 text-white outline-none"
+          ref={textAreaRef}
+          disabled={loading}
+          onKeyDown={handleEnter}
+          autoFocus={false}
+          rows={1}
+          maxLength={512}
+          id="userInput"
+          name="userInput"
+          placeholder={
+            loading ? "Waiting for response..." : "Type your question..."
+          }
+          value={userInput}
+          onChange={(e) => setUserInput(e.target.value)}
+        />
+        <button
+          className="inline-flex aspect-square h-10 items-center justify-center rounded-full border-white bg-gray-800 fill-white text-white"
+          type="submit"
+          disabled={loading}
+        >
+          <svg
+            className="h-5 w-5 rotate-90"
+            viewBox="0 0 20 20"
+            xmlns="http://www.w3.org/2000/svg"
           >
-            <svg
-              className="h-5 w-5 rotate-90"
-              viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"></path>
-            </svg>
-          </button>
-        </form>
-      </div>
+            <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"></path>
+          </svg>
+        </button>
+      </form>
     </div>
   );
 }
