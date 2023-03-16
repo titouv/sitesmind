@@ -32,50 +32,50 @@ export async function GET(
   const { url, siteId } = result.data;
   const botId = params.id;
 
-  const supabaseClient = createApiClient();
+  // const supabaseClient = createApiClient();
 
-  const {
-    data: { session },
-    error: sessionError,
-  } = await supabaseClient.auth.getSession();
+  // const {
+  //   data: { session },
+  //   error: sessionError,
+  // } = await supabaseClient.auth.getSession();
 
-  if (sessionError || !session)
-    return NextResponse.json(
-      { status: "Unauthorized", session, error: sessionError },
-      { status: 401 }
-    );
+  // if (sessionError || !session)
+  //   return NextResponse.json(
+  //     { status: "Unauthorized", session, error: sessionError },
+  //     { status: 401 }
+  //   );
 
-  const { data: bots, error } = await supabaseClient
-    .from("bots")
-    .select("*")
-    .eq("user_id", session.user.id);
+  // const { data: bots, error } = await supabaseClient
+  //   .from("bots")
+  //   .select("*")
+  //   .eq("user_id", session.user.id);
 
-  if (error)
-    return NextResponse.json({ status: "Query error", error }, { status: 500 });
+  // if (error)
+  //   return NextResponse.json({ status: "Query error", error }, { status: 500 });
 
-  const botsLength = bots.length;
+  // const botsLength = bots.length;
 
-  if (session.user.email && botsLength >= 5)
-    return NextResponse.json({ status: "Limit reached" }, { status: 400 });
+  // if (session.user.email && botsLength >= 5)
+  //   return NextResponse.json({ status: "Limit reached" }, { status: 400 });
 
-  if (botsLength > 0) {
-    // query sites of this both and verify if the url is already in the db
-    const { data: sites, error: sitesError } = await supabaseClient
-      .from("sites")
-      .select("*");
+  // if (botsLength > 0) {
+  //   // query sites of this both and verify if the url is already in the db
+  //   const { data: sites, error: sitesError } = await supabaseClient
+  //     .from("sites")
+  //     .select("*");
 
-    if (sitesError)
-      return NextResponse.json(
-        { status: "Query error", error: sitesError },
-        { status: 500 }
-      );
-    // if site is found
-    if (sites.filter((site) => site.url === url).length > 1)
-      return NextResponse.json(
-        { status: "Site already exists" },
-        { status: 400 }
-      );
-  }
+  //   if (sitesError)
+  //     return NextResponse.json(
+  //       { status: "Query error", error: sitesError },
+  //       { status: 500 }
+  //     );
+  //   // if site is found
+  //   if (sites.filter((site) => site.url === url).length > 1)
+  //     return NextResponse.json(
+  //       { status: "Site already exists" },
+  //       { status: 400 }
+  //     );
+  // }
   const start = Date.now();
   try {
     await generateEmbeddings({ url, siteId, botId });

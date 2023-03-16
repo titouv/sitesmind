@@ -9,19 +9,19 @@ export async function generateEmbeddings({
   url,
   siteId,
   botId,
+  bannedUrls,
 }: {
   url: string;
   botId: string;
   siteId: number;
+  bannedUrls: string[];
 }) {
-  const pageDatas = await mainCrawl(url);
+  const pageDatas = await mainCrawl(url, bannedUrls);
 
   const rawDocs = await Promise.all(
     pageDatas.map(async (pageData) => {
       const rawContent = pageData.textContent || "";
-      const cleanedContent = rawContent
-        .replace(/\n/g, " ")
-        .replace(/\s+/g, " ");
+      const cleanedContent = rawContent;
 
       return new Document({
         pageContent: cleanedContent,
@@ -31,9 +31,8 @@ export async function generateEmbeddings({
   );
 
   const textSplitter = new RecursiveCharacterTextSplitter({
-    chunkSize: 1000,
+    chunkSize: 500,
     chunkOverlap: 100,
-    separators: ["\n\n", "\n", " "],
   });
 
   const documents = await textSplitter.splitDocuments(rawDocs);
@@ -43,7 +42,7 @@ export async function generateEmbeddings({
   );
 
   const dataToInsert = documents.map((doc, index) => ({
-    content: doc.pageContent,
+    content: doc.pageContent.replace(/\n/g, " "),
     embedding: embeddings[index],
     metadata: doc.metadata,
     site_id: siteId,
@@ -64,6 +63,7 @@ async function getEmbeddingOfDocument(document: Document) {
   // OpenAI recommends replacing newlines with spaces for best results
   const input = pageContent.replace(/\n/g, " ");
 
+  console.log("Generating embedding for", input);
   // TODO convert to openaiclient when possible
   const embeddingResponse = await fetch(
     "https://api.openai.com/v1/embeddings",

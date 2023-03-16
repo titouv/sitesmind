@@ -112,11 +112,12 @@ async function performExpensiveOperation(
   return getInterestingDataFromHtml($);
 }
 
-export async function mainCrawl(url: string) {
+export async function mainCrawl(url: string, bannedUrls: string[] = []) {
+  console.log("Crawling", url, "...");
+  console.log("Banned URLs:", bannedUrls);
   const startingUrl = url;
   const startingUrlDomain = new URL(startingUrl).hostname;
   const results: PageData[] = [];
-  const bannedUrls: string[] = [];
   const visitedUrls: string[] = [];
   await crawl(
     startingUrl,
@@ -126,6 +127,7 @@ export async function mainCrawl(url: string) {
     results,
     bannedUrls
   );
-
+  console.log("Crawled", results.length, "pages");
+  console.log("Visited", visitedUrls.length, "pages");
   return results;
 }
