@@ -1,35 +1,9 @@
-import { getData } from "@/app/api/bot/[id]/ingest/scraper";
 import {
   RecursiveCharacterTextSplitter,
   Document,
 } from "@/app/api/bot/[id]/ingest/splitter";
+import { mainCrawl } from "./crawler";
 import { createBrowserClient } from "@/supabase/utils/browser";
-
-async function getDocuments(urls: string[]) {
-  const rawDocs = await Promise.all(
-    urls.map(async (url) => {
-      const rawContent = await getData(url);
-      // cleaned content by removing newlines and multiples spaces
-      const cleanedContent = rawContent
-        .replace(/\n/g, " ")
-        .replace(/\s+/g, " ");
-
-      return new Document({
-        pageContent: cleanedContent,
-        metadata: { url: url },
-      });
-    })
-  );
-
-  const textSplitter = new RecursiveCharacterTextSplitter({
-    chunkSize: 1000,
-    chunkOverlap: 100,
-    separators: ["\n\n", "\n", " "],
-  });
-  const docs = await textSplitter.splitDocuments(rawDocs);
-
-  return docs;
-}
 
 export async function generateEmbeddings({
   url,
@@ -40,7 +14,29 @@ export async function generateEmbeddings({
   botId: string;
   siteId: number;
 }) {
-  const documents = await getDocuments([url]); // Your custom function to load docs
+  const pageDatas = await mainCrawl(url);
+
+  const rawDocs = await Promise.all(
+    pageDatas.map(async (pageData) => {
+      const rawContent = pageData.textContent || "";
+      const cleanedContent = rawContent
+        .replace(/\n/g, " ")
+        .replace(/\s+/g, " ");
+
+      return new Document({
+        pageContent: cleanedContent,
+        metadata: { url: pageData.url },
+      });
+    })
+  );
+
+  const textSplitter = new RecursiveCharacterTextSplitter({
+    chunkSize: 1000,
+    chunkOverlap: 100,
+    separators: ["\n\n", "\n", " "],
+  });
+
+  const documents = await textSplitter.splitDocuments(rawDocs);
 
   const embeddings = await Promise.all(
     documents.map((doc) => getEmbeddingOfDocument(doc))
