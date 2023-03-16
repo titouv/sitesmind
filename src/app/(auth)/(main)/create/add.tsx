@@ -1,12 +1,14 @@
 "use client";
 
 import { IngestApiSchemaType } from "@/app/api/bot/[id]/ingest/route";
+import { ComingSoon } from "@/components/coming-soon";
 import { LoadingSpinner } from "@/components/loading-spinner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Link } from "@/components/ui/link";
 import { useSupabase } from "@/supabase/components/supabase-provider";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export function Add() {
@@ -17,6 +19,8 @@ export function Add() {
   const [siteId, setSiteId] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [botId, setBotId] = useState<string | null>(null);
+
+  const router = useRouter();
 
   async function ingest() {
     setLoading(true);
@@ -64,9 +68,7 @@ export function Add() {
     }
     const data = await response.json();
 
-    setData(data);
-
-    setLoading(false);
+    router.push(`/bot/${bot.id}/chat`);
   }
 
   return (
@@ -79,7 +81,7 @@ export function Add() {
           <div className="mt-2 flex gap-4">
             <Input
               type="url"
-              placeholder="https:/datapix.fr"
+              placeholder="https:/example.com"
               value={siteUrl}
               className="invalid:border-red-500 invalid:text-red-500 "
               onChange={(e) => setSiteUrl(e.target.value)}
@@ -88,19 +90,17 @@ export function Add() {
               Create
             </Button>
           </div>
-          <span className="mt-4 block text-sm text-gray-500">
-            Coming soon : select the root of the website you want to import, and
-            import all the subpages at once
-          </span>
+          <ComingSoon />
         </>
       ) : (
         <div className="flex flex-col items-center justify-center gap-4">
           {loading ? (
             <div className="flex  flex-col items-center justify-center">
               Generating chatbot from {siteUrl}
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-slate-900">
+              <div className="mt-4 flex h-10 w-10 items-center justify-center rounded-xl bg-slate-900">
                 <LoadingSpinner />
               </div>
+              <ComingSoon />
             </div>
           ) : error ? (
             <div
@@ -111,7 +111,7 @@ export function Add() {
             </div>
           ) : (
             <>
-              <span className="py-2">The data as been treated</span>
+              <span className="py-2">The data has been treated</span>
 
               {data && (
                 <Link href={`/bot/${botId}/chat`}>
