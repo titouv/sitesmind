@@ -55,10 +55,7 @@ export function Add() {
 
     console.log("body", { url: siteUrl, id: bot.id });
 
-    const url = new URL(
-      `/api/bot/${bot.id}/new_ingest`,
-      window.location.origin
-    );
+    const url = new URL(`/api/bot/${bot.id}/ingest`, window.location.origin);
 
     url.searchParams.set("siteId", site.id.toString());
     url.searchParams.set("url", siteUrl);

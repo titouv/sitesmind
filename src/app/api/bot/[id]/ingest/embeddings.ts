@@ -1,52 +1,53 @@
-import { getData } from "@/app/api/bot/[id]/ingest/scraper";
-import {
-  RecursiveCharacterTextSplitter,
-  Document,
-} from "@/app/api/bot/[id]/ingest/splitter";
+import { RecursiveCharacterTextSplitter, Document } from "./splitter";
+import { mainCrawl } from "./crawler";
 import { createBrowserClient } from "@/supabase/utils/browser";
-
-async function getDocuments(urls: string[]) {
-  const rawDocs = await Promise.all(
-    urls.map(async (url) => {
-      const rawContent = await getData(url);
-      // cleaned content by removing newlines and multiples spaces
-      const cleanedContent = rawContent
-        .replace(/\n/g, " ")
-        .replace(/\s+/g, " ");
-
-      return new Document({
-        pageContent: cleanedContent,
-        metadata: { url: url },
-      });
-    })
-  );
-
-  const textSplitter = new RecursiveCharacterTextSplitter({
-    chunkSize: 1000,
-    chunkOverlap: 100,
-    separators: ["\n\n", "\n", " "],
-  });
-  const docs = await textSplitter.splitDocuments(rawDocs);
-
-  return docs;
-}
 
 export async function generateEmbeddings({
   url,
   siteId,
   botId,
+  bannedUrls,
 }: {
   url: string;
   botId: string;
   siteId: number;
+  bannedUrls: string[];
 }) {
-  const documents = await getDocuments([url]); // Your custom function to load docs
+  const pageDatas = await mainCrawl(url, bannedUrls);
 
-  const embeddings = await Promise.all(
-    documents.map((doc) => getEmbeddingOfDocument(doc))
+  const rawDocs = await Promise.all(
+    pageDatas.map(async (pageData) => {
+      const rawContent = pageData.textContent || "";
+      const cleanedContent = rawContent;
+
+      return new Document({
+        pageContent: cleanedContent,
+        metadata: { url: pageData.url },
+      });
+    })
   );
 
-  const dataToInsert = documents.map((doc, index) => ({
+  console.log("Number of raw documents:", rawDocs.length);
+
+  const textSplitter = new RecursiveCharacterTextSplitter();
+
+  const documents = await textSplitter.splitDocuments(rawDocs);
+  console.log("Number of documents:", documents.length);
+
+  const cleanDocuments = documents.map((doc) => {
+    // remove all newlines and multiples spaces
+    const content = doc.pageContent.replace(/\n/g, " ").replace(/\s+/g, " ");
+    return new Document({
+      pageContent: content,
+      metadata: doc.metadata,
+    });
+  });
+
+  const embeddings = await Promise.all(
+    cleanDocuments.map((doc) => getEmbeddingOfDocument(doc))
+  );
+
+  const dataToInsert = cleanDocuments.map((doc, index) => ({
     content: doc.pageContent,
     embedding: embeddings[index],
     metadata: doc.metadata,
@@ -54,8 +55,11 @@ export async function generateEmbeddings({
     bot_id: botId,
   }));
 
+  console.log("Inserting documents into Supabase");
   const supabaseClient = createBrowserClient();
   // In production we should handle possible errors
+  await supabaseClient.from("documents").delete().eq("bot_id", botId);
+
   const { error } = await supabaseClient.from("documents").insert(dataToInsert);
   if (error) {
     console.error("Error while inserting documents", error);
@@ -64,10 +68,9 @@ export async function generateEmbeddings({
 }
 
 async function getEmbeddingOfDocument(document: Document) {
-  const { pageContent } = document;
-  // OpenAI recommends replacing newlines with spaces for best results
-  const input = pageContent.replace(/\n/g, " ");
+  const { pageContent: input } = document;
 
+  console.log("Generating embedding for", input);
   // TODO convert to openaiclient when possible
   const embeddingResponse = await fetch(
     "https://api.openai.com/v1/embeddings",
@@ -93,5 +96,5 @@ async function getEmbeddingOfDocument(document: Document) {
   }
 
   const [{ embedding }] = (await embeddingResponse.json()).data;
-  return embedding;
+  return embedding as number[];
 }

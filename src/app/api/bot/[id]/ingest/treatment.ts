@@ -15,6 +15,6 @@ export function getInterestingDataFromHtml($: CheerioAPI) {
         }
       }
     });
-  let text = Array.from(texts).join("\n");
+  let text = Array.from(texts).join("\n\n");
   return text;
 }

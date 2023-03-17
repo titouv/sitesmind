@@ -89,6 +89,7 @@ export async function GET(
       headers: corsHeaders,
     });
   }
+
   console.log("time for match_documents", Date.now() - start, "ms");
   const tokenizer = new GPT3Tokenizer({ type: "gpt3" });
   let tokenCount = 0;

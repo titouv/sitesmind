@@ -40,8 +40,6 @@ export async function GET(
   const lastMessage = messages[messages.length - 1];
   const previousMessages = messages.slice(0, messages.length - 1);
 
-  console.log("lastMessage", lastMessage);
-
   // OpenAI recommends replacing newlines with spaces for best results
   const input = lastMessage.content.replace(/\n/g, " ");
 
@@ -91,6 +89,7 @@ export async function GET(
       headers: corsHeaders,
     });
   }
-  console.log("time for match_documents", Date.now() - start, "ms");
+
+  console.log("time for match_documents supabase", Date.now() - start, "ms");
   return NextResponse.json(documents);
 }

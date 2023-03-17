@@ -2,7 +2,7 @@ import { getInterestingDataFromHtml } from "./treatment";
 import { load } from "cheerio";
 
 const MAX_DEPTH = 5; // Maximum depth to crawl
-// const URL_LIMIT = 5;
+const URL_LIMIT = 5;
 
 interface PageData {
   url: string;
@@ -28,7 +28,7 @@ export async function crawl(
   bannedUrls: string[] = []
 ): Promise<void> {
   // Check if max depth has been reached
-  if (depth >= MAX_DEPTH) {
+  if (depth >= MAX_DEPTH || visitedUrls.length >= URL_LIMIT) {
     return;
   }
 
@@ -128,6 +128,9 @@ export async function mainCrawl(url: string, bannedUrls: string[] = []) {
     bannedUrls
   );
   console.log("Crawled", results.length, "pages");
-  console.log("Visited", visitedUrls.length, "pages");
-  return results;
+
+  const limitedResults = results.slice(0, URL_LIMIT);
+  console.log("Crawled", limitedResults.length, "pages");
+
+  return limitedResults;
 }
