@@ -1,16 +1,16 @@
-import { RecursiveCharacterTextSplitter, Document } from "./splitter";
+import { RecursiveCharacterTextSplitter, Document } from "../splitter";
 import { mainCrawl } from "./crawler";
 import { createBrowserClient } from "@/supabase/utils/browser";
 
 export async function generateEmbeddings({
   url,
-  siteId,
+  sourceId,
   botId,
   bannedUrls,
 }: {
   url: string;
   botId: string;
-  siteId: number;
+  sourceId: number;
   bannedUrls: string[];
 }) {
   const pageDatas = await mainCrawl(url, bannedUrls);
@@ -51,7 +51,7 @@ export async function generateEmbeddings({
     content: doc.pageContent,
     embedding: embeddings[index],
     metadata: doc.metadata,
-    site_id: siteId,
+    source_id: sourceId,
     bot_id: botId,
   }));
 
@@ -67,7 +67,7 @@ export async function generateEmbeddings({
   }
 }
 
-async function getEmbeddingOfDocument(document: Document) {
+export async function getEmbeddingOfDocument(document: Document) {
   const { pageContent: input } = document;
 
   console.log("Generating embedding for", input);

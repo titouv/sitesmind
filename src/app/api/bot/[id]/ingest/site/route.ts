@@ -10,7 +10,7 @@ export const config = {
 
 const IngestApiSchema = z.object({
   url: z.string(),
-  siteId: z.coerce.number(),
+  sourceId: z.coerce.number(),
   // bannedUrls: z.array(z.string()),
 });
 
@@ -24,7 +24,7 @@ export async function GET(
 
   const result = IngestApiSchema.safeParse({
     url: searchParams.get("url"),
-    siteId: searchParams.get("siteId"),
+    sourceId: searchParams.get("siteId"),
     // bannedUrls: JSON.parse(searchParams.get("bannedUrls") || ""),
   });
 
@@ -35,7 +35,7 @@ export async function GET(
     "https://datapix.fr/mentions-legales",
     "https://datapix.fr/polique-de-confidentialite",
   ];
-  const { url, siteId } = result.data;
+  const { url, sourceId } = result.data;
   const botId = params.id;
 
   const supabaseClient = createApiClient();
@@ -66,8 +66,8 @@ export async function GET(
 
   if (botsLength > 0) {
     // query sites of this both and verify if the url is already in the db
-    const { data: sites, error: sitesError } = await supabaseClient
-      .from("sites")
+    const { data: sources, error: sitesError } = await supabaseClient
+      .from("sources")
       .select("*");
 
     if (sitesError)
@@ -76,7 +76,7 @@ export async function GET(
         { status: 500 }
       );
     // if site is found
-    if (sites.filter((site) => site.url === url).length > 1)
+    if (sources.filter((site) => site.meta === url).length > 1)
       return NextResponse.json(
         { status: "Site already exists" },
         { status: 400 }
@@ -84,7 +84,7 @@ export async function GET(
   }
   const start = Date.now();
   try {
-    await generateEmbeddings({ url, siteId, botId, bannedUrls });
+    await generateEmbeddings({ url, sourceId, botId, bannedUrls });
   } catch (error) {
     console.error("Error while generating embeddings", error);
     return NextResponse.json(

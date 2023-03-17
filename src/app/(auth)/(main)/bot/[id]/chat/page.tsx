@@ -4,11 +4,9 @@ import { createServerComponentClient } from "@/supabase/utils/server";
 export default async function Page({ params }: { params: { id: string } }) {
   const supabase = createServerComponentClient();
   const { data, error } = await supabase
-    .from("sites")
+    .from("sources")
     .select("*")
-    .eq("bot_id", params.id)
-    .limit(1)
-    .single();
+    .eq("bot_id", params.id);
 
   if (error) {
     throw new Error(error.message);
@@ -18,11 +16,11 @@ export default async function Page({ params }: { params: { id: string } }) {
     throw new Error("No data");
   }
 
-  const url = data.url;
+  const metaJoined = data.map((d) => d.meta).join(", ");
 
   return (
     <>
-      <Chat bot={{ id: params.id, url }} />
+      <Chat bot={{ id: params.id, meta: metaJoined }} />
     </>
   );
 }

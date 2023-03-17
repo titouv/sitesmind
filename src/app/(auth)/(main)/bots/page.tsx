@@ -8,7 +8,7 @@ export default async function Page() {
   const supabase = createServerComponentClient();
 
   let { data, error } = await supabase.from("bots").select(`*,
-    sites (
+    sources (
       *
     )`);
 
@@ -33,21 +33,16 @@ export default async function Page() {
             {data.map((bot) => (
               <li
                 key={bot.id}
-                className="flex justify-between gap-8 rounded-xl border-slate-200 p-2 odd:bg-slate-100 even:border"
+                className="flex items-center justify-between gap-8 rounded-xl border border-slate-200  p-4"
               >
-                {Array.isArray(bot.sites) &&
-                  bot.sites.map((site) => (
-                    <Link
-                      key={site.id}
-                      className="p-0 pl-2"
-                      variant="link"
-                      href={site.url}
-                    >
-                      {site.url}
-                    </Link>
-                  ))}
+                <span>{bot.name}</span>
 
-                <Link href={`/bot/${bot.id}/chat`}>Chat</Link>
+                <div className="flex gap-2">
+                  <Link variant="subtle" href={`/bot/${bot.id}`}>
+                    View
+                  </Link>
+                  <Link href={`/bot/${bot.id}/chat`}>Chat</Link>
+                </div>
               </li>
             ))}
           </ul>

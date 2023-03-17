@@ -15,14 +15,14 @@ type Message = {
   streaming?: boolean;
 };
 
-export function Chat({ bot }: { bot: { id: string; url: string } }) {
+export function Chat({ bot }: { bot: { id: string; meta: string } }) {
   const [userInput, setUserInput] = useState("");
   const [loading, setLoading] = useState(false);
 
   const [messages, setMessages] = useState<Message[]>([
     {
       role: "system",
-      content: `You are Q&A bot trained on the website ${bot.url}. A highly intelligent system that answers
+      content: `You are Q&A bot trained on the content : ${bot.meta}. A highly intelligent system that answers
 user questions based on the information provided by the user above
 each question. If the information can not be found in the information
 provided by the user you truthfully say "I don't know"`,

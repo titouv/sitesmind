@@ -1,9 +1,9 @@
-import { CreateBot } from "@/app/(auth)/(main)/create/create-bot";
 import { Link } from "@/components/ui/link";
 import { createServerComponentClient } from "@/supabase/utils/server";
 import { cookies, headers } from "next/headers";
+import { AddText } from "./add-text";
 
-export default async function Page() {
+export default async function Page({ params }: { params: { id: string } }) {
   const supabase = createServerComponentClient();
 
   const {
@@ -31,7 +31,7 @@ export default async function Page() {
     <section className="container grid items-center gap-6 pt-6 pb-8 md:py-10">
       <div className="flex flex-col items-center justify-center">
         <h1 className="text-3xl font-extrabold leading-tight tracking-tighter sm:text-3xl md:text-5xl lg:text-6xl">
-          Get started
+          Train from a custom text
         </h1>
         {!profile.subscription_status && sources.length >= 5 ? (
           <div className="flex flex-col items-center gap-4 pt-8">
@@ -43,9 +43,7 @@ export default async function Page() {
             </Link>
           </div>
         ) : (
-          <div className="flex flex-col items-center gap-4 pt-8">
-            <CreateBot />
-          </div>
+          <AddText botId={params.id} />
         )}
       </div>
     </section>

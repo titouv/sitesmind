@@ -6,40 +6,28 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Link } from "@/components/ui/link";
+import { Textarea } from "@/components/ui/textarea";
 import { useSupabase } from "@/supabase/components/supabase-provider";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-export function Add() {
+export function AddText({ botId }: { botId: string }) {
   const { supabase, session } = useSupabase();
-  const [siteUrl, setSiteUrl] = useState("");
+  const [text, setText] = useState("");
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState<any>(null);
   const [siteId, setSiteId] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [botId, setBotId] = useState<string | null>(null);
 
   const router = useRouter();
 
   async function ingest() {
     setLoading(true);
     if (!session) return;
-    const { data: bot, error: botError } = await supabase
-      .from("bots")
-      .insert({ user_id: session.user.id })
-      .select()
-      .single();
-
-    if (botError) {
-      console.error(botError);
-      setError(botError.message);
-      return;
-    }
-    setBotId(bot.id);
 
     const { data: site, error: siteError } = await supabase
-      .from("sites")
-      .insert({ url: siteUrl, bot_id: bot.id })
+      .from("sources")
+      .insert({ meta: text, bot_id: botId })
       .select()
       .single();
 
@@ -49,15 +37,19 @@ export function Add() {
       return;
     } else {
       setSiteId(site.id);
-      console.log(bot);
+      console.log(site.id);
     }
 
-    console.log("body", { url: siteUrl, id: bot.id });
+    console.log("body", { url: text, id: botId });
 
-    const url = new URL(`/api/bot/${bot.id}/ingest`, window.location.origin);
+    const url = new URL(
+      `/api/bot/${botId}/ingest/text`,
+      window.location.origin
+    );
 
-    url.searchParams.set("siteId", site.id.toString());
-    url.searchParams.set("url", siteUrl);
+    url.searchParams.set("sourceId", site.id.toString());
+    url.searchParams.set("fileName", text);
+    url.searchParams.set("text", text);
 
     const response = await fetch(url);
     if (!response.ok) {
@@ -67,25 +59,21 @@ export function Add() {
     }
     const data = await response.json();
 
-    router.push(`/bot/${bot.id}/chat`);
+    router.push(`/bot/${botId}/chat`);
   }
 
   return (
     <div className="pt-8">
       {!siteId ? (
         <>
-          <Label>
-            Enter the adress of the website you want to import data from.
-          </Label>
+          <Label>Enter the text that you want your bot to know.</Label>
           <div className="mt-2 flex gap-4">
-            <Input
-              type="url"
-              placeholder="https:/example.com"
-              value={siteUrl}
-              className="invalid:border-red-500 invalid:text-red-500 "
-              onChange={(e) => setSiteUrl(e.target.value)}
+            <Textarea
+              placeholder="This is the data that I want my bot to know"
+              value={text}
+              onChange={(e) => setText(e.target.value)}
             />
-            <Button disabled={!siteUrl || loading} onClick={ingest}>
+            <Button disabled={!text || loading} onClick={ingest}>
               Create
             </Button>
           </div>
@@ -95,10 +83,8 @@ export function Add() {
         <div className="flex flex-col items-center justify-center gap-4">
           {loading ? (
             <div className="flex  flex-col items-center justify-center">
-              Generating chatbot from {siteUrl}
-              <div className="mt-4 flex h-20 w-20 items-center justify-center rounded-xl bg-slate-900 p-4">
-                <LoadingSpinner />
-              </div>
+              Generating chatbot from {text}
+              <LoadingSpinner />
               <ComingSoon />
             </div>
           ) : error ? (

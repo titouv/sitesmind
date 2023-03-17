@@ -1,16 +1,16 @@
 import { headers, cookies } from "next/headers";
-import { createServerComponentSupabaseClient } from "@supabase/auth-helpers-nextjs";
-
+import {
+  createRouteHandlerSupabaseClient,
+  createServerComponentSupabaseClient,
+} from "@supabase/auth-helpers-nextjs";
+import { createClient } from "@supabase/supabase-js";
 import type { Database } from "../database.types";
 
 export const createServerComponentClient = () =>
-  createServerComponentSupabaseClient<Database>({
+  createServerComponentSupabaseClient<Database, "public">({
     headers,
     cookies,
   });
-
-import { createClient } from "@supabase/supabase-js";
-import { createRouteHandlerSupabaseClient } from "@supabase/auth-helpers-nextjs";
 
 export const createApiClientAsAnon = () =>
   createClient<Database>(
@@ -19,7 +19,7 @@ export const createApiClientAsAnon = () =>
   );
 
 export const createApiClient = () =>
-  createRouteHandlerSupabaseClient({
+  createRouteHandlerSupabaseClient<Database>({
     cookies,
     headers,
   });
