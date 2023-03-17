@@ -1,3 +1,4 @@
+import { Title } from "@/components/title";
 import { Link } from "@/components/ui/link";
 import { createServerComponentClient } from "@/supabase/utils/server";
 
@@ -20,9 +21,7 @@ export default async function Page() {
   return (
     <section className="container grid items-center gap-6 pt-6 pb-8 md:py-10">
       <div className="flex flex-col items-center justify-center">
-        <h1 className="text-3xl font-extrabold leading-tight tracking-tighter sm:text-3xl md:text-5xl lg:text-6xl">
-          Bots
-        </h1>
+        <Title>Bots</Title>
         {!data || data.length == 0 ? (
           <div className="pt-8">
             <span className="block pb-2">No bots found</span>

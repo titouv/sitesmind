@@ -2,13 +2,14 @@
 import { BASE_URL } from "@/config/site";
 import { Button } from "@/components/ui/button";
 import { useSupabase } from "@/supabase/components/supabase-provider";
+import { Title } from "@/components/title";
 
 export function Auth() {
   const { supabase, session } = useSupabase();
 
   return (
     <div>
-      <h1>Auth</h1>
+      <Title>Auth</Title>
       {session ? (
         <div>
           <p>Logged as {session.user.email} </p>

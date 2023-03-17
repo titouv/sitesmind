@@ -8,14 +8,13 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { Title } from "@/components/title";
 
 export default function Page() {
   return (
     <section className="container grid items-center gap-6 pt-6 pb-8 md:py-10">
       <div className="flex flex-col items-center justify-center">
-        <h1 className="text-3xl font-extrabold leading-tight tracking-tighter sm:text-3xl md:text-5xl lg:text-6xl">
-          Pricing
-        </h1>
+        <Title>Pricing</Title>
       </div>
       <div className="relative mx-auto mt-8 grid max-w-2xl gap-8 md:grid-cols-2 md:gap-16 ">
         <div className="absolute inset-x-0 top-20 bottom-0 z-0 mx-auto w-1/2 rounded-full bg-blue-500/50 blur-[100px]" />

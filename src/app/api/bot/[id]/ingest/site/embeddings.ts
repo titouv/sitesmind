@@ -57,8 +57,6 @@ export async function generateEmbeddings({
 
   console.log("Inserting documents into Supabase");
   const supabaseClient = createBrowserClient();
-  // In production we should handle possible errors
-  await supabaseClient.from("documents").delete().eq("bot_id", botId);
 
   const { error } = await supabaseClient.from("documents").insert(dataToInsert);
   if (error) {

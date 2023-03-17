@@ -1,3 +1,4 @@
+import { Title } from "@/components/title";
 import { Link } from "@/components/ui/link";
 import { createServerComponentClient } from "@/supabase/utils/server";
 
@@ -29,9 +30,9 @@ export default async function Page({ params }: { params: { id: string } }) {
   return (
     <section className="container grid items-center gap-6 pt-6 pb-8 md:py-10">
       <div className="flex flex-col items-center justify-center">
-        <h1 className="text-3xl font-extrabold leading-tight tracking-tighter sm:text-3xl md:text-5xl lg:text-6xl">
-          Your Bot : {bot.name}
-        </h1>
+        <Title>{bot.name}</Title>
+        {/* divider */}
+        <div className="my-4 h-0.5 w-60 bg-gradient-to-r from-slate-200 to-slate-100" />
 
         {/* <ul className="flex max-w-sm flex-col gap-2 pt-8">
           {sources.map((source) => (
@@ -43,7 +44,7 @@ export default async function Page({ params }: { params: { id: string } }) {
             </li>
           ))}
         </ul> */}
-        {sources && sources.length > 0 && (
+        {/* {sources && sources.length > 0 && (
           <div className="m-4 flex flex-col items-center">
             <h2 className="mb-4 text-2xl font-bold leading-tight tracking-tighter sm:text-2xl md:text-4xl lg:text-5xl">
               Stats
@@ -54,7 +55,7 @@ export default async function Page({ params }: { params: { id: string } }) {
               </div>
             </div>
           </div>
-        )}
+        )} */}
         <div className="m-4 flex flex-col items-center">
           <h2 className="mb-4 text-2xl font-bold leading-tight tracking-tighter sm:text-2xl md:text-4xl lg:text-5xl">
             {sources.length == 0

@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Icons } from "@/components/icons";
 import { Link } from "@/components/ui/link";
+import { Title } from "@/components/title";
 
 type Message = {
   content: string;
@@ -147,7 +148,7 @@ provided by the user you truthfully say "I don't know"`,
   return (
     <div className="container flex flex-col items-center py-8">
       <div className="flex w-full items-center justify-between py-2  md:w-[75vw]">
-        <h1 className="text-2xl font-bold text-slate-900">Test your chatbot</h1>
+        <Title>Test your chatbot</Title>
         <Link href={`/bot/${bot.id}/how-to`}>
           How to use the chat on your website
         </Link>

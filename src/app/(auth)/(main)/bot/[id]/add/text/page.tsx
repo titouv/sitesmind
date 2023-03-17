@@ -1,3 +1,4 @@
+import { Title } from "@/components/title";
 import { Link } from "@/components/ui/link";
 import { createServerComponentClient } from "@/supabase/utils/server";
 import { cookies, headers } from "next/headers";
@@ -30,9 +31,7 @@ export default async function Page({ params }: { params: { id: string } }) {
   return (
     <section className="container grid items-center gap-6 pt-6 pb-8 md:py-10">
       <div className="flex flex-col items-center justify-center">
-        <h1 className="text-3xl font-extrabold leading-tight tracking-tighter sm:text-3xl md:text-5xl lg:text-6xl">
-          Train from a custom text
-        </h1>
+        <Title>Train from a custom text</Title>
         {!profile.subscription_status && sources.length >= 5 ? (
           <div className="flex flex-col items-center gap-4 pt-8">
             <span>Your reach the free limit, subscribe to see more</span>

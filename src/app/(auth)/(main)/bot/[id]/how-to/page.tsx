@@ -1,3 +1,4 @@
+import { Title } from "@/components/title";
 import { Link } from "@/components/ui/link";
 import { BASE_URL } from "@/config/site";
 import { Code } from "bright";
@@ -10,9 +11,7 @@ export default function Page({ params }: { params: { id: string } }) {
   return (
     <section className="container grid items-center gap-6 pt-6 pb-8 md:py-10">
       <div className="flex flex-col items-center justify-center">
-        <h1 className="text-3xl font-extrabold leading-tight tracking-tighter sm:text-3xl md:text-5xl lg:text-6xl">
-          How to use your chat on your website
-        </h1>
+        <Title>How to use your chat on your website</Title>
       </div>
       <div className="flex flex-col items-center">
         <span>
