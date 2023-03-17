@@ -1,6 +1,5 @@
 "use client";
 
-import { IngestApiSchemaType } from "@/app/api/bot/[id]/ingest/route";
 import { ComingSoon } from "@/components/coming-soon";
 import { LoadingSpinner } from "@/components/loading-spinner";
 import { Button } from "@/components/ui/button";
@@ -97,7 +96,7 @@ export function Add() {
           {loading ? (
             <div className="flex  flex-col items-center justify-center">
               Generating chatbot from {siteUrl}
-              <div className="mt-4 flex h-10 w-10 items-center justify-center rounded-xl bg-slate-900">
+              <div className="mt-4 flex h-20 w-20 items-center justify-center rounded-xl bg-slate-900 p-4">
                 <LoadingSpinner />
               </div>
               <ComingSoon />
