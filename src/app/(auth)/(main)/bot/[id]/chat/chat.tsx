@@ -9,6 +9,8 @@ import { cn } from "@/lib/utils";
 import { Icons } from "@/components/icons";
 import { Link } from "@/components/ui/link";
 import { Title } from "@/components/title";
+import { AlertDialogCopyLink } from "@/components/dialog";
+import { getBaseUrl } from "@/config/site";
 
 type Message = {
   content: string;
@@ -149,9 +151,21 @@ provided by the user you truthfully say "I don't know"`,
     <div className="container flex flex-col items-center py-8">
       <div className="flex w-full items-center justify-between py-2  md:w-[75vw]">
         <Title>Test your chatbot</Title>
-        <Link href={`/bot/${bot.id}/how-to`}>
-          How to use the chat on your website
-        </Link>
+        <div className="flex gap-2">
+          <Link variant="subtle" href={`/bot/${bot.id}/how-to`}>
+            How to use
+          </Link>
+          {/* <Button
+            onClick={() => {
+              navigator.clipboard.writeText(
+                `www.sitesmind.com/bot/${bot.id}/chat`
+              );
+            }}
+          >
+            Copy link to share
+          </Button> */}
+          <AlertDialogCopyLink url={`www.sitesmind.com/bot/${bot.id}/chat`} />
+        </div>
       </div>
       <div className="flex h-[65vh] w-full flex-col items-center justify-center  overflow-hidden rounded-xl border border-slate-300  md:w-[75vw]">
         <div
