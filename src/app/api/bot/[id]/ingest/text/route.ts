@@ -21,7 +21,7 @@ export async function GET(
   const searchParamsRecord = Object.fromEntries(searchParams.entries());
   console.log("searchParamsRecord", searchParamsRecord);
 
-  const botId = parseInt(params.id);
+  const botId = params.id;
   const result = IngestFileApiSchema.safeParse(searchParamsRecord);
 
   if (!result.success) {

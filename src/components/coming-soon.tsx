@@ -1,7 +1,6 @@
 const comingSoonList = [
   "Choose your start phrase",
   "Customize the interface of the embed",
-  "Select the root of the website you want to import, and import all the subpages at once",
   "Import data from file like CSV of PDF",
   "Choose a language for the bot",
 ];

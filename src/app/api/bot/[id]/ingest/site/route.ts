@@ -8,35 +8,35 @@ export const config = {
   runtime: "edge",
 };
 
-const IngestApiSchema = z.object({
+const IngestSiteApiSchema = z.object({
   url: z.string(),
   sourceId: z.coerce.number(),
   // bannedUrls: z.array(z.string()),
 });
 
-export type IngestApiSchemaType = z.infer<typeof IngestApiSchema>;
+export type IngestApiSchemaType = z.infer<typeof IngestSiteApiSchema>;
 
 export async function GET(
   req: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  const searchParams = req.nextUrl.searchParams;
+  console.log("Ingest site", params.id, req.nextUrl.searchParams.toString());
+  // convert searchparams to a record<string, string>
+  const searchParams = new URLSearchParams(req.nextUrl.search);
+  const searchParamsRecord = Object.fromEntries(searchParams.entries());
+  console.log("searchParamsRecord", searchParamsRecord);
 
-  const result = IngestApiSchema.safeParse({
-    url: searchParams.get("url"),
-    sourceId: searchParams.get("siteId"),
-    // bannedUrls: JSON.parse(searchParams.get("bannedUrls") || ""),
-  });
+  const result = IngestSiteApiSchema.safeParse(searchParamsRecord);
 
   if (!result.success) {
     return NextResponse.json({ error: result.error }, { status: 400 });
   }
-  const bannedUrls = [
-    "https://datapix.fr/mentions-legales",
-    "https://datapix.fr/polique-de-confidentialite",
-  ];
   const { url, sourceId } = result.data;
   const botId = params.id;
+  const bannedUrls: string[] = [
+    // "https://datapix.fr/mentions-legales",
+    // "https://datapix.fr/polique-de-confidentialite",
+  ];
 
   const supabaseClient = createApiClient();
 

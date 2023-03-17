@@ -36,6 +36,11 @@ export async function crawl(
     // Remove the fragment identifier from the URL
     const urlWithoutFragment = new URL(url);
     urlWithoutFragment.hash = "";
+    // test if url is a file
+    if (urlWithoutFragment.pathname.split(".").length > 1) {
+      return;
+    }
+
     const normalizedUrl = urlWithoutFragment.href;
 
     if (visitedUrls.includes(normalizedUrl)) {
@@ -96,7 +101,7 @@ export async function crawl(
     results.push(pageData);
   } catch (error) {
     // @ts-ignore
-    console.error(`Error fetching ${url}:`, error.message);
+    console.error(`Error fetching ${url}:`, { error });
   }
 }
 
@@ -127,6 +132,8 @@ export async function mainCrawl(url: string, bannedUrls: string[] = []) {
     results,
     bannedUrls
   );
+
+  console.log({ visitedUrls });
   console.log("Crawled", results.length, "pages");
 
   const limitedResults = results.slice(0, URL_LIMIT);
@@ -134,3 +141,7 @@ export async function mainCrawl(url: string, bannedUrls: string[] = []) {
 
   return limitedResults;
 }
+
+// mainCrawl("https://epita-s3-ocr.netlify.app/").then((results) => {
+//   // console.log(results);
+// });

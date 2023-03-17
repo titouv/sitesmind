@@ -33,6 +33,7 @@ export function AddSite({ botId }: { botId: string }) {
     if (siteError) {
       console.error(siteError);
       setError(siteError.message);
+      throw siteError;
       return;
     } else {
       setSiteId(site.id);
