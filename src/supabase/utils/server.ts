@@ -12,6 +12,12 @@ export const createServerComponentClient = () =>
     cookies,
   });
 
+export const createServerComponentClientAsAdmin = () =>
+  createClient<Database, "public">(
+    process.env.NEXT_PUBLIC_SUPABASE_URL,
+    process.env.SUPABASE_SECRET_KEY
+  );
+
 export const createApiClientAsAnon = () =>
   createClient<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL,
