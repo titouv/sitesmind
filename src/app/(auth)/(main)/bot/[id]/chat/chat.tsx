@@ -6,7 +6,7 @@ import remarkGfm from "remark-gfm";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { Icons } from "@/components/icons";
+import { Lightning, User } from "@/components/icons";
 import { Link } from "@/components/ui/link";
 import { Title } from "@/components/title";
 import { AlertDialogCopyLink } from "@/components/dialog";
@@ -150,7 +150,7 @@ provided by the user you truthfully say "I don't know"`,
   return (
     <div className="container flex flex-col items-center py-8">
       <div className="flex w-full items-center justify-between py-2  md:w-[75vw]">
-        <Title>Test your chatbot</Title>
+        <Title>{bot.id}</Title>
         <div className="flex gap-2">
           <Link variant="subtle" href={`/bot/${bot.id}/how-to`}>
             How to use
@@ -180,15 +180,9 @@ provided by the user you truthfully say "I don't know"`,
 
             if (message.role === "assistant") {
               icon = (
-                // <Image
-                //   src="/chatIcon.png"
-                //   alt="AI"
-                //   width="30"
-                //   height="30"
-                //   priority
-                // />
                 <div className="rounded-md bg-white p-2">
-                  <Icons.bot
+                  <Lightning
+                    weight="fill"
                     className="h-[14px] w-[14px]"
                     width={30}
                     height={30}
@@ -198,15 +192,9 @@ provided by the user you truthfully say "I don't know"`,
               roleClassName = "bg-slate-100";
             } else {
               icon = (
-                //     <Image
-                //       src="/usericon.png"
-                //       alt="Me"
-                //       width="30"
-                //       height="30"
-                //       priority
-                //     />
                 <div className="rounded-md bg-slate-100 p-2">
-                  <Icons.user
+                  <User
+                    weight="fill"
                     className="h-[14px] w-[14px]"
                     width={30}
                     height={30}

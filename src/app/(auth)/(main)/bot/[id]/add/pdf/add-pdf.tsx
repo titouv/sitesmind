@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Link } from "@/components/ui/link";
+import { cn } from "@/lib/utils";
 import { useSupabase } from "@/supabase/components/supabase-provider";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -51,7 +52,7 @@ export function AddText({ botId }: { botId: string }) {
 
     const formData = new FormData();
     formData.append("file", pdfFile);
-
+    formData.append("sourceId", site.id.toString());
     const response = await fetch(url, {
       method: "POST",
       body: formData,
@@ -63,7 +64,7 @@ export function AddText({ botId }: { botId: string }) {
     }
     const data = await response.json();
 
-    // router.push(`/bot/${botId}/chat`);
+    router.push(`/bot/${botId}/chat`);
   }
 
   const acceptedFileTypes: Accept = {
@@ -73,32 +74,44 @@ export function AddText({ botId }: { botId: string }) {
     <div className="pt-8">
       {!siteId ? (
         <>
-          <Label>Enter the text that you want your bot to know.</Label>
-          <div className="mt-2 flex gap-4">
+          <Label>Enter the PDF file that you want your bot to know.</Label>
+          <div className="mt-2 flex flex-col gap-4">
             <Dropzone
               accept={acceptedFileTypes}
               onDrop={(acceptedFiles) => {
                 setPdfFile(acceptedFiles[0]);
               }}
+              validator={(file) => {
+                if (file.size > 10000000) {
+                  return {
+                    code: "file-too-large",
+                    message: "File is too large",
+                  };
+                }
+                return null;
+              }}
             >
               {({ getRootProps, getInputProps, acceptedFiles }) => (
-                <div className="flex w-64 flex-col items-center justify-center gap-4 rounded-md border-2 border-gray-300 p-4">
+                <div
+                  className={cn(
+                    "flex w-96 flex-col items-center justify-center gap-4 rounded-md border-2 border-dashed border-gray-300 bg-gray-100 p-8  hover:border-gray-500",
+                    acceptedFiles.length > 0 &&
+                      "border-solid border-green-500 bg-green-50 hover:border-green-500"
+                  )}
+                >
                   {acceptedFiles.length < 1 ? (
                     <div {...getRootProps()}>
                       <input {...getInputProps()} />
                       <p>Drop a PDF here, or click to select a file</p>
                     </div>
                   ) : (
-                    <span>File accepted</span>
+                    <span className="text-center">
+                      File accepted :<br /> {acceptedFiles[0].name}
+                    </span>
                   )}
                 </div>
               )}
             </Dropzone>
-            {/* <Textarea
-              placeholder="This is the data that I want my bot to know"
-              value={text}
-              onChange={(e) => setText(e.target.value)}
-            /> */}
             <Button disabled={!pdfFile || loading} onClick={ingest}>
               Create
             </Button>

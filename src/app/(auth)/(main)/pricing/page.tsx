@@ -1,6 +1,6 @@
 "use client";
 
-import { Icons } from "@/components/icons";
+import { CheckCircle } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import {
   Accordion,
@@ -29,15 +29,15 @@ export default function Page() {
           <div className="my-3 h-0.5 bg-slate-200 md:my-6"></div>
           <ul className=" flex flex-col gap-3">
             <li className="flex gap-3 ">
-              <Icons.checkCircle className="h-6 w-6" />
+              <CheckCircle className="h-6 w-6" />
               <span>1 site</span>
             </li>
             <li className="flex gap-3 ">
-              <Icons.checkCircle className="h-6 w-6" />
+              <CheckCircle className="h-6 w-6" />
               <span>2000 characters</span>
             </li>
             <li className="flex gap-3 ">
-              <Icons.checkCircle className="h-6 w-6" />
+              <CheckCircle className="h-6 w-6" />
               <span>5 embeds</span>
             </li>
           </ul>
@@ -55,15 +55,15 @@ export default function Page() {
           <div className="my-3 h-0.5 bg-slate-700 md:my-6"></div>
           <ul className="flex flex-col gap-3">
             <li className="flex gap-3 ">
-              <Icons.checkCircle className="h-6 w-6" />
+              <CheckCircle className="h-6 w-6" />
               <span>5 site</span>
             </li>
             <li className="flex gap-3 ">
-              <Icons.checkCircle className="h-6 w-6" />
+              <CheckCircle className="h-6 w-6" />
               <span>5000 characters</span>
             </li>
             <li className="flex gap-3 ">
-              <Icons.checkCircle className="h-6 w-6" />
+              <CheckCircle className="h-6 w-6" />
               <span>3 embeds</span>
             </li>
           </ul>

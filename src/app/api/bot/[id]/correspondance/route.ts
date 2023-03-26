@@ -19,7 +19,7 @@ type OpenAIStreamPayload = Parameters<typeof OpenAIStream>[0];
 export type OpenAIMessages = OpenAIStreamPayload["messages"];
 
 export type ChatApiSchemaType = {
-  messages: OpenAIMessages;
+  text: string;
   botId: string;
 };
 
@@ -30,18 +30,9 @@ export async function GET(
 ) {
   const { id } = params;
 
-  const messages = JSON.parse(req.nextUrl.searchParams.get("messages") || "[]");
-
-  if (!messages) {
-    return new Response("no query", { headers: corsHeaders });
-  }
-
-  // i want a variable with only the last element and a var with all the previous elements
-  const lastMessage = messages[messages.length - 1];
-  const previousMessages = messages.slice(0, messages.length - 1);
-
+  const text = req.nextUrl.searchParams.get("text") || "";
   // OpenAI recommends replacing newlines with spaces for best results
-  const input = lastMessage.content.replace(/\n/g, " ");
+  const input = text.replace(/\n/g, " ");
 
   let start = Date.now();
 

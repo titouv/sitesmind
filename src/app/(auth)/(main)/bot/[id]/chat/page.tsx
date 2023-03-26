@@ -3,6 +3,7 @@ import { createServerComponentClient } from "@/supabase/utils/server";
 
 export default async function Page({ params }: { params: { id: string } }) {
   const supabase = createServerComponentClient();
+
   const { data, error } = await supabase
     .from("sources")
     .select("*")

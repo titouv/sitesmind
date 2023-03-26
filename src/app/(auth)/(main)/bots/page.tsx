@@ -28,7 +28,7 @@ export default async function Page() {
             <Link href="/create">Create one</Link>
           </div>
         ) : (
-          <ul className="flex max-w-sm flex-col gap-2 pt-8">
+          <ul className="flex max-w-lg flex-col gap-2 pt-8">
             {data.map((bot) => (
               <li
                 key={bot.id}
@@ -36,9 +36,12 @@ export default async function Page() {
               >
                 <span>{bot.name}</span>
 
-                <div className="flex gap-2">
+                <div className="flex items-center gap-2 ">
+                  <span>
+                    {Array.isArray(bot.sources) && bot.sources.length} source(s)
+                  </span>
                   <Link variant="subtle" href={`/bot/${bot.id}`}>
-                    View
+                    Modify
                   </Link>
                   <Link href={`/bot/${bot.id}/chat`}>Chat</Link>
                 </div>

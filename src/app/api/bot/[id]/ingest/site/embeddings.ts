@@ -68,7 +68,6 @@ export async function generateEmbeddings({
 export async function getEmbeddingOfDocument(document: Document) {
   const { pageContent: input } = document;
 
-  console.log("Generating embedding for", input);
   // TODO convert to openaiclient when possible
   const embeddingResponse = await fetch(
     "https://api.openai.com/v1/embeddings",

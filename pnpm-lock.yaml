@@ -2,9 +2,9 @@ lockfileVersion: 5.4
 
 specifiers:
   '@dqbd/tiktoken': ^1.0.2
-  '@heroicons/react': ^2.0.16
   '@hookform/resolvers': ^2.9.11
   '@ianvs/prettier-plugin-sort-imports': ^3.7.1
+  '@phosphor-icons/react': ^2.0.6
   '@radix-ui/react-accordion': ^1.1.1
   '@radix-ui/react-alert-dialog': ^1.0.3
   '@radix-ui/react-avatar': ^1.0.2
@@ -36,7 +36,6 @@ specifiers:
   eventsource-parser: ^0.1.0
   gpt3-tokenizer: ^1.1.5
   langchain: ^0.0.36
-  lucide-react: ^0.125.0
   next: 13.2.4
   openai: ^3.2.1
   path: ^0.12.7
@@ -64,8 +63,8 @@ specifiers:
 
 dependencies:
   '@dqbd/tiktoken': 1.0.2
-  '@heroicons/react': 2.0.16_react@18.2.0
   '@hookform/resolvers': 2.9.11_react-hook-form@7.43.5
+  '@phosphor-icons/react': 2.0.6_biqbaboplfbrettd7655fr4n2y
   '@radix-ui/react-accordion': 1.1.1_biqbaboplfbrettd7655fr4n2y
   '@radix-ui/react-alert-dialog': 1.0.3_zula6vjvt3wdocc4mwcxqa6nzi
   '@radix-ui/react-avatar': 1.0.2_biqbaboplfbrettd7655fr4n2y
@@ -94,7 +93,6 @@ dependencies:
   eventsource-parser: 0.1.0
   gpt3-tokenizer: 1.1.5
   langchain: 0.0.36_7udndkbo34u536coppgxvj2ueq
-  lucide-react: 0.125.0_react@18.2.0
   next: 13.2.4_biqbaboplfbrettd7655fr4n2y
   openai: 3.2.1
   path: 0.12.7
@@ -608,14 +606,6 @@ packages:
       - '@types/react'
     dev: false
 
-  /@heroicons/react/2.0.16_react@18.2.0:
-    resolution: {integrity: sha512-x89rFxH3SRdYaA+JCXwfe+RkE1SFTo9GcOkZettHer71Y3T7V+ogKmfw5CjTazgS3d0ClJ7p1NA+SP7VQLQcLw==}
-    peerDependencies:
-      react: '>= 16'
-    dependencies:
-      react: 18.2.0
-    dev: false
-
   /@hookform/resolvers/2.9.11_react-hook-form@7.43.5:
     resolution: {integrity: sha512-bA3aZ79UgcHj7tFV7RlgThzwSSHZgvfbt2wprldRkYBcMopdMvHyO17Wwp/twcJasNFischFfS7oz8Katz8DdQ==}
     peerDependencies:
@@ -848,6 +838,17 @@ packages:
     dependencies:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.15.0
+
+  /@phosphor-icons/react/2.0.6_biqbaboplfbrettd7655fr4n2y:
+    resolution: {integrity: sha512-vT5Tv+isibcRO1ATPW+cZs2w46n512SfShRX9kqZbETht8ME11CT387APBbcW9EAeBFEGM6buoYxP+0/IJJRKg==}
+    engines: {node: '>=10'}
+    peerDependencies:
+      react: '>= 16.8'
+      react-dom: '>= 16.8'
+    dependencies:
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+    dev: false
 
   /@pkgr/utils/2.3.1:
     resolution: {integrity: sha512-wfzX8kc1PMyUILA+1Z/EqoE4UCXGy0iRGMhPwdfae1+f0OXlLqCk+By+aMzgJBzR9AzS4CDizioG6Ss1gvAFJw==}
@@ -3630,14 +3631,6 @@ packages:
   /lru-cache/7.18.3:
     resolution: {integrity: sha512-jumlc0BIUrS3qJGgIkWZsyfAM7NCWiBcCDhnd+3NNM5KbBmLTgHVfWBcg6W+rLUsIpzpERPsvwUP7CckAQSOoA==}
     engines: {node: '>=12'}
-    dev: false
-
-  /lucide-react/0.125.0_react@18.2.0:
-    resolution: {integrity: sha512-tadphtB6TPytEitR9vX75hqu9PQT/uz5RcvXMq976nC190eukAM9+cHMgBxfvfEGDXwIhIT9aFxTUGdAjxw9uQ==}
-    peerDependencies:
-      react: ^16.5.1 || ^17.0.0 || ^18.0.0
-    dependencies:
-      react: 18.2.0
     dev: false
 
   /markdown-table/3.0.3:

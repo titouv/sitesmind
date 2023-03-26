@@ -7,9 +7,9 @@ import remarkGfm from "remark-gfm";
 //   ChatApiSchemaType,
 //   OpenAIMessages,
 // } from "@/app/(auth)/api/bot/[id]/chat/route";
-import { Icons } from "@/components/icons";
 import { BASE_URL } from "@/config/site";
 import * as Popover from "@radix-ui/react-popover";
+import { ChatTeardropDots, Lightning, User } from "@/components/icons";
 
 const botId = "3bcae46d-2796-4922-b84b-81cbc24befcf";
 
@@ -149,10 +149,7 @@ export default function SmallChabotPreview({
           className="flex
           items-center justify-center gap-2 rounded-full bg-blue-500 p-2 text-white"
         >
-          <Icons.messageCircle className="h-4 w-4" />
-
-          {/* <PhChatTeardropFill className="h-6 w-6" /> */}
-          {/* <span>Datapix GPT</span> */}
+          <ChatTeardropDots size={16} />
         </button>
       </Popover.Trigger>
       <Popover.Content
@@ -173,30 +170,16 @@ export default function SmallChabotPreview({
 
               if (message.role === "assistant") {
                 icon = (
-                  // <Image
-                  //   src="/chatIcon.png"
-                  //   alt="AI"
-                  //   width="30"
-                  //   height="30"
-                  //   priority
-                  // />
                   <div>
-                    <Icons.bot width={30} height={30} />
+                    <Lightning size={30} />
                   </div>
                 );
                 roleClassName =
                   "px-3 py-2 rounded-t-xl rounded-br-xl bg-[#004584] text-white";
               } else {
                 icon = (
-                  //     <Image
-                  //       src="/usericon.png"
-                  //       alt="Me"
-                  //       width="30"
-                  //       height="30"
-                  //       priority
-                  //     />
                   <div>
-                    <Icons.user width={30} height={30} />
+                    <User size={30} />
                   </div>
                 );
 
