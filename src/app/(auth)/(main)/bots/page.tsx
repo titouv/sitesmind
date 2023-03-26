@@ -38,7 +38,8 @@ export default async function Page() {
 
                 <div className="flex items-center gap-2 ">
                   <span>
-                    {Array.isArray(bot.sources) && bot.sources.length} source(s)
+                    {Array.isArray(bot.sources) && bot.sources.length}
+                    &nbsp;source(s)
                   </span>
                   <Link variant="subtle" href={`/bot/${bot.id}`}>
                     Modify

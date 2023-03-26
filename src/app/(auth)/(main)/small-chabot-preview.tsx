@@ -1,13 +1,8 @@
 "use client";
 
-import { useState, useRef, useEffect, useMemo } from "react";
+import { useState, useRef, useEffect } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-// import {
-//   ChatApiSchemaType,
-//   OpenAIMessages,
-// } from "@/app/(auth)/api/bot/[id]/chat/route";
-import { BASE_URL } from "@/config/site";
 import * as Popover from "@radix-ui/react-popover";
 import { ChatTeardropDots, Lightning, User } from "@/components/icons";
 

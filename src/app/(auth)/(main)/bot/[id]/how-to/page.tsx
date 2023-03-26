@@ -1,6 +1,5 @@
 import { Title } from "@/components/title";
 import { Link } from "@/components/ui/link";
-import { BASE_URL } from "@/config/site";
 import { Code } from "bright";
 import Script from "next/script";
 

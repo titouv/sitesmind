@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect, useMemo } from "react";
+import { useState, useRef, useEffect } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { Textarea } from "@/components/ui/textarea";
@@ -8,9 +8,6 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Lightning, User } from "@/components/icons";
 import { Link } from "@/components/ui/link";
-import { Title } from "@/components/title";
-import { AlertDialogCopyLink } from "@/components/dialog";
-import { getBaseUrl } from "@/config/site";
 
 type Message = {
   content: string;
@@ -18,7 +15,11 @@ type Message = {
   streaming?: boolean;
 };
 
-export function Chat({ bot }: { bot: { id: string; meta: string } }) {
+export function Chat({
+  bot,
+}: {
+  bot: { id: string; name: string; meta: string };
+}) {
   const [userInput, setUserInput] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -149,13 +150,15 @@ provided by the user you truthfully say "I don't know"`,
 
   return (
     <div className="container flex flex-col items-center py-8">
-      <div className="flex w-full items-center justify-between py-2  md:w-[75vw]">
-        <Title>{bot.id}</Title>
+      <div className="flex w-full flex-col py-2 md:w-[75vw] md:flex-row md:items-center  md:justify-between">
+        <h1 className="text-3xl font-extrabold leading-tight tracking-tighter">
+          {bot.name}
+        </h1>
         <div className="flex gap-2">
           <Link variant="subtle" href={`/bot/${bot.id}/how-to`}>
             How to use
           </Link>
-          {/* <Button
+          <Button
             onClick={() => {
               navigator.clipboard.writeText(
                 `www.sitesmind.com/bot/${bot.id}/chat`
@@ -163,8 +166,7 @@ provided by the user you truthfully say "I don't know"`,
             }}
           >
             Copy link to share
-          </Button> */}
-          <AlertDialogCopyLink url={`www.sitesmind.com/bot/${bot.id}/chat`} />
+          </Button>
         </div>
       </div>
       <div className="flex h-[65vh] w-full flex-col items-center justify-center  overflow-hidden rounded-xl border border-slate-300  md:w-[75vw]">
@@ -212,15 +214,13 @@ provided by the user you truthfully say "I don't know"`,
             return (
               <div className={cn("flex px-6 py-4 ", roleClassName)} key={index}>
                 <div className="mr-4">{icon}</div>
-                <div>
-                  <ReactMarkdown
-                    className="prose max-w-none"
-                    remarkPlugins={[remarkGfm]}
-                    linkTarget="_blank"
-                  >
-                    {message.content}
-                  </ReactMarkdown>
-                </div>
+                <ReactMarkdown
+                  className="prose max-w-none"
+                  remarkPlugins={[remarkGfm]}
+                  linkTarget="_blank"
+                >
+                  {message.content}
+                </ReactMarkdown>
               </div>
             );
           })}

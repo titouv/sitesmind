@@ -1,7 +1,6 @@
 import { Title } from "@/components/title";
 import { Link } from "@/components/ui/link";
 import { createServerComponentClient } from "@/supabase/utils/server";
-import { cookies, headers } from "next/headers";
 import { AddText } from "./add-pdf";
 
 export default async function Page({ params }: { params: { id: string } }) {

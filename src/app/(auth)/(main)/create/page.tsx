@@ -2,7 +2,6 @@ import { CreateBot } from "@/app/(auth)/(main)/create/create-bot";
 import { Title } from "@/components/title";
 import { Link } from "@/components/ui/link";
 import { createServerComponentClient } from "@/supabase/utils/server";
-import { cookies, headers } from "next/headers";
 
 export default async function Page() {
   const supabase = createServerComponentClient();

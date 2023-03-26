@@ -18,5 +18,6 @@ export {
 type IconProps = any;
 
 export const Logo = (props: IconProps) => (
+  // eslint-disable-next-line @next/next/no-img-element
   <img alt="logo" src="/icon.svg" {...props} />
 );

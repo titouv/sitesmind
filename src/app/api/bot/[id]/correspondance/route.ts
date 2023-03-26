@@ -1,5 +1,4 @@
 import { OpenAIStream } from "@/utils/openAIStream";
-import GPT3Tokenizer from "gpt3-tokenizer";
 import { OpenAIApi } from "openai";
 import { NextRequest, NextResponse } from "next/server";
 import { createApiClientAsAnon } from "@/supabase/utils/server";

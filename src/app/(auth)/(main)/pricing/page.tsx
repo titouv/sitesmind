@@ -2,12 +2,12 @@
 
 import { CheckCircle } from "@/components/icons";
 import { Button } from "@/components/ui/button";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
+// import {
+//   Accordion,
+//   AccordionContent,
+//   AccordionItem,
+//   AccordionTrigger,
+// } from "@/components/ui/accordion";
 import { Title } from "@/components/title";
 
 export default function Page() {
