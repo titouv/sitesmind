@@ -33,10 +33,7 @@ export async function GET(
   }
   const { url, sourceId } = result.data;
   const botId = params.id;
-  const bannedUrls: string[] = [
-    // "https://datapix.fr/mentions-legales",
-    // "https://datapix.fr/polique-de-confidentialite",
-  ];
+  const bannedUrls: string[] = [];
 
   const supabaseClient = createApiClient();
 

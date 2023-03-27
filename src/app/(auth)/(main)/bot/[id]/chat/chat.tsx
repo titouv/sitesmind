@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Lightning, User } from "@/components/icons";
 import { Link } from "@/components/ui/link";
+import { useToast } from "@/hooks/ui/use-toast";
 
 type Message = {
   content: string;
@@ -148,6 +149,8 @@ provided by the user you truthfully say "I don't know"`,
     }
   };
 
+  const { toast } = useToast();
+
   return (
     <div className="container flex flex-col items-center py-8">
       <div className="flex w-full flex-col py-2 md:w-[75vw] md:flex-row md:items-center  md:justify-between">
@@ -163,6 +166,10 @@ provided by the user you truthfully say "I don't know"`,
               navigator.clipboard.writeText(
                 `www.sitesmind.com/bot/${bot.id}/chat`
               );
+              toast({
+                title: "Copied",
+                description: "Thanks for sharing this chat",
+              });
             }}
           >
             Copy link to share
