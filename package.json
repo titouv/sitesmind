@@ -51,7 +51,7 @@
     "eslint-config-next": "13.3.0",
     "eventsource-parser": "^0.1.0",
     "gpt3-tokenizer": "^1.1.5",
-    "langchain": "^0.0.45",
+    "langchain": "^0.0.50",
     "next": "13.3.0",
     "openai": "^3.2.1",
     "path": "^0.12.7",
