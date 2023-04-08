@@ -1,6 +1,6 @@
 import { ChatBot } from "@/app/embed/bot/[id]/bot";
 import { createServerComponentClientAsAdmin } from "@/supabase/utils/server";
-
+export const runtime = "edge";
 export default async function Page({ params }: { params: { id: string } }) {
   const supabase = createServerComponentClientAsAdmin();
 

@@ -2,7 +2,7 @@ import { Title } from "@/components/title";
 import { Link } from "@/components/ui/link";
 import { createServerComponentClient } from "@/supabase/utils/server";
 import { AddSite } from "./add-site";
-
+export const runtime = "edge";
 export default async function Page({ params }: { params: { id: string } }) {
   const supabase = createServerComponentClient();
 

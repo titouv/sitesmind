@@ -15,7 +15,7 @@ export function AddText({ botId }: { botId: string }) {
   const [text, setText] = useState("");
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState<any>(null);
-  const [siteId, setSiteId] = useState<number | null>(null);
+  const [sourceId, setsourceId] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const router = useRouter();
@@ -24,19 +24,19 @@ export function AddText({ botId }: { botId: string }) {
     setLoading(true);
     if (!session) return;
 
-    const { data: site, error: siteError } = await supabase
+    const { data: source, error: sourceError } = await supabase
       .from("sources")
-      .insert({ meta: text, bot_id: botId })
+      .insert({ type: "text", metadata: { textContent: text }, bot_id: botId })
       .select()
       .single();
 
-    if (siteError) {
-      console.error(siteError);
-      setError(siteError.message);
+    if (sourceError) {
+      console.error(sourceError);
+      setError(sourceError.message);
       return;
     } else {
-      setSiteId(site.id);
-      console.log(site.id);
+      setsourceId(source.id);
+      console.log(source.id);
     }
 
     console.log("body", { url: text, id: botId });
@@ -46,7 +46,7 @@ export function AddText({ botId }: { botId: string }) {
       window.location.origin
     );
 
-    url.searchParams.set("sourceId", site.id.toString());
+    url.searchParams.set("sourceId", source.id.toString());
     url.searchParams.set("fileName", text);
     url.searchParams.set("text", text);
 
@@ -58,12 +58,12 @@ export function AddText({ botId }: { botId: string }) {
     }
     const data = await response.json();
 
-    router.push(`/bot/${botId}/chat`);
+    router.push(`/bot/${botId}/customize`);
   }
 
   return (
     <div className="pt-8">
-      {!siteId ? (
+      {!sourceId ? (
         <>
           <Label>Enter the text that you want your bot to know.</Label>
           <div className="mt-2 flex gap-4">

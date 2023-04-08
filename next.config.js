@@ -1,3 +1,5 @@
+const fileLoaderRule = /\.(woff(2)?|otf|ttf|eot|svg|wasm)(\?v=\d+.\d+.\d+)?$/;
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
@@ -14,6 +16,23 @@ const nextConfig = {
         headers: securityHeadersSimple,
       },
     ];
+  },
+  webpack(config, options) {
+    config.module.rules.push({
+      test: fileLoaderRule,
+      type: "asset/resource",
+      generator: {
+        filename: `static/chunks/[path][name].[hash]${options.fileExtensions}`,
+      },
+    });
+
+    config.module.rules.push({
+      test: /\.(js|mjs|jsx)$/,
+      issuer: { and: [/node_modules\/pdfjs-dist/] },
+      type: "javascript/auto",
+    });
+
+    return config;
   },
 };
 

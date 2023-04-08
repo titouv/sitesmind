@@ -1,8 +1,8 @@
 import { Title } from "@/components/title";
 import { Link } from "@/components/ui/link";
 import { createServerComponentClient } from "@/supabase/utils/server";
-import { AddText } from "./add-pdf";
-
+import { AddPdf } from "./add-pdf";
+export const runtime = "edge";
 export default async function Page({ params }: { params: { id: string } }) {
   const supabase = createServerComponentClient();
 
@@ -41,7 +41,7 @@ export default async function Page({ params }: { params: { id: string } }) {
             </Link>
           </div>
         ) : (
-          <AddText botId={params.id} />
+          <AddPdf botId={params.id} />
         )}
       </div>
     </section>

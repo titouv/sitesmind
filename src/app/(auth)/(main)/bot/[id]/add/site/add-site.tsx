@@ -1,5 +1,6 @@
 "use client";
 
+import { SiteRow } from "@/app/(auth)/(main)/bot/[id]/add/site/siteRow";
 import { ComingSoon } from "@/components/coming-soon";
 import { LoadingSpinner } from "@/components/loading-spinner";
 import { Button } from "@/components/ui/button";
@@ -7,76 +8,77 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Link } from "@/components/ui/link";
 import { useSupabase } from "@/supabase/components/supabase-provider";
+import {
+  createParser,
+  ParsedEvent,
+  ReconnectInterval,
+} from "eventsource-parser";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export function AddSite({ botId }: { botId: string }) {
-  const { supabase, session } = useSupabase();
-  const [siteUrl, setSiteUrl] = useState("");
+  const [sourceUrl, setsourceUrl] = useState("");
   const [loading, setLoading] = useState(false);
-  const [data, setData] = useState<any>(null);
-  const [siteId, setSiteId] = useState<number | null>(null);
+  const [sourceId, setsourceId] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
-
+  const [siteUrls, setSiteUrls] = useState<string[]>([]);
   const router = useRouter();
 
-  async function ingest() {
+  async function crawl() {
+    console.log("makeing ");
     setLoading(true);
-    if (!session) return;
+    const response = await fetch("/api/sitemapCrawler");
 
-    const { data: site, error: siteError } = await supabase
-      .from("sources")
-      .insert({ meta: siteUrl, bot_id: botId })
-      .select()
-      .single();
-
-    if (siteError) {
-      console.error(siteError);
-      setError(siteError.message);
-      throw siteError;
-      return;
-    } else {
-      setSiteId(site.id);
-      console.log(site.id);
-    }
-
-    console.log("body", { url: siteUrl, id: botId });
-
-    const url = new URL(
-      `/api/bot/${botId}/ingest/site`,
-      window.location.origin
-    );
-
-    url.searchParams.set("sourceId", site.id.toString());
-    url.searchParams.set("url", siteUrl);
-
-    const response = await fetch(url);
     if (!response.ok) {
-      setError("Something went wrong");
-      setLoading(false);
-      return;
+      throw new Error(response.statusText);
     }
-    const data = await response.json();
 
-    router.push(`/bot/${botId}/chat`);
+    function onParse(event: ParsedEvent | ReconnectInterval) {
+      if (event.type === "event") {
+        const { url } = JSON.parse(event.data);
+        setSiteUrls((prev) => [...prev, url]);
+      }
+    }
+
+    const data = response.body;
+    if (!data) {
+      throw new Error("No data");
+    }
+
+    const parser = createParser(onParse);
+    const decoder = new TextDecoder("utf-8");
+    const reader = data.getReader();
+    let done = false;
+
+    while (!done) {
+      const { value, done: doneReading } = await reader.read();
+      setLoading(false);
+      done = doneReading;
+      const chunkValue = decoder.decode(value);
+      console.log(chunkValue);
+      const splitted = chunkValue.split("\n\n");
+      for (const chunk of splitted) {
+        parser.feed(chunk + "\n\n");
+      }
+    }
   }
 
   return (
     <div className="pt-8">
-      {!siteId ? (
+      {siteUrls.length == 0 ? (
         <>
           <Label>
-            Enter the adress of the website you want to import data from.
+            Enter the root URL of the website you want to import data from.
           </Label>
           <div className="mt-2 flex gap-4">
             <Input
               type="url"
               placeholder="https:/example.com"
-              value={siteUrl}
+              value={sourceUrl}
               className="invalid:border-red-500 invalid:text-red-500 "
-              onChange={(e) => setSiteUrl(e.target.value)}
+              onChange={(e) => setsourceUrl(e.target.value)}
             />
-            <Button disabled={!siteUrl || loading} onClick={ingest}>
+            <Button disabled={!sourceUrl || loading} onClick={crawl}>
               Create
             </Button>
           </div>
@@ -86,7 +88,7 @@ export function AddSite({ botId }: { botId: string }) {
         <div className="flex flex-col items-center justify-center gap-4">
           {loading ? (
             <div className="flex  flex-col items-center justify-center">
-              Generating chatbot from {siteUrl}
+              Generating chatbot from {sourceUrl}
               <LoadingSpinner />
               <ComingSoon />
             </div>
@@ -99,13 +101,14 @@ export function AddSite({ botId }: { botId: string }) {
             </div>
           ) : (
             <>
-              <span className="py-2">The data has been treated</span>
-
-              {data && (
-                <Link href={`/bot/${botId}/chat`}>
-                  Try the generated chatbot
-                </Link>
-              )}
+              <div className="flex flex-col items-center justify-center gap-4">
+                <Link href={`/bot/${botId}/customize`}>Customize</Link>
+                <ul className="flex flex-col gap-4">
+                  {siteUrls.map((url) => (
+                    <SiteRow botId={botId} siteUrl={url} key={url} />
+                  ))}
+                </ul>
+              </div>
             </>
           )}
         </div>

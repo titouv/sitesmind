@@ -3,11 +3,9 @@ import { LoginButton } from "@/components/login-button";
 import { Link } from "@/components/ui/link";
 import { createServerComponentClient } from "@/supabase/utils/server";
 
-export default async function Home({
-  searchParams,
-}: {
-  searchParams: { redirect: string };
-}) {
+export const runtime = "edge";
+
+export default async function Home() {
   const supabase = createServerComponentClient();
   const {
     data: { session },
@@ -15,13 +13,8 @@ export default async function Home({
 
   return (
     <>
-      {searchParams.redirect && (
-        <div className="container my-2 w-full rounded-xl  bg-slate-100 py-3">
-          <span>Please login before using</span>
-        </div>
-      )}
       <section className="container relative grid items-center gap-6 pt-6 pb-8 md:grid-cols-2 md:py-10">
-        <div className="absolute inset-x-0 top-20 bottom-0 -z-10  w-1/2 rounded-full bg-blue-500/50 blur-[100px]" />
+        <div className="absolute inset-x-0 top-20 bottom-0 w-1/2 rounded-full bg-blue-500/50 blur-[100px]" />
         <div className="z-10 mt-10 flex flex-col items-start gap-2 md:mt-20">
           <span className="mb-4 rounded-md border border-slate-600 bg-slate-50/50 px-4 py-2 text-sm font-medium text-slate-700 backdrop-blur-2xl md:mb-8">
             This is an alpha version

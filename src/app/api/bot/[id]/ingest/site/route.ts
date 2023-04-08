@@ -1,5 +1,4 @@
-import { generateEmbeddings } from "./embeddings";
-import { createApiClient } from "@/supabase/utils/server";
+import { generateEmbeddings } from "@/utils/ingest/site/embeddings";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
@@ -21,7 +20,6 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   console.log("Ingest site", params.id, req.nextUrl.searchParams.toString());
-  // convert searchparams to a record<string, string>
   const searchParams = new URLSearchParams(req.nextUrl.search);
   const searchParamsRecord = Object.fromEntries(searchParams.entries());
   console.log("searchParamsRecord", searchParamsRecord);
@@ -35,51 +33,6 @@ export async function GET(
   const botId = params.id;
   const bannedUrls: string[] = [];
 
-  const supabaseClient = createApiClient();
-
-  const {
-    data: { session },
-    error: sessionError,
-  } = await supabaseClient.auth.getSession();
-
-  if (sessionError || !session)
-    return NextResponse.json(
-      { status: "Unauthorized", session, error: sessionError },
-      { status: 401 }
-    );
-
-  const { data: bots, error } = await supabaseClient
-    .from("bots")
-    .select("*")
-    .eq("user_id", session.user.id);
-
-  if (error)
-    return NextResponse.json({ status: "Query error", error }, { status: 500 });
-
-  const botsLength = bots.length;
-
-  if (session.user.email && botsLength >= 5)
-    return NextResponse.json({ status: "Limit reached" }, { status: 400 });
-
-  if (botsLength > 0) {
-    // query sites of this both and verify if the url is already in the db
-    const { data: sources, error: sitesError } = await supabaseClient
-      .from("sources")
-      .select("*");
-
-    if (sitesError)
-      return NextResponse.json(
-        { status: "Query error", error: sitesError },
-        { status: 500 }
-      );
-    // if site is found
-    if (sources.filter((site) => site.meta === url).length > 1)
-      return NextResponse.json(
-        { status: "Site already exists" },
-        { status: 400 }
-      );
-  }
-  const start = Date.now();
   try {
     await generateEmbeddings({ url, sourceId, botId, bannedUrls });
   } catch (error) {
@@ -90,6 +43,5 @@ export async function GET(
     );
   }
 
-  console.log("Time total route embeddings", Date.now() - start);
   return NextResponse.json({ status: "OK" }, { status: 200 });
 }

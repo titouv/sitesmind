@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 //   AccordionTrigger,
 // } from "@/components/ui/accordion";
 import { Title } from "@/components/title";
-
+export const runtime = "edge";
 export default function Page() {
   return (
     <section className="container grid items-center gap-6 pt-6 pb-8 md:py-10">

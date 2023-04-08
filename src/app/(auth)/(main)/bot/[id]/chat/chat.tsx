@@ -16,25 +16,34 @@ type Message = {
   streaming?: boolean;
 };
 
+interface Props {
+  botId: string;
+  botName: string;
+  botMeta: string;
+  botStartSentence: string;
+  botContextSentence: string;
+  botColor: string;
+}
+
 export function Chat({
-  bot,
-}: {
-  bot: { id: string; name: string; meta: string };
-}) {
+  botId,
+  botName,
+  botMeta,
+  botStartSentence,
+  botContextSentence,
+  botColor,
+}: Props) {
   const [userInput, setUserInput] = useState("");
   const [loading, setLoading] = useState(false);
 
   const [messages, setMessages] = useState<Message[]>([
     {
       role: "system",
-      content: `You are Q&A bot trained on the content : ${bot.meta}. A highly intelligent system that answers
-user questions based on the information provided by the user above
-each question. If the information can not be found in the information
-provided by the user you truthfully say "I don't know"`,
+      content: botContextSentence,
     },
     {
-      content: "Hello, I am a chatbot. How can I help you?",
       role: "assistant",
+      content: botStartSentence,
     },
   ]);
 
@@ -62,7 +71,7 @@ provided by the user you truthfully say "I don't know"`,
       { content: question, role: "user" },
       { content: "", role: "assistant", streaming: true },
     ]);
-    const url = new URL(`api/bot/${bot.id}/chat`, window.location.origin);
+    const url = new URL(`api/bot/${botId}/chat`, window.location.origin);
 
     const searchParams: { messages: Message[] } = {
       messages: messagesToApi.map((message) => ({
@@ -155,16 +164,16 @@ provided by the user you truthfully say "I don't know"`,
     <div className="container flex flex-col items-center py-8">
       <div className="flex w-full flex-col py-2 md:w-[75vw] md:flex-row md:items-center  md:justify-between">
         <h1 className="text-3xl font-extrabold leading-tight tracking-tighter">
-          {bot.name}
+          {botName}
         </h1>
         <div className="flex gap-2">
-          <Link variant="subtle" href={`/bot/${bot.id}/how-to`}>
+          <Link variant="subtle" href={`/bot/${botId}/how-to`}>
             How to use
           </Link>
           <Button
             onClick={() => {
               navigator.clipboard.writeText(
-                `www.sitesmind.com/bot/${bot.id}/chat`
+                `www.sitesmind.com/bot/${botId}/chat`
               );
               toast({
                 title: "Copied",

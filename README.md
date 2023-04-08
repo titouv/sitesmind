@@ -8,6 +8,11 @@
 - Optimize / Allow more crawling
 - Tests for embed
 - Customization
-    - Choose your start phrase
-    - Customize the interface of the embed
-    - Choose a language for the bot
+  - Choose your start phrase
+  - Customize the interface of the embed
+  - Choose a language for the bot
+
+# Idead
+
+- OG image for each bot to share on social media
+- Upload pdf on supabase to be able to support file > 10mb

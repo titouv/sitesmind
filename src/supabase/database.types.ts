@@ -11,45 +11,57 @@ export interface Database {
     Tables: {
       bots: {
         Row: {
+          cite_sources: boolean
+          color: string | null
+          context_sentence: string | null
           created_at: string
           id: string
           name: string
+          start_sentence: string | null
           user_id: string
         }
         Insert: {
+          cite_sources?: boolean
+          color?: string | null
+          context_sentence?: string | null
           created_at?: string
           id?: string
           name: string
+          start_sentence?: string | null
           user_id: string
         }
         Update: {
+          cite_sources?: boolean
+          color?: string | null
+          context_sentence?: string | null
           created_at?: string
           id?: string
           name?: string
+          start_sentence?: string | null
           user_id?: string
         }
       }
       documents: {
         Row: {
           bot_id: string
-          content: string | null
-          embedding: unknown | null
+          content: string
+          embedding: unknown
           id: number
           metadata: Json
           source_id: number
         }
         Insert: {
           bot_id: string
-          content?: string | null
-          embedding?: unknown | null
+          content: string
+          embedding: unknown
           id?: number
           metadata: Json
           source_id: number
         }
         Update: {
           bot_id?: string
-          content?: string | null
-          embedding?: unknown | null
+          content?: string
+          embedding?: unknown
           id?: number
           metadata?: Json
           source_id?: number
@@ -89,19 +101,22 @@ export interface Database {
           bot_id: string
           created_at: string
           id: number
-          meta: string
+          metadata: Json
+          type: string
         }
         Insert: {
           bot_id: string
           created_at?: string
           id?: number
-          meta: string
+          metadata: Json
+          type: string
         }
         Update: {
           bot_id?: string
           created_at?: string
           id?: number
-          meta?: string
+          metadata?: Json
+          type?: string
         }
       }
     }

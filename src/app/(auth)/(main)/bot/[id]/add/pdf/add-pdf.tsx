@@ -13,12 +13,12 @@ import Dropzone, { Accept, FileRejection } from "react-dropzone";
 
 type File = FileRejection["file"];
 
-export function AddText({ botId }: { botId: string }) {
+export function AddPdf({ botId }: { botId: string }) {
   const { supabase, session } = useSupabase();
   const [pdfFile, setPdfFile] = useState<File>();
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState<any>(null);
-  const [siteId, setSiteId] = useState<number | null>(null);
+  const [sourceId, setsourceId] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const router = useRouter();
@@ -28,30 +28,51 @@ export function AddText({ botId }: { botId: string }) {
     if (!session) return;
     if (!pdfFile) return;
 
-    const pdfFileName = pdfFile.name;
+    const fileName = pdfFile.name;
+    const filePath = `public/${session.user.id}/${fileName}`;
 
-    const { data: site, error: siteError } = await supabase
+    const { data, error } = await supabase.storage
+      .from("pdf")
+      .upload(filePath, pdfFile, {
+        cacheControl: "3600",
+        upsert: false,
+      });
+
+    console.log(data, error);
+    // get public url
+    const {
+      data: { publicUrl },
+    } = supabase.storage.from("pdf").getPublicUrl(filePath);
+    console.log(publicUrl);
+
+    const { data: source, error: sourceError } = await supabase
       .from("sources")
-      .insert({ meta: pdfFileName, bot_id: botId })
+      .insert({
+        type: "pdf",
+        metadata: { fileName, url: publicUrl },
+        bot_id: botId,
+      })
       .select()
       .single();
-
-    if (siteError) {
-      console.error(siteError);
-      setError(siteError.message);
-      return;
-    } else {
-      setSiteId(site.id);
-      console.log(site.id);
+    if (sourceError) {
+      throw sourceError;
     }
 
-    console.log("body", { url: pdfFile, id: botId });
+    console.log(source, sourceError);
+    setsourceId(source.id);
+
+    const contentResponse = await fetch("/api/getPdfDocument", {
+      method: "POST",
+      body: JSON.stringify({ url: publicUrl }),
+    });
+    const content = await contentResponse.json();
+    console.log(content);
 
     const url = new URL(`/api/bot/${botId}/ingest/pdf`, window.location.origin);
 
     const formData = new FormData();
-    formData.append("file", pdfFile);
-    formData.append("sourceId", site.id.toString());
+    formData.append("documents", JSON.stringify(content));
+    formData.append("sourceId", source.id.toString());
     const response = await fetch(url, {
       method: "POST",
       body: formData,
@@ -61,9 +82,10 @@ export function AddText({ botId }: { botId: string }) {
       setLoading(false);
       return;
     }
-    const data = await response.json();
+    const responseData = await response.json();
+    console.log(responseData);
 
-    router.push(`/bot/${botId}/chat`);
+    setData(responseData);
   }
 
   const acceptedFileTypes: Accept = {
@@ -71,7 +93,7 @@ export function AddText({ botId }: { botId: string }) {
   };
   return (
     <div className="pt-8">
-      {!siteId ? (
+      {!sourceId ? (
         <>
           <Label>Enter the PDF file that you want your bot to know.</Label>
           <div className="mt-2 flex flex-col gap-4">
@@ -80,8 +102,12 @@ export function AddText({ botId }: { botId: string }) {
               onDrop={(acceptedFiles) => {
                 setPdfFile(acceptedFiles[0]);
               }}
+              onDropRejected={(rejectedFiles) => {
+                console.log(rejectedFiles);
+              }}
               validator={(file) => {
-                if (file.size > 10000000) {
+                // limit to 10MB
+                if (file.size > 10 * 1024 * 1024) {
                   return {
                     code: "file-too-large",
                     message: "File is too large",

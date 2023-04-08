@@ -4,7 +4,7 @@ import { createServerComponentClient } from "@/supabase/utils/server";
 
 // do not cache this page
 export const revalidate = 0;
-
+export const runtime = "edge";
 export default async function Page() {
   const supabase = createServerComponentClient();
 

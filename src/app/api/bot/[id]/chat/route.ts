@@ -9,7 +9,7 @@ export const config = {
   runtime: "edge",
 };
 
-export const corsHeaders = {
+const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Content-Type": "text/html; charset=utf-8",
 };

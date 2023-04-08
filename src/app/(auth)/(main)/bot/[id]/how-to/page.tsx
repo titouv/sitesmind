@@ -2,7 +2,7 @@ import { Title } from "@/components/title";
 import { Link } from "@/components/ui/link";
 import { Code } from "bright";
 import Script from "next/script";
-
+export const runtime = "nodejs";
 Code.theme = "github-dark";
 
 export default function Page({ params }: { params: { id: string } }) {

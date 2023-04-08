@@ -1,7 +1,7 @@
 import "server-only";
 
 import { createServerComponentClient } from "@/supabase/utils/server";
-
+export const runtime = "edge";
 // do not cache this page
 export const revalidate = 0;
 

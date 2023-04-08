@@ -1,8 +1,12 @@
 import { z } from "zod";
 import { NextRequest, NextResponse } from "next/server";
-import { Document, RecursiveCharacterTextSplitter } from "../splitter";
-import { getEmbeddingOfDocument } from "@/app/api/bot/[id]/ingest/site/embeddings";
-import { createBrowserClient } from "@/supabase/utils/browser";
+import {
+  Document,
+  RecursiveCharacterTextSplitter,
+} from "../../../../../../utils/ingest/splitter";
+import { insertDocumentInSupabase } from "@/utils/ingest/insert";
+import { getEmbeddingOfDocument } from "@/utils/ingest/embedding";
+import { DocumentWithMetadata } from "@/utils/ingest/types";
 
 const IngestFileApiSchema = z.object({
   text: z.string(),
@@ -36,12 +40,19 @@ export async function GET(
 
   const textSplitter = new RecursiveCharacterTextSplitter();
   const documents = await textSplitter.splitDocuments([document]);
-
-  const embeddings = await Promise.all(
-    documents.map((doc) => getEmbeddingOfDocument(doc))
+  const docsWithMetadata = documents.map(
+    (doc) =>
+      new DocumentWithMetadata({
+        pageContent: doc.pageContent,
+        metadata: { url: "st" },
+      })
   );
 
-  const dataToInsert = documents.map((doc, index) => ({
+  const embeddings = await Promise.all(
+    docsWithMetadata.map((doc) => getEmbeddingOfDocument(doc))
+  );
+
+  const dataToInsert = docsWithMetadata.map((doc, index) => ({
     content: doc.pageContent,
     embedding: embeddings[index],
     metadata: doc.metadata,
@@ -49,15 +60,14 @@ export async function GET(
     bot_id: params.id,
   }));
 
-  console.log("Inserting documents into Supabase");
-  const supabaseClient = createBrowserClient();
-  // In production we should handle possible errors
-  await supabaseClient.from("documents").delete().eq("bot_id", botId);
-
-  const { error } = await supabaseClient.from("documents").insert(dataToInsert);
-  if (error) {
+  try {
+    insertDocumentInSupabase(dataToInsert);
+  } catch (error) {
     console.error("Error while inserting documents", error);
-    throw new Error("Error while inserting documents");
+    return NextResponse.json(
+      { status: "Error while inserting documents", error },
+      { status: 500 }
+    );
   }
 
   return NextResponse.json({ success: true });

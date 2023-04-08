@@ -1,6 +1,8 @@
 import { RecursiveCharacterTextSplitter, Document } from "../splitter";
 import { mainCrawl } from "./crawler";
-import { createBrowserClient } from "@/supabase/utils/browser";
+import { insertDocumentInSupabase } from "@/utils/ingest/insert";
+import { getEmbeddingOfDocument } from "@/utils/ingest/embedding";
+import { DocumentWithMetadata } from "@/utils/ingest/types";
 
 export async function generateEmbeddings({
   url,
@@ -37,9 +39,9 @@ export async function generateEmbeddings({
   const cleanDocuments = documents.map((doc) => {
     // remove all newlines and multiples spaces
     const content = doc.pageContent.replace(/\n/g, " ").replace(/\s+/g, " ");
-    return new Document({
+    return new DocumentWithMetadata({
       pageContent: content,
-      metadata: doc.metadata,
+      metadata: { url: "https://document" },
     });
   });
 
@@ -55,43 +57,5 @@ export async function generateEmbeddings({
     bot_id: botId,
   }));
 
-  console.log("Inserting documents into Supabase");
-  const supabaseClient = createBrowserClient();
-
-  const { error } = await supabaseClient.from("documents").insert(dataToInsert);
-  if (error) {
-    console.error("Error while inserting documents", error);
-    throw new Error("Error while inserting documents");
-  }
-}
-
-export async function getEmbeddingOfDocument(document: Document) {
-  const { pageContent: input } = document;
-
-  // TODO convert to openaiclient when possible
-  const embeddingResponse = await fetch(
-    "https://api.openai.com/v1/embeddings",
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
-      },
-      body: JSON.stringify({
-        input,
-        model: "text-embedding-ada-002",
-      }),
-    }
-  );
-
-  if (!embeddingResponse.ok) {
-    console.error(
-      "Error while generating embedding",
-      embeddingResponse.statusText
-    );
-    throw new Error("Error while generating embedding");
-  }
-
-  const [{ embedding }] = (await embeddingResponse.json()).data;
-  return embedding as number[];
+  insertDocumentInSupabase(dataToInsert);
 }
